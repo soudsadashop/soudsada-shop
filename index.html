@@ -567,7 +567,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="site-header">
   <img class="header-logo"
     src="https://i.postimg.cc/d322Q33X/LOGO.jpg"
@@ -586,15 +585,12 @@
   </button>
 </header>
 
-<!-- NOTICE -->
 <div class="notice-bar">
   ✅ ສິນຄ້າຂອງແທ້ · ສົ່ງທົ່ວລາວ · COD ສະເພາະ ອານຸສິດ ✈️ &nbsp;|&nbsp; ສອບຖາມ: WhatsApp / Facebook
 </div>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- ── ກວດສອບສະຖານະອໍເດີ ── -->
   <div class="section-title">🔍 ກວດສອບສະຖານະອໍເດີ</div>
   <div class="status-checker">
     <div class="status-checker-title">📦 ກວດສອບການສັ່ງຊື້ຂອງທ່ານ</div>
@@ -621,7 +617,6 @@
     </div>
   </div>
 
-  <!-- QTY SELECTOR -->
   <div class="qty-panel" id="qty-panel">
     <div class="qty-prod-name" id="qty-name"></div>
     <div class="qty-stock-info" id="qty-stock"></div>
@@ -635,7 +630,6 @@
     </div>
   </div>
 
-  <!-- CART -->
   <div class="cart-panel" id="cart-panel">
     <div class="cart-header">
       <h3>🛒 ລາຍການສິນຄ້າ</h3>
@@ -648,7 +642,6 @@
     </div>
   </div>
 
-  <!-- CUSTOMER FORM -->
   <div class="section-title" id="form-anchor">👤 ຂໍ້ມູນຜູ້ສັ່ງ</div>
   <div class="form-card">
 
@@ -861,7 +854,6 @@
       </div>
     </div>
 
-    <!-- SLIP UPLOAD -->
     <div class="form-section" id="slip-section" style="display:none">
       <div class="form-section-title">ສະລິບໂອນ / ຫຼັກຖານ <span class="req" id="slip-req">*</span></div>
       <div class="file-upload-area" id="upload-area" onclick="triggerUpload()">
@@ -886,24 +878,19 @@
       </div>
     </div>
 
-  </div><!-- /form-card -->
+  </div></main>
 
-</main>
-
-<!-- SUBMIT BAR -->
 <div class="submit-bar">
   <button class="submit-btn" id="submit-btn" onclick="submitOrder()">
     ✅ ຢືນຢັນການສັ່ງຊື້
   </button>
 </div>
 
-<!-- LOADING -->
 <div class="loading-overlay" id="loading">
   <div class="spinner"></div>
   <div class="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div>
 </div>
 
-<!-- SUCCESS MODAL -->
 <div class="success-modal" id="success-modal">
   <div class="success-box" style="max-width:380px;max-height:90vh;overflow-y:auto;">
     <div class="success-icon">🎉</div>
@@ -925,6 +912,12 @@
 </div>
 
 <script>
+// ═══════════════════════════════════════════
+// API CONFIGURATION (ເອົາ URL ມາໃສ່ບ່ອນນີ້)
+// ═══════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYP0bCa0PubM1Taf5btkBPD7lgo0MpQnWzntWGc4KP9HZrlWBvIWM0j2EhAat9707Gvg/exec';
+
+
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
@@ -963,7 +956,7 @@ function checkOrderStatus() {
         .withFailureHandler(function(e) { cb(e, null); })
         .getOrderStatus(code);
     } else {
-      var url = window.location.href.split('?')[0] + '?action=getOrderStatus&code=' + encodeURIComponent(code);
+      var url = SCRIPT_URL + '?action=getOrderStatus&code=' + encodeURIComponent(code);
       fetch(url)
         .then(function(r) { return r.json(); })
         .then(function(d) { cb(null, d); })
@@ -1063,7 +1056,7 @@ function loadProducts() {
 }
 
 function loadProductsViaFetch() {
-  var apiUrl = window.location.href.split('?')[0] + '?action=getProducts';
+  var apiUrl = SCRIPT_URL + '?action=getProducts';
   fetch(apiUrl)
     .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function(d) { allProds = Array.isArray(d) ? d : []; renderProds(allProds); })
@@ -1336,7 +1329,7 @@ function submitOrder() {
       })
       .submitCustomerOrderFromClient(orderData);
   } else {
-    var url = window.location.href.split('?')[0];
+    var url = SCRIPT_URL;
     fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
