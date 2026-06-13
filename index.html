@@ -152,17 +152,27 @@ input,select,textarea{font-family:inherit}
 .empty-state .eicon{font-size:32px;margin-bottom:8px}
 
 /* ─── QTY PANEL ──────────────────────────── */
-.qty-panel{display:none;background:var(--green-lt);border:2px solid var(--green);border-radius:8px;padding:10px 12px;margin:0 10px 10px;animation:fadeUp .2s ease}
+.qty-panel{
+  display:none;
+  background:var(--surface);
+  border:2px solid var(--green);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:12px 14px;
+  margin-bottom:12px;
+  animation:fadeUp .2s ease;
+}
 .qty-panel.open{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.qty-prod-name{font-weight:800;color:var(--green);margin-bottom:3px;font-size:12px}
-.qty-stock-info{font-size:10px;color:var(--muted);margin-bottom:7px}
+.qty-panel-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.qty-prod-name{font-weight:800;color:var(--green);font-size:13px;flex:1}
+.qty-stock-info{font-size:10px;color:var(--muted);background:var(--green-lt);padding:2px 8px;border-radius:10px;white-space:nowrap}
 .qty-row{display:flex;align-items:center;gap:8px}
 .qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:7px;overflow:hidden;background:var(--surface)}
-.qty-btn{width:32px;height:32px;background:var(--green-lt);border:none;font-size:17px;font-weight:700;color:var(--green)}
+.qty-btn{width:34px;height:34px;background:var(--green-lt);border:none;font-size:18px;font-weight:700;color:var(--green)}
 .qty-btn:active{background:#C5E8D4}
-.qty-num{width:44px;text-align:center;border:none;outline:none;font-size:14px;font-weight:700;background:var(--surface)}
-.qty-add-btn{flex:1;background:var(--green);color:#fff;border:none;border-radius:7px;padding:9px 0;font-size:12px;font-weight:700}
+.qty-num{width:48px;text-align:center;border:none;outline:none;font-size:15px;font-weight:700;background:var(--surface)}
+.qty-add-btn{flex:1;background:var(--green);color:#fff;border:none;border-radius:7px;padding:10px 0;font-size:13px;font-weight:700}
 .qty-add-btn:hover{background:var(--green-dk)}
 
 /* ─── RIGHT PANEL ────────────────────────── */
@@ -346,7 +356,7 @@ input,select,textarea{font-family:inherit}
 
 <!-- ─── NOTICE ─────────────────────────────── -->
 <div class="notice-bar">
-  ✅ ສິນຄ້າຕົງປົກ · ສົ່ງທົ່ວລາວ · COD ສະເພາະ ອານຸສິດ ✈️ &nbsp;|&nbsp; ສອບຖາມ: WhatsApp: 020 92833416 / Facebook: Soudsada
+  ✅ ສິນຄ້າຕົງປົກ · ສົ່ງທົ່ວລາວ · COD ສະເພາະ ອານຸສິດ ✈️ &nbsp;|&nbsp; ສອບຖາມ: WhatsApp 020 92833416 / Facebook: Soudsada
 </div>
 
 <!-- ─── STATUS STRIP ───────────────────────── -->
@@ -379,23 +389,27 @@ input,select,textarea{font-family:inherit}
         <div class="prod-grid" id="prod-grid">
           <div class="empty-state"><div class="eicon">⏳</div><div>ກຳລັງໂຫຼດສິນຄ້າ...</div></div>
         </div>
-        <div class="qty-panel" id="qty-panel">
-          <div class="qty-prod-name" id="qty-name"></div>
-          <div class="qty-stock-info" id="qty-stock"></div>
-          <div class="qty-row">
-            <div class="qty-ctrl">
-              <button class="qty-btn" onclick="changeQty(-1)">−</button>
-              <input class="qty-num" id="qty-num" type="number" value="1" min="1" max="99">
-              <button class="qty-btn" onclick="changeQty(1)">+</button>
-            </div>
-            <button class="qty-add-btn" onclick="addToCart()">🛒 ເພີ່ມລົງກະຕ່າ</button>
-          </div>
-        </div>
       </div>
     </div>
 
-    <!-- RIGHT: CART + FORM -->
+    <!-- RIGHT: QTY + CART + FORM -->
     <div class="right-panel" id="right-panel">
+
+      <!-- QTY PANEL — ດ້ານເທີ່ງຂວາ ຕິດ cart -->
+      <div class="qty-panel" id="qty-panel">
+        <div class="qty-panel-top">
+          <div class="qty-prod-name" id="qty-name"></div>
+          <div class="qty-stock-info" id="qty-stock"></div>
+        </div>
+        <div class="qty-row">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <input class="qty-num" id="qty-num" type="number" value="1" min="1" max="99">
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+          </div>
+          <button class="qty-add-btn" onclick="addToCart()">🛒 ເພີ່ມລົງກະຕ່າ</button>
+        </div>
+      </div>
 
       <!-- CART -->
       <div class="panel-card" id="cart-panel">
@@ -797,7 +811,9 @@ function selectProd(name){
   document.getElementById('qty-num').value=1;
   document.getElementById('qty-num').max=prod[3];
   document.getElementById('qty-panel').classList.add('open');
-  document.getElementById('qty-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+  // scroll ໄປດ້ານເທີ່ງ right panel ທີ່ qty-panel ຢູ່
+  var qtyEl = document.getElementById('qty-panel');
+  qtyEl.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function changeQty(d){
