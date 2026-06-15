@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SOUDSADA SHOP – ສັ່ງຊື້ສິນຄ້າ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --green:#2D7A55;--green-dk:#1B5E3A;--green-lt:#E8F5EE;--green-md:#4CAF7D;
@@ -30,31 +31,56 @@ input,select,textarea{font-family:inherit}
 .admin-btn{background:rgba(255,200,0,.25);border-color:rgba(255,200,0,.6)}
 .admin-btn:hover{background:rgba(255,200,0,.4)}
 .cart-count{background:var(--gold);color:#fff;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
-
-/* ── DATETIME BAR ── */
 .datetime-bar{width:100%;background:rgba(0,0,0,.2);border-top:1px solid rgba(255,255,255,.15);padding:4px 0;display:flex;align-items:center;justify-content:center;gap:12px;font-size:11px;color:rgba(255,255,255,.9);font-weight:600;letter-spacing:.3px}
 .datetime-bar span{display:flex;align-items:center;gap:4px}
 
-/* ── MARQUEE NOTICE ── */
+/* ── MARQUEE ── */
 .marquee-wrap{background:linear-gradient(90deg,#1B5E3A,#2D7A55,#1B5E3A);border-bottom:2px solid #C8973A;overflow:hidden;height:28px;display:flex;align-items:center}
-.marquee-track{display:flex;animation:marquee 28s linear infinite;white-space:nowrap;gap:0}
+.marquee-track{display:flex;animation:marquee 28s linear infinite;white-space:nowrap}
 .marquee-track:hover{animation-play-state:paused}
 .marquee-item{font-size:11px;font-weight:700;color:#fff;padding:0 32px;display:inline-flex;align-items:center;gap:8px}
 .marquee-dot{color:#C8973A;font-size:14px}
 @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* ── STATUS STRIP ── */
-.status-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.status-strip-label{font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap}
-.status-strip-row{display:flex;gap:6px;flex:1;min-width:200px}
-.status-strip-input{flex:1;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;outline:none;color:var(--ink);transition:border-color .2s}
-.status-strip-input:focus{border-color:var(--green)}
-.status-strip-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:800;white-space:nowrap}
-.status-strip-btn:hover{background:var(--green-dk)}
-.status-result-strip{width:100%;margin-top:6px;display:none}
-.status-result-strip.show{display:block}
+/* ── SEARCH / TRACK TAB ── */
+.track-tab{background:var(--surface);border-bottom:2px solid var(--green);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.track-tab-header{display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border)}
+.track-tab-btn{flex:1;padding:9px 8px;font-size:11px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:5px}
+.track-tab-btn.active{color:var(--green);border-bottom-color:var(--green);background:var(--green-lt)}
+.track-tab-body{padding:10px 14px}
+.track-pane{display:none}
+.track-pane.active{display:block}
 
-/* ── STATUS RESULT ── */
+/* Search row */
+.track-row{display:flex;gap:8px;align-items:center}
+.track-inp{flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:700;outline:none;transition:border-color .2s}
+.track-inp:focus{border-color:var(--green)}
+.track-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:11px;font-weight:800;white-space:nowrap;flex-shrink:0}
+.track-btn:hover{background:var(--green-dk)}
+
+/* Camera pane */
+.camera-pane{text-align:center}
+.camera-video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;max-width:320px;margin:0 auto}
+#qr-video{width:100%;display:block;max-height:220px;object-fit:cover}
+.camera-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.camera-frame{width:160px;height:160px;border:3px solid var(--green);border-radius:12px;box-shadow:0 0 0 2000px rgba(0,0,0,.35)}
+.camera-corner{position:absolute;width:20px;height:20px;border-color:var(--gold);border-style:solid;border-width:0}
+.camera-corner.tl{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0}
+.camera-corner.tr{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0}
+.camera-corner.bl{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px;border-radius:0 0 0 4px}
+.camera-corner.br{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px;border-radius:0 0 4px 0}
+.scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent);animation:scanline 1.8s ease-in-out infinite}
+@keyframes scanline{0%{top:20%}100%{top:80%}}
+.camera-controls{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.cam-btn{padding:7px 16px;border:none;border-radius:8px;font-size:11px;font-weight:700}
+.cam-start{background:var(--green);color:#fff}
+.cam-stop{background:#EF4444;color:#fff}
+.cam-hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5}
+.scan-result-badge{background:var(--green-lt);border:1.5px solid var(--green);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--green);margin-top:8px;display:none}
+.scan-result-badge.show{display:block}
+
+/* Track result */
+.track-result{margin-top:10px}
 .status-box{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;animation:fadeUp .2s ease}
 .status-box-header{background:var(--green-lt);border-bottom:1px solid #A8D5BC;padding:9px 14px;display:flex;justify-content:space-between;align-items:center}
 .status-code-lbl{font-size:12px;font-weight:800;color:var(--green)}
@@ -80,7 +106,7 @@ input,select,textarea{font-family:inherit}
 .step-item.active .step-lbl{color:var(--gold)}
 .status-not-found{text-align:center;padding:14px;font-size:12px;color:var(--muted)}
 
-/* ── MAIN LAYOUT ── */
+/* ── MAIN ── */
 .main{max-width:1200px;margin:0 auto;padding:12px 12px 80px}
 .shop-layout{display:grid;grid-template-columns:1fr 380px;gap:12px;align-items:start}
 @media(max-width:860px){.shop-layout{grid-template-columns:1fr}}
@@ -210,30 +236,70 @@ input,select,textarea{font-family:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{color:#fff;font-size:13px;font-weight:700}
 
-/* ── SUCCESS MODAL ── */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;padding:16px}
+/* ── SUCCESS MODAL (RECEIPT POPUP) ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:10px}
 .modal-overlay.show{display:flex}
-.modal-box{background:var(--surface);border-radius:18px;padding:24px 20px;max-width:420px;width:100%;text-align:center;animation:popIn .35s cubic-bezier(.22,1,.36,1);max-height:92vh;overflow-y:auto}
+.modal-box{background:var(--surface);border-radius:18px;max-width:440px;width:100%;animation:popIn .35s cubic-bezier(.22,1,.36,1);max-height:96vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-.success-icon{font-size:48px;margin-bottom:8px}
-.success-title{font-size:17px;font-weight:800;color:var(--green);margin-bottom:5px}
-.success-code-box{background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:700;color:var(--green);margin:8px 0;letter-spacing:1px}
-.success-bill{background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;margin:9px 0;text-align:left;font-size:11px}
-.success-bill-row{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed var(--border);gap:6px}
-.success-bill-row:last-child{border-bottom:none}
-.sbl{color:var(--muted);flex-shrink:0}.sbv{font-weight:700;color:var(--ink);text-align:right}
-.success-bill-total{display:flex;justify-content:space-between;padding:6px 0 0;font-size:13px;font-weight:900;color:var(--green)}
-.success-pay-msg{font-size:11px;color:var(--green);font-weight:700;margin:5px 0}
-.success-tip{background:#FEF3C7;border:1.5px solid #F59E0B;border-radius:8px;padding:9px 11px;font-size:11px;color:#92400E;margin:8px 0;line-height:1.6;text-align:left}
-.success-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
-.success-dl-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;background:var(--green);color:#fff;border:none;border-radius:9px;padding:10px;font-size:12px;font-weight:700;min-width:120px}
-.success-dl-btn:hover{background:var(--green-dk)}
-.success-new-btn{flex:1;background:var(--bg);color:var(--green);border:2px solid var(--green);border-radius:9px;padding:10px;font-size:12px;font-weight:700;min-width:120px}
-.wa-btn{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:700;text-decoration:none;margin-top:5px}
 
-/* ══════════════════════════════════════════
-   ADMIN MODAL — ປັບໃໝ່ທັງໝົດ
-══════════════════════════════════════════ */
+/* Receipt header */
+.receipt-header{background:linear-gradient(135deg,#1B5E3A,#2D7A55);padding:18px 20px 14px;text-align:center;position:relative}
+.receipt-logo-wrap{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.receipt-shop-name{font-size:18px;font-weight:900;color:#fff;letter-spacing:.5px}
+.receipt-shop-sub{font-size:10px;color:rgba(255,255,255,.75);margin-top:2px}
+.receipt-confetti{font-size:32px;margin-bottom:6px}
+.receipt-success-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:2px}
+.receipt-date{font-size:10px;color:rgba(255,255,255,.7)}
+
+/* Receipt body */
+.receipt-body{padding:16px 18px}
+.receipt-code-row{display:flex;align-items:center;justify-content:space-between;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.receipt-code-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.receipt-code-val{font-size:15px;font-weight:900;color:var(--green);font-family:monospace;letter-spacing:1px}
+
+/* QR code in receipt */
+.receipt-qr-section{text-align:center;margin-bottom:14px;padding:12px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
+.receipt-qr-label{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+#receipt-qr-code{display:inline-block;background:#fff;padding:8px;border-radius:8px;border:1.5px solid var(--border)}
+#receipt-qr-code canvas,#receipt-qr-code img{display:block}
+.receipt-qr-code-text{font-size:11px;font-weight:800;color:var(--green);margin-top:6px;font-family:monospace;letter-spacing:1px}
+
+/* Receipt items */
+.receipt-section-title{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.receipt-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.receipt-items{background:var(--bg);border-radius:8px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
+.receipt-item-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-bottom:1px dashed var(--border);font-size:11px;gap:8px}
+.receipt-item-row:last-child{border-bottom:none}
+.receipt-item-name{font-weight:700;color:var(--ink);flex:1}
+.receipt-item-qty{color:var(--muted);font-size:10px;margin:0 8px}
+.receipt-item-price{font-weight:800;color:var(--green);white-space:nowrap}
+
+/* Receipt info */
+.receipt-info{background:var(--bg);border-radius:8px;border:1px solid var(--border);overflow:hidden;margin-bottom:12px}
+.receipt-info-row{display:flex;justify-content:space-between;padding:6px 12px;border-bottom:1px dashed var(--border);font-size:11px;gap:8px}
+.receipt-info-row:last-child{border-bottom:none}
+.receipt-info-label{color:var(--muted);flex-shrink:0;font-size:10px}
+.receipt-info-val{font-weight:700;text-align:right;color:var(--ink)}
+
+/* Total */
+.receipt-total{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;margin-bottom:14px}
+.receipt-total-label{font-size:13px;font-weight:700;color:var(--green)}
+.receipt-total-amount{font-size:20px;font-weight:900;color:var(--green)}
+
+/* Notice boxes */
+.receipt-notice{border-radius:9px;padding:10px 12px;font-size:11px;line-height:1.6;margin-bottom:10px}
+.receipt-notice.yellow{background:#FFFBEB;border:1.5px solid #FCD34D;color:#92400E}
+.receipt-notice.red{background:#FEF2F2;border:1.5px solid #FCA5A5;color:#991B1B}
+.receipt-notice strong{font-weight:800}
+
+/* Actions */
+.receipt-actions{display:flex;gap:8px;flex-wrap:wrap}
+.receipt-dl-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 8px;font-size:12px;font-weight:700;min-width:100px}
+.receipt-dl-btn:hover{background:var(--green-dk)}
+.receipt-new-btn{flex:1;background:#fff;color:var(--green);border:2px solid var(--green);border-radius:10px;padding:11px 8px;font-size:12px;font-weight:700;min-width:100px}
+.wa-btn{display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:11px;font-weight:700;text-decoration:none;margin-top:5px;width:100%;justify-content:center}
+
+/* ── ADMIN MODAL ── */
 .admin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;overflow-y:auto;padding:16px}
 .admin-modal.show{display:block}
 .admin-box{background:var(--surface);border-radius:16px;max-width:1000px;margin:0 auto;overflow:hidden;animation:popIn .3s ease;box-shadow:var(--shadow-lg)}
@@ -241,16 +307,12 @@ input,select,textarea{font-family:inherit}
 .admin-header h2{color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
 .admin-close{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700}
 .admin-close:hover{background:rgba(255,255,255,.35)}
-
-/* Login */
 .admin-login-box{padding:32px 24px;text-align:center;max-width:360px;margin:0 auto}
 .admin-login-box h3{font-size:18px;font-weight:800;margin-bottom:20px;color:var(--green)}
 .admin-login-inp{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;margin-bottom:10px;outline:none}
 .admin-login-inp:focus{border-color:var(--green)}
 .admin-login-btn{width:100%;background:var(--green);color:#fff;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700}
 .admin-login-btn:hover{background:var(--green-dk)}
-
-/* Stats */
 .admin-content{padding:16px}
 .admin-stat{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 @media(max-width:600px){.admin-stat{grid-template-columns:repeat(2,1fr)}}
@@ -258,32 +320,24 @@ input,select,textarea{font-family:inherit}
 .stat-card:hover{transform:translateY(-2px)}
 .stat-num{font-size:26px;font-weight:900;color:var(--green);line-height:1}
 .stat-lbl{font-size:10px;color:var(--muted);font-weight:700;margin-top:4px;text-transform:uppercase;letter-spacing:.5px}
-
-/* ★ TABS — 5 ແຖບ */
 .admin-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;background:var(--bg);padding:6px;border-radius:12px}
 .admin-tab{flex:1;min-width:80px;background:transparent;border:none;border-radius:8px;padding:8px 6px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;white-space:nowrap}
 .admin-tab:hover{background:rgba(45,122,85,.1);color:var(--green)}
 .admin-tab.active{background:var(--surface);color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .admin-tab .tab-count{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;border-radius:10px;min-width:18px;height:18px;font-size:9px;font-weight:800;padding:0 5px;margin-left:4px;transition:background .2s}
 .admin-tab:not(.active) .tab-count{background:var(--muted)}
-
-/* Filter */
 .admin-filter{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .admin-filter-inp{flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;outline:none}
 .admin-filter-inp:focus{border-color:var(--green)}
 .admin-refresh-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
 .admin-refresh-btn:hover{background:var(--green-dk)}
-
-/* Table */
 .orders-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .orders-table{width:100%;border-collapse:collapse;font-size:11px}
-.orders-table th{background:var(--green-dk);color:#fff;padding:10px 10px;text-align:left;white-space:nowrap;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.orders-table th{background:var(--green-dk);color:#fff;padding:10px;text-align:left;white-space:nowrap;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
 .orders-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
 .orders-table tr:last-child td{border-bottom:none}
 .orders-table tr:hover td{background:#F0FFF8}
 .order-code{font-weight:800;color:var(--green);font-size:11px;font-family:monospace}
-
-/* ★ STATUS BUTTON — ແທນ select */
 .status-btn-wrap{position:relative;display:inline-block}
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
 .status-pill:hover{filter:brightness(.92);transform:scale(1.03)}
@@ -291,8 +345,6 @@ input,select,textarea{font-family:inherit}
 .status-pill.s1{background:#DBEAFE;color:#1E40AF}
 .status-pill.s2{background:#EDE9FE;color:#5B21B6}
 .status-pill.s3{background:#D1FAE5;color:#065F46}
-
-/* ★ STATUS POPUP */
 .status-popup{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:999;min-width:210px;overflow:hidden;animation:fadeUp .15s ease}
 .status-popup.open{display:block}
 .status-popup-header{padding:8px 12px;background:var(--green-lt);border-bottom:1px solid #A8D5BC;font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.5px}
@@ -303,8 +355,6 @@ input,select,textarea{font-family:inherit}
 .status-popup-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .status-popup-text{font-size:11px;font-weight:700;color:var(--ink)}
 .status-popup-check{margin-left:auto;color:var(--green);font-size:13px;font-weight:900}
-
-/* Slip */
 .slip-thumb{width:46px;height:38px;object-fit:cover;border-radius:5px;border:1px solid var(--border);cursor:pointer;transition:transform .15s}
 .slip-thumb:hover{transform:scale(1.1)}
 .slip-view-btn{color:var(--green);font-size:9px;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;margin-top:2px;display:block}
@@ -312,7 +362,6 @@ input,select,textarea{font-family:inherit}
 .slip-modal.show{display:flex}
 .slip-modal img{max-width:90vw;max-height:90vh;border-radius:10px;object-fit:contain}
 .slip-modal-close{position:absolute;top:16px;right:16px;background:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;font-weight:900;cursor:pointer}
-
 #bill-canvas{display:none}
 </style>
 </head>
@@ -338,7 +387,6 @@ input,select,textarea{font-family:inherit}
       <button class="header-btn" onclick="scrollToCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
     </div>
   </div>
-  <!-- ★ DATETIME BAR -->
   <div class="datetime-bar">
     <span>📅 <span id="dt-date"></span></span>
     <span>⏰ <span id="dt-time"></span></span>
@@ -346,7 +394,7 @@ input,select,textarea{font-family:inherit}
   </div>
 </header>
 
-<!-- ★ MARQUEE NOTICE -->
+<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track" id="marquee-track">
     <span class="marquee-item">✅ ສິນຄ້າຕົງປົກ 100%</span><span class="marquee-dot">✦</span>
@@ -354,25 +402,64 @@ input,select,textarea{font-family:inherit}
     <span class="marquee-item">✈️ COD ສະເພາະ ອານຸສິດ</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">💳 ຮັບໂອນ BCEL One ແລະ ທະນາຄານອື່ນໆ</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">📱 ສອບຖາມ WhatsApp 020 92833416 Facebook Soudsada</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">🎁 ມັດຈຳ COD ພຽງ 15,000 ₭ ບໍ່ມີບັນຊີ ຂູດເປັນບັດຕື່ມເງີນໄດ້ ຫຼັ້ກ 5 ຫຼື 9 ກະໄດ້ນະ 10,000 ₭</span><span class="marquee-dot">✦</span>
-    <!-- dup for seamless loop -->
+    <span class="marquee-item">🎁 ມັດຈຳ COD ພຽງ 15,000 ₭</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">✅ ສິນຄ້າຕົງປົກ 100%</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">🚚 ສົ່ງທຸກແຂວງ ທົ່ວລາວ</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">✈️ COD ສະເພາະ ອານຸສິດ</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">💳 ຮັບໂອນ BCEL One ທະນາຄານອື່ນໆ</span><span class="marquee-dot">✦</span>
     <span class="marquee-item">📱 ສອບຖາມ WhatsApp 020 92833416 Facebook Soudsada</span><span class="marquee-dot">✦</span>
-    <span class="marquee-item">🎁 ມັດຈຳ COD ພຽງ 15,000 ₭ ບໍ່ມີບັນຊີ ຂູດເປັນບັດຕື່ມເງີນໄດ້ ຫຼັ້ກ 5 ຫຼື 9 ກະໄດ້ນະ 10,000 ₭</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">🎁 ມັດຈຳ COD ພຽງ 15,000 ₭</span><span class="marquee-dot">✦</span>
   </div>
 </div>
 
-<!-- STATUS STRIP -->
-<div class="status-strip">
-  <span class="status-strip-label">🔍 ກວດສອບອໍເດີ:</span>
-  <div class="status-strip-row">
-    <input class="status-strip-input" id="track-code-inp" type="text" placeholder="ໃສ່ເລກບິນ ເຊັ່ນ P1234-5678" onkeydown="if(event.key==='Enter')checkStatus()">
-    <button class="status-strip-btn" onclick="checkStatus()">ກວດສອບ</button>
+<!-- ★ TRACK TAB (3 modes) -->
+<div class="track-tab">
+  <div class="track-tab-header">
+    <button class="track-tab-btn active" onclick="switchTrackTab('order',this)" id="ttb-order">📦 ເລກບິນ</button>
+    <button class="track-tab-btn" onclick="switchTrackTab('phone',this)" id="ttb-phone">📱 ເບີໂທ</button>
+    <button class="track-tab-btn" onclick="switchTrackTab('scan',this)" id="ttb-scan">📷 ສະແກນ QR</button>
   </div>
-  <div class="status-result-strip" id="status-result-strip"></div>
+  <div class="track-tab-body">
+    <!-- Pane 1: OrderID -->
+    <div class="track-pane active" id="tp-order">
+      <div class="track-row">
+        <input class="track-inp" id="inp-order" type="text" placeholder="ໃສ່ເລກບິນ ເຊັ່ນ P9416-2847" onkeydown="if(event.key==='Enter')trackByOrder()">
+        <button class="track-btn" onclick="trackByOrder()">🔍 ກວດສອບ</button>
+      </div>
+    </div>
+    <!-- Pane 2: Phone -->
+    <div class="track-pane" id="tp-phone">
+      <div class="track-row">
+        <input class="track-inp" id="inp-phone" type="tel" placeholder="ໃສ່ເບີໂທ ເຊັ່ນ 02099999999" onkeydown="if(event.key==='Enter')trackByPhone()">
+        <button class="track-btn" onclick="trackByPhone()">🔍 ກວດສອບ</button>
+      </div>
+    </div>
+    <!-- Pane 3: Camera QR Scan -->
+    <div class="track-pane" id="tp-scan">
+      <div class="camera-pane">
+        <div class="camera-video-wrap">
+          <video id="qr-video" playsinline autoplay muted></video>
+          <div class="camera-overlay">
+            <div class="camera-frame" style="position:relative">
+              <div class="camera-corner tl"></div>
+              <div class="camera-corner tr"></div>
+              <div class="camera-corner bl"></div>
+              <div class="camera-corner br"></div>
+              <div class="scan-line"></div>
+            </div>
+          </div>
+        </div>
+        <div class="camera-controls">
+          <button class="cam-btn cam-start" onclick="startCamera()" id="btn-cam-start">📷 ເປີດກ້ອງ</button>
+          <button class="cam-btn cam-stop" onclick="stopCamera()" id="btn-cam-stop" style="display:none">⏹ ປິດກ້ອງ</button>
+        </div>
+        <div class="scan-result-badge" id="scan-result-badge"></div>
+        <div class="cam-hint">ວາງ QR Code ຢູ່ໃນກ່ອງ · ລະບົບຈະສະແກນອັດຕະໂນມັດ<br>ຮັບຮອງ QR ຈາກໃບບິນ SOUDSADA SHOP</div>
+      </div>
+    </div>
+    <!-- Result -->
+    <div class="track-result" id="track-result"></div>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -484,26 +571,73 @@ input,select,textarea{font-family:inherit}
 </main>
 
 <div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ຢືນຢັນການສັ່ງຊື້</button></div>
-
 <div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div></div>
 
-<!-- SUCCESS MODAL -->
+<!-- ★ SUCCESS RECEIPT MODAL -->
 <div class="modal-overlay" id="success-modal">
-  <div class="modal-box" id="bill-box">
-    <div class="success-icon">🎉</div>
-    <div class="success-title">ສັ່ງຊື້ສຳເລັດ!</div>
-    <div class="success-code-box" id="success-code">—</div>
-    <div class="success-bill" id="success-bill"></div>
-    <div class="success-pay-msg" id="success-pay-msg"></div>
-    <div class="success-tip">📸 <strong>ກະລຸນາບັນທຶກບິນນີ້ໄວ້!</strong><br>ດາວໂຫຼດຮູບບິນ ຫຼື ແຄບຈໍໄວ້ຢືນຢັນ.<br>ຫາກຍັງບໍ່ຖືກກວດສອບ ສົ່ງໃຫ້ແມ່ຄ້າ:<br><a href="https://wa.link/3c7y89" target="_blank" class="wa-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp 020 92833416</a></div>
-    <div class="success-actions">
-      <button class="success-dl-btn" onclick="downloadBill()">⬇️ ດາວໂຫຼດໃບບິນ</button>
-      <button class="success-new-btn" onclick="resetAll()">🛒 ສັ່ງຊື້ໃໝ່</button>
+  <div class="modal-box" id="receipt-box">
+    <!-- Header -->
+    <div class="receipt-header">
+      <div class="receipt-confetti">🎉</div>
+      <div class="receipt-success-title">ສັ່ງຊື້ສຳເລັດແລ້ວ!</div>
+      <div class="receipt-shop-name">SOUDSADA SHOP</div>
+      <div class="receipt-shop-sub">ຮ້ານຂາຍສິນຄ້າຄວາມງາມ · ຝາກສົ່ງທົ່ວລາວ</div>
+      <div class="receipt-date" id="receipt-date"></div>
+    </div>
+    <!-- Body -->
+    <div class="receipt-body">
+      <!-- Order code -->
+      <div class="receipt-code-row">
+        <div><div class="receipt-code-label">ລະຫັດອໍເດີ້</div><div class="receipt-code-val" id="receipt-code-val">—</div></div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D7A55" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      </div>
+
+      <!-- QR code of OrderID -->
+      <div class="receipt-qr-section">
+        <div class="receipt-qr-label">📲 QR Code ສຳລັບກວດສອບອໍເດີ້</div>
+        <div id="receipt-qr-code"></div>
+        <div class="receipt-qr-code-text" id="receipt-qr-code-text"></div>
+      </div>
+
+      <!-- Items -->
+      <div class="receipt-section-title">🛍️ ລາຍການສິນຄ້າ</div>
+      <div class="receipt-items" id="receipt-items"></div>
+
+      <!-- Total -->
+      <div class="receipt-total">
+        <span class="receipt-total-label">💰 ລວມທັງໝົດ</span>
+        <span class="receipt-total-amount" id="receipt-total-amount">0 ₭</span>
+      </div>
+
+      <!-- Order info -->
+      <div class="receipt-section-title">📋 ຂໍ້ມູນການສັ່ງຊື້</div>
+      <div class="receipt-info" id="receipt-info"></div>
+
+      <!-- Notices -->
+      <div class="receipt-notice yellow">
+        📸 <strong>ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້!</strong><br>
+        ດາວໂຫຼດຮູບໃບບິນ ຫຼື ແຄບຈໍໄວ້ ເພື່ອໃຊ້ຢືນຢັນການສັ່ງຊື້.<br>
+        <span id="pay-specific-msg"></span>
+      </div>
+      <div class="receipt-notice red">
+        ⚠️ <strong>ກໍລະນີ 1-2 ມື້ ຍັງບໍ່ໄດ້ຮັບການຕິດຕໍ່:</strong><br>
+        ຫາກ ໃນ 1-2 ມື້ ແມ່ຄ້າຍັງບໍ່ຕິດຕໍ່ຫາທ່ານ, <strong>ໃຫ້ຕິດຕໍ່ຫາແມ່ຄ້າດ່ວນ</strong> ເພື່ອຕວດສອບວ່າອໍເດີ້ຕົກຫຼົ່ນຫຼືບໍ່!
+        <a href="https://wa.link/3c7y89" target="_blank" class="wa-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp 020 92833416
+        </a>
+      </div>
+
+      <!-- Actions -->
+      <div class="receipt-actions">
+        <button class="receipt-dl-btn" onclick="downloadReceipt()">⬇️ ດາວໂຫຼດໃບບິນ</button>
+        <button class="receipt-new-btn" onclick="resetAll()">🛒 ສັ່ງຊື້ໃໝ່</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ★ ADMIN MODAL — ປັບໃໝ່ -->
+<!-- ADMIN MODAL -->
 <div class="admin-modal" id="admin-modal">
   <div class="admin-box">
     <div class="admin-header">
@@ -519,9 +653,7 @@ input,select,textarea{font-family:inherit}
     </div>
     <div id="admin-dashboard" style="display:none">
       <div class="admin-content">
-        <!-- Stats -->
         <div class="admin-stat" id="admin-stat"></div>
-        <!-- ★ 5 TABS -->
         <div class="admin-tabs">
           <button class="admin-tab active" onclick="adminTab('all',this)">📋 ທັງໝົດ<span class="tab-count" id="tc-all">0</span></button>
           <button class="admin-tab" onclick="adminTab('waiting',this)">⏳ ລໍຖ້າ<span class="tab-count" id="tc-waiting">0</span></button>
@@ -529,24 +661,14 @@ input,select,textarea{font-family:inherit}
           <button class="admin-tab" onclick="adminTab('packing',this)">📦 ກຽມສົ່ງ<span class="tab-count" id="tc-packing">0</span></button>
           <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ສົ່ງແລ້ວ<span class="tab-count" id="tc-shipped">0</span></button>
         </div>
-        <!-- Filter -->
         <div class="admin-filter">
           <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ເລກບິນ / ເບີ..." oninput="adminRenderOrders()">
           <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 ໂຫຼດໃໝ່</button>
         </div>
-        <!-- Table -->
         <div class="orders-table-wrap">
           <table class="orders-table">
-            <thead>
-              <tr>
-                <th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th>
-                <th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th>
-                <th>ສະລິບ</th><th>ສະຖານະ</th>
-              </tr>
-            </thead>
-            <tbody id="orders-tbody">
-              <tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr>
-            </tbody>
+            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ສະຖານະ</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -563,54 +685,103 @@ input,select,textarea{font-family:inherit}
 <canvas id="bill-canvas"></canvas>
 
 <script>
+// ─────────────────────────────────────────
+//  CONFIG
+// ─────────────────────────────────────────
 var SCRIPT_URL    = 'https://script.google.com/macros/s/AKfycbwYP0bCa0PubM1Taf5btkBPD7lgo0MpQnWzntWGc4KP9HZrlWBvIWM0j2EhAat9707Gvg/exec';
 var ADMIN_PASSWORD = 'soudsada2025';
 var QR_IMG_URL    = 'https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ';
 
+// ─────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────
 var allProds=[],cart=[],selectedProd=null;
 var slipBase64='',selectedShip='',selectedPay='';
 var adminOrders=[],adminTabFilter='all',adminLoggedIn=false;
 var lastOrderData={};
 var openPopupCode=null;
-
+var cameraStream=null,scanInterval=null;
 var noImg="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%23d1d5db' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
 
-/* ── DATETIME ── */
+// ─────────────────────────────────────────
+//  DATETIME
+// ─────────────────────────────────────────
 function updateClock(){
-  var now=new Date();
-  var opts={timeZone:'Asia/Vientiane'};
-  var dateStr=now.toLocaleDateString('lo-LA',Object.assign({weekday:'long',year:'numeric',month:'long',day:'numeric'},opts));
-  var timeStr=now.toLocaleTimeString('lo-LA',Object.assign({hour:'2-digit',minute:'2-digit',second:'2-digit'},opts));
-  document.getElementById('dt-date').textContent=dateStr;
-  document.getElementById('dt-time').textContent=timeStr;
+  var now=new Date(),opts={timeZone:'Asia/Vientiane'};
+  document.getElementById('dt-date').textContent=now.toLocaleDateString('lo-LA',Object.assign({weekday:'long',year:'numeric',month:'long',day:'numeric'},opts));
+  document.getElementById('dt-time').textContent=now.toLocaleTimeString('lo-LA',Object.assign({hour:'2-digit',minute:'2-digit',second:'2-digit'},opts));
 }
-updateClock();
-setInterval(updateClock,1000);
+updateClock();setInterval(updateClock,1000);
 
-/* ── STATUS CHECKER ── */
+// ─────────────────────────────────────────
+//  TRACK TAB SWITCHER
+// ─────────────────────────────────────────
+function switchTrackTab(tab,el){
+  document.querySelectorAll('.track-tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.track-pane').forEach(function(p){p.classList.remove('active');});
+  el.classList.add('active');
+  document.getElementById('tp-'+tab).classList.add('active');
+  if(tab!=='scan')stopCamera();
+  document.getElementById('track-result').innerHTML='';
+}
+
+// ─────────────────────────────────────────
+//  STATUS STEPS
+// ─────────────────────────────────────────
 var STATUS_STEPS=[
-  {key:'ລໍຖ້າຮັບຍອດ',icon:'⏳',lbl:'ລໍຖ້າ\nຮັບຍອດ',cls:'badge-waiting'},
-  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ',icon:'✅',lbl:'ຮັບຍອດ\nແລ້ວ',cls:'badge-accepted'},
-  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',lbl:'ກຽມ\nຈັດສົ່ງ',cls:'badge-packing'},
-  {key:'ຈັດສົ່ງສຳເລັດ',icon:'🎉',lbl:'ສົ່ງ\nສຳເລັດ',cls:'badge-shipped'}
+  {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',lbl:'ລໍຖ້າ\nຮັບຍອດ',   cls:'badge-waiting'},
+  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ', icon:'✅',lbl:'ຮັບຍອດ\nແລ້ວ',    cls:'badge-accepted'},
+  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',lbl:'ກຽມ\nຈັດສົ່ງ',   cls:'badge-packing'},
+  {key:'ຈັດສົ່ງສຳເລັດ',    icon:'🎉',lbl:'ສົ່ງ\nສຳເລັດ',   cls:'badge-shipped'}
 ];
 
-function checkStatus(){
-  var code=document.getElementById('track-code-inp').value.trim().toUpperCase();
+// ─────────────────────────────────────────
+//  TRACK BY ORDER ID
+// ─────────────────────────────────────────
+function trackByOrder(){
+  var code=document.getElementById('inp-order').value.trim().toUpperCase();
   if(!code){alert('ກະລຸນາໃສ່ເລກບິນ');return;}
-  var el=document.getElementById('status-result-strip');
-  el.classList.add('show');
-  el.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
-  fetch(SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(code))
-    .then(function(r){return r.json();})
-    .then(function(d){
-      if(!d||d.status==='not_found'){el.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບເລກບິນ <strong>'+code+'</strong></div></div>';return;}
-      renderStatusResult(d);
-    }).catch(function(){el.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້</div></div>';});
+  doTrack('code',code);
 }
 
-function renderStatusResult(d){
-  var el=document.getElementById('status-result-strip');
+// ─────────────────────────────────────────
+//  TRACK BY PHONE
+// ─────────────────────────────────────────
+function trackByPhone(){
+  var phone=document.getElementById('inp-phone').value.trim();
+  if(!phone){alert('ກະລຸນາໃສ່ເບີໂທ');return;}
+  doTrack('phone',phone);
+}
+
+// ─────────────────────────────────────────
+//  UNIFIED TRACK FETCH
+// ─────────────────────────────────────────
+function doTrack(mode,value){
+  var res=document.getElementById('track-result');
+  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
+  var url=SCRIPT_URL+'?action=getOrderStatus&'+mode+'='+encodeURIComponent(value);
+  if(mode==='code') url=SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(value);
+  if(mode==='phone') url=SCRIPT_URL+'?action=getOrderByPhone&phone='+encodeURIComponent(value);
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d||d.status==='not_found'){
+        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບຂໍ້ມູນ <strong>'+escHtml(value)+'</strong><br><small>ກວດສອບຕົວອັກສອນ ຫຼື ລອງໃໝ່</small></div></div>';
+        return;
+      }
+      // If multiple orders by phone
+      if(Array.isArray(d.orders)&&d.orders.length>0){
+        var html='<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">ພົບ '+d.orders.length+' ອໍເດີ້ ສຳລັບເບີໂທ '+escHtml(value)+'</div>';
+        d.orders.forEach(function(order){html+=buildStatusHtml(order);html+='<div style="height:8px"></div>';});
+        res.innerHTML=html;
+      }else{
+        res.innerHTML=buildStatusHtml(d);
+      }
+    })
+    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div></div>';});
+}
+
+function buildStatusHtml(d){
   var cur=d.orderStatus||'ລໍຖ້າຮັບຍອດ';
   var idx=STATUS_STEPS.findIndex(function(s){return s.key===cur;});
   if(idx<0)idx=0;
@@ -622,14 +793,116 @@ function renderStatusResult(d){
   }).join('');
   var rows=[['📦','ລະຫັດ',d.code],['👤','ຊື່',d.customerName],['📱','ເບີ',d.customerPhone],
     ['🚚','ຂົນສົ່ງ',d.shipping],['💳','ຊຳລະ',d.payment],
-    ['💰','ລວມ',Number(d.totalAmount||0).toLocaleString()+' ₭'],['📅','ວັນທີ',d.submittedAt||'']
+    ['💰','ລວມ',fN(d.totalAmount||0)+' ₭'],['📅','ວັນທີ',d.submittedAt||'']
   ].filter(function(r){return r[2];}).map(function(r){
-    return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+r[2]+'</span></div>';
+    return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+escHtml(String(r[2]))+'</span></div>';
   }).join('');
-  el.innerHTML='<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+d.code+'</span><span class="status-badge '+step.cls+'">'+step.icon+' '+step.key+'</span></div><div class="status-box-body"><div class="step-tracker"><div class="step-progress" style="width:calc('+pct+'% - 24px)"></div>'+stepsHtml+'</div>'+rows+'</div></div>';
+  return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.cls+'">'+step.icon+' '+cur+'</span></div>'
+    +'<div class="status-box-body"><div class="step-tracker"><div class="step-progress" style="width:calc('+pct+'% - 24px)"></div>'+stepsHtml+'</div>'+rows+'</div></div>';
 }
 
-/* ── PRODUCTS ── */
+// ─────────────────────────────────────────
+//  CAMERA QR SCAN
+// ─────────────────────────────────────────
+function startCamera(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert('ບ​ຣາວ​ເຊີ​ນີ້​ບໍ່​ຮອງ​ຮັບ​ກ້ອງ');return;}
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+    .then(function(stream){
+      cameraStream=stream;
+      var video=document.getElementById('qr-video');
+      video.srcObject=stream;
+      video.play();
+      document.getElementById('btn-cam-start').style.display='none';
+      document.getElementById('btn-cam-stop').style.display='';
+      startQRScan();
+    })
+    .catch(function(err){alert('ບໍ່ສາ​ມາດ​ເປີດ​ກ້ອງ: '+err.message);});
+}
+
+function stopCamera(){
+  if(cameraStream){cameraStream.getTracks().forEach(function(t){t.stop();});cameraStream=null;}
+  var video=document.getElementById('qr-video');
+  if(video){video.srcObject=null;}
+  clearInterval(scanInterval);scanInterval=null;
+  document.getElementById('btn-cam-start').style.display='';
+  document.getElementById('btn-cam-stop').style.display='none';
+  document.getElementById('scan-result-badge').classList.remove('show');
+}
+
+// Simple QR scan using canvas + BarcodeDetector API (modern browsers)
+function startQRScan(){
+  var video=document.getElementById('qr-video');
+  var canvas=document.createElement('canvas');
+  var ctx=canvas.getContext('2d');
+  var lastResult='';
+
+  // Try BarcodeDetector first (Chrome/Edge)
+  if('BarcodeDetector' in window){
+    var detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13']});
+    scanInterval=setInterval(function(){
+      if(!video.videoWidth)return;
+      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0);
+      detector.detect(canvas).then(function(barcodes){
+        if(barcodes.length>0){
+          var val=barcodes[0].rawValue;
+          if(val&&val!==lastResult){
+            lastResult=val;
+            handleScanResult(val);
+          }
+        }
+      }).catch(function(){});
+    },500);
+  } else {
+    // Fallback: jsQR from CDN
+    loadJsQR(function(){
+      scanInterval=setInterval(function(){
+        if(!video.videoWidth)return;
+        canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+        ctx.drawImage(video,0,0);
+        var imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
+        if(window.jsQR){
+          var code=window.jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'dontInvert'});
+          if(code&&code.data&&code.data!==lastResult){
+            lastResult=code.data;
+            handleScanResult(code.data);
+          }
+        }
+      },500);
+    });
+  }
+}
+
+function loadJsQR(cb){
+  if(window.jsQR){cb();return;}
+  var s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
+  s.onload=cb;document.head.appendChild(s);
+}
+
+function handleScanResult(val){
+  var badge=document.getElementById('scan-result-badge');
+  badge.innerHTML='✅ ສະແກນໄດ້: <strong>'+escHtml(val)+'</strong>';
+  badge.classList.add('show');
+  // Auto-search if looks like an order code
+  stopCamera();
+  var res=document.getElementById('track-result');
+  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
+  fetch(SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(val))
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d||d.status==='not_found'){
+        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບ QR Code ນີ້ ຫຼື ບໍ່ແມ່ນໃບບິນ SOUDSADA SHOP</div></div>';
+        return;
+      }
+      res.innerHTML=buildStatusHtml(d);
+    })
+    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້</div></div>';});
+}
+
+// ─────────────────────────────────────────
+//  PRODUCTS
+// ─────────────────────────────────────────
 function loadProducts(){
   fetch(SCRIPT_URL+'?action=getProducts')
     .then(function(r){return r.json();})
@@ -654,6 +927,8 @@ function convertGD(url){
   return url;
 }
 
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
 function renderProds(prods){
   var grid=document.getElementById('prod-grid');
   document.getElementById('prod-count-lbl').textContent=prods.length?prods.length+' ລາຍການ':'';
@@ -668,14 +943,16 @@ function renderProds(prods){
     var inC=!!ci,cQ=ci?ci.qty:0;
     html+='<div class="prod-card'+(qty<=0?' out':'')+(inC?' in-cart':'')+'" onclick="'+(qty<=0?'':'selectProd(\''+sn+'\')')+'">'
       +'<div class="cart-qty-badge">'+cQ+'</div>'
-      +'<div class="prod-thumb-wrap"><img class="prod-thumb" src="'+(img||noImg)+'" alt="'+name+'" loading="lazy" onerror="this.src=\''+noImg+'\'"></div>'
-      +'<div class="prod-info"><div class="prod-name">'+name+'</div><div class="prod-price">'+fN(price)+' ₭</div>'
+      +'<div class="prod-thumb-wrap"><img class="prod-thumb" src="'+(img||noImg)+'" alt="'+escHtml(name)+'" loading="lazy" onerror="this.src=\''+noImg+'\'"></div>'
+      +'<div class="prod-info"><div class="prod-name">'+escHtml(name)+'</div><div class="prod-price">'+fN(price)+' ₭</div>'
       +'<span class="prod-stock-badge '+bc+'">'+bt+'</span></div></div>';
   });
   grid.innerHTML=html;
 }
 
-/* ── SELECT / QTY ── */
+// ─────────────────────────────────────────
+//  QTY PANEL
+// ─────────────────────────────────────────
 function selectProd(name){
   var prod=allProds.find(function(r){return r[0]===name;});
   if(!prod||Number(prod[3])<=0)return;
@@ -689,15 +966,12 @@ function selectProd(name){
   document.getElementById('qty-panel').classList.add('open');
   setTimeout(function(){document.getElementById('qty-panel').scrollIntoView({behavior:'smooth',block:'nearest'});},50);
 }
-
 function closeQtyPanel(){selectedProd=null;document.getElementById('qty-panel').classList.remove('open');}
-
 function changeQty(d){
   var inp=document.getElementById('qty-num');
   var max=selectedProd?Number(selectedProd[3]):99;
   inp.value=Math.max(1,Math.min(max,(parseInt(inp.value)||1)+d));
 }
-
 function confirmQty(){
   if(!selectedProd)return;
   var qty=Math.max(1,Math.min(Number(selectedProd[3]),parseInt(document.getElementById('qty-num').value)||1));
@@ -709,19 +983,19 @@ function confirmQty(){
   setTimeout(function(){ce.style.boxShadow='';},700);
 }
 
-/* ── CART ── */
+// ─────────────────────────────────────────
+//  CART
+// ─────────────────────────────────────────
 function renderCart(){
-  var countEl=document.getElementById('cart-count');
-  var totalEl=document.getElementById('cart-total');
-  var itemsEl=document.getElementById('cart-items');
   var total=cart.reduce(function(s,c){return s+c.price*c.qty;},0);
-  countEl.textContent=cart.reduce(function(s,c){return s+c.qty;},0);
-  totalEl.textContent=fN(total)+' ₭';
-  if(!cart.length){itemsEl.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div>';return;}
+  document.getElementById('cart-count').textContent=cart.reduce(function(s,c){return s+c.qty;},0);
+  document.getElementById('cart-total').textContent=fN(total)+' ₭';
+  var el=document.getElementById('cart-items');
+  if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div>';return;}
   var html='';
   cart.forEach(function(item,i){
     var sub=item.price*item.qty;
-    html+='<div class="cart-item"><div><div class="cart-item-name">'+item.name+'</div>'
+    html+='<div class="cart-item"><div><div class="cart-item-name">'+escHtml(item.name)+'</div>'
       +'<div class="cart-item-detail">'+fN(item.price)+' ₭ × '+item.qty+'</div>'
       +'<div class="cart-item-actions"><button class="cart-qty-btn" onclick="cartChangeQty('+i+',-1)">−</button>'
       +'<span class="cart-qty-num">'+item.qty+'</span>'
@@ -729,9 +1003,8 @@ function renderCart(){
       +'<button class="cart-remove" onclick="removeFromCart('+i+')">✕ ລຶບ</button></div></div>'
       +'<div class="cart-item-right"><div class="cart-item-price">'+fN(sub)+' ₭</div></div></div>';
   });
-  itemsEl.innerHTML=html;
+  el.innerHTML=html;
 }
-
 function cartChangeQty(i,d){
   var item=cart[i];if(!item)return;
   var prod=allProds.find(function(r){return r[0]===item.name;});
@@ -742,20 +1015,32 @@ function removeFromCart(i){cart.splice(i,1);renderCart();filterProds();}
 function clearCart(){cart=[];renderCart();filterProds();}
 function scrollToCart(){document.getElementById('right-panel').scrollIntoView({behavior:'smooth'});}
 
-/* ── SHIP / PAY ── */
-function selectShip(el,val){document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});el.classList.add('active');selectedShip=val;updatePayState();}
-function selectPay(el,val){document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('active');});el.classList.add('active');selectedPay=val;updatePayState();}
+// ─────────────────────────────────────────
+//  SHIP / PAY
+// ─────────────────────────────────────────
+function selectShip(el,val){
+  document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});
+  el.classList.add('active');selectedShip=val;updatePayState();
+}
+function selectPay(el,val){
+  document.querySelectorAll('.pay-opt').forEach(function(o){o.classList.remove('active');});
+  el.classList.add('active');selectedPay=val;updatePayState();
+}
 function updatePayState(){
   var isCOD=selectedPay==='ເກັບປາຍທາງ COD',isTransfer=selectedPay==='ໂອນຈ່າຍ',showQR=isCOD||isTransfer;
   document.getElementById('qr-pay-box').classList.toggle('show',showQR);
   document.getElementById('cod-warning').classList.toggle('show',isCOD);
   document.getElementById('slip-section').style.display=showQR?'block':'none';
-  if(isCOD&&selectedShip!=='ອານຸສິດ'){document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸສິດ';}
+  if(isCOD&&selectedShip!=='ອານຸສິດ'){
+    document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});
+    var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸສິດ';
+  }
 }
-
 function downloadQR(){window.open(QR_IMG_URL,'_blank');}
 
-/* ── FILE UPLOAD ── */
+// ─────────────────────────────────────────
+//  FILE UPLOAD
+// ─────────────────────────────────────────
 function triggerUpload(){document.getElementById('slip-file').click();}
 function previewSlip(input){
   var file=input.files[0];if(!file)return;
@@ -781,10 +1066,16 @@ function removeSlip(){slipBase64='';document.getElementById('slip-file').value='
   var area=document.getElementById('upload-area');if(!area)return;
   area.addEventListener('dragover',function(e){e.preventDefault();area.classList.add('dragover');});
   area.addEventListener('dragleave',function(){area.classList.remove('dragover');});
-  area.addEventListener('drop',function(e){e.preventDefault();area.classList.remove('dragover');var files=e.dataTransfer.files;if(files.length){document.getElementById('slip-file').files=files;previewSlip({files:files});}});
+  area.addEventListener('drop',function(e){
+    e.preventDefault();area.classList.remove('dragover');
+    var files=e.dataTransfer.files;
+    if(files.length){document.getElementById('slip-file').files=files;previewSlip({files:files});}
+  });
 })();
 
-/* ── VALIDATION ── */
+// ─────────────────────────────────────────
+//  VALIDATION
+// ─────────────────────────────────────────
 function showErr(id,show){var el=document.getElementById(id);if(el)show?el.classList.add('show'):el.classList.remove('show');}
 function markField(id,inv){var el=document.getElementById(id);if(el)inv?el.classList.add('invalid'):el.classList.remove('invalid');}
 function validate(){
@@ -803,9 +1094,19 @@ function validate(){
   return ok;
 }
 
-/* ── SUBMIT ── */
-function getOrderCode(phone){var p=String(phone||'').replace(/\D/g,'');var last4=p.length>=4?p.slice(-4):p.padStart(4,'0');return 'P'+last4+'-'+Date.now().toString().slice(-4);}
+// ─────────────────────────────────────────
+//  ORDER CODE GENERATOR
+// ─────────────────────────────────────────
+function generateOrderCode(phone){
+  var p=String(phone||'').replace(/\D/g,'');
+  var last4=p.length>=4?p.slice(-4):p.padStart(4,'0');
+  var ts=Date.now().toString().slice(-4);
+  return 'P'+last4+'-'+ts;
+}
 
+// ─────────────────────────────────────────
+//  SUBMIT
+// ─────────────────────────────────────────
 function submitOrder(){
   if(!validate())return;
   var name=document.getElementById('c-name').value.trim();
@@ -815,79 +1116,255 @@ function submitOrder(){
   var addrD=document.getElementById('c-addr-detail').value.trim();
   var branch=document.getElementById('c-branch').value.trim();
   var note=document.getElementById('c-note').value.trim();
-  var code=getOrderCode(phone);
+  var code=generateOrderCode(phone);
   var total=cart.reduce(function(s,c){return s+c.price*c.qty;},0);
   var addr=[prov,dist,addrD].filter(Boolean).join(' - ');
   var shipping=[selectedShip,branch].filter(Boolean).join(': ');
-  var orderData={code:code,customerName:name,customerPhone:phone,customerAddr:addr,shipping:shipping,payment:selectedPay,note:note,cart:cart,totalAmount:total,slipBase64:slipBase64,submittedAt:new Date().toISOString()};
-  var loadEl=document.getElementById('loading');loadEl.classList.add('show');document.getElementById('loading-text').textContent='ກຳລັງສົ່ງຄຳສັ່ງ...';
+  var now=new Date();
+  var orderData={
+    code:code,customerName:name,customerPhone:phone,customerAddr:addr,
+    shipping:shipping,payment:selectedPay,note:note,cart:cart,
+    totalAmount:total,slipBase64:slipBase64,submittedAt:now.toISOString()
+  };
+  var loadEl=document.getElementById('loading');
+  loadEl.classList.add('show');
+  document.getElementById('loading-text').textContent='ກຳລັງສົ່ງຄຳສັ່ງ...';
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'submitCustomerOrder',data:orderData})})
-  .then(function(){loadEl.classList.remove('show');showSuccess(code,total,name,phone,shipping);})
-  .catch(function(){submitViaGet(orderData);});
+    .then(function(){loadEl.classList.remove('show');showSuccess(orderData,now);})
+    .catch(function(){submitViaGet(orderData,now);});
 }
 
-function submitViaGet(orderData){
+function submitViaGet(orderData,now){
   var loadEl=document.getElementById('loading');loadEl.classList.add('show');
   var params=new URLSearchParams({action:'submitCustomerOrder',code:orderData.code,customerName:orderData.customerName,customerPhone:orderData.customerPhone,customerAddr:orderData.customerAddr,shipping:orderData.shipping,payment:orderData.payment,note:orderData.note||'',totalAmount:orderData.totalAmount,items:JSON.stringify(orderData.cart),submittedAt:orderData.submittedAt});
   fetch(SCRIPT_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})
-  .then(function(){loadEl.classList.remove('show');showSuccess(orderData.code,orderData.totalAmount,orderData.customerName,orderData.customerPhone,orderData.shipping);})
-  .catch(function(){loadEl.classList.remove('show');alert('❌ ສົ່ງບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');});
+    .then(function(){loadEl.classList.remove('show');showSuccess(orderData,now);})
+    .catch(function(){loadEl.classList.remove('show');alert('❌ ສົ່ງບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');});
 }
 
-/* ── SUCCESS ── */
-function showSuccess(code,total,name,phone,shipping){
-  lastOrderData={code:code,total:total,name:name,phone:phone,shipping:shipping,payment:selectedPay,cart:JSON.parse(JSON.stringify(cart)),note:document.getElementById('c-note').value.trim()};
-  document.getElementById('success-code').textContent='📦 ລະຫັດ: '+code;
-  var html='';
-  cart.forEach(function(item){html+='<div class="success-bill-row"><span class="sbl">'+item.name+' ×'+item.qty+'</span><span class="sbv">'+fN(item.price*item.qty)+' ₭</span></div>';});
-  html+='<div class="success-bill-row"><span class="sbl">👤 ຊື່</span><span class="sbv">'+name+' | '+phone+'</span></div>';
-  html+='<div class="success-bill-row"><span class="sbl">🚚 ຂົນສົ່ງ</span><span class="sbv">'+shipping+'</span></div>';
-  html+='<div class="success-bill-row"><span class="sbl">💳 ຊຳລະ</span><span class="sbv">'+selectedPay+'</span></div>';
-  html+='<div class="success-bill-total"><span>ລວມທັງໝົດ</span><span>'+fN(total)+' ₭</span></div>';
-  document.getElementById('success-bill').innerHTML=html;
-  var payMsg=selectedPay==='ເກັບປາຍທາງ COD'?'⚠️ ໂອນມັດຈຳ 15,000₭ ກ່ອນ!':selectedPay==='ໂອນຈ່າຍ'?'💳 ທາງຮ້ານຈະກວດສອບ ແລ້ວຈັດສົ່ງ':'💵 ຈ່າຍເວລາຮັບເຄື່ອງ';
-  document.getElementById('success-pay-msg').textContent=payMsg;
+// ─────────────────────────────────────────
+//  SHOW SUCCESS RECEIPT POPUP
+// ─────────────────────────────────────────
+function showSuccess(orderData,nowDate){
+  lastOrderData=JSON.parse(JSON.stringify(orderData));
+  lastOrderData._date=nowDate||new Date();
+
+  // Date string
+  var now=nowDate||new Date();
+  var dateStr=now.toLocaleString('lo-LA',{timeZone:'Asia/Vientiane',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('receipt-date').textContent='📅 '+dateStr;
+
+  // Code
+  document.getElementById('receipt-code-val').textContent=orderData.code;
+  document.getElementById('receipt-qr-code-text').textContent=orderData.code;
+
+  // Generate QR Code for the OrderID
+  var qrEl=document.getElementById('receipt-qr-code');
+  qrEl.innerHTML='';
+  try{
+    new QRCode(qrEl,{
+      text:orderData.code,
+      width:128,height:128,
+      colorDark:'#1B5E3A',colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M
+    });
+  }catch(e){
+    qrEl.innerHTML='<div style="width:128px;height:128px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:10px;color:#6B7280;border-radius:6px">QR: '+escHtml(orderData.code)+'</div>';
+  }
+
+  // Items
+  var itemsHtml='';
+  orderData.cart.forEach(function(item){
+    var sub=item.price*item.qty;
+    itemsHtml+='<div class="receipt-item-row">'
+      +'<span class="receipt-item-name">'+escHtml(item.name)+'</span>'
+      +'<span class="receipt-item-qty">×'+item.qty+'</span>'
+      +'<span class="receipt-item-price">'+fN(sub)+' ₭</span>'
+      +'</div>';
+  });
+  document.getElementById('receipt-items').innerHTML=itemsHtml;
+
+  // Total
+  document.getElementById('receipt-total-amount').textContent=fN(orderData.totalAmount)+' ₭';
+
+  // Info rows
+  var infoHtml=[
+    ['👤 ຊື່',orderData.customerName],
+    ['📱 ເບີໂທ',orderData.customerPhone],
+    ['📍 ທີ່ຢູ່',orderData.customerAddr],
+    ['🚚 ຂົນສົ່ງ',orderData.shipping],
+    ['💳 ຊຳລະ',orderData.payment],
+    orderData.note?['📝 ໝາຍເຫດ',orderData.note]:null
+  ].filter(Boolean).map(function(r){
+    return '<div class="receipt-info-row"><span class="receipt-info-label">'+r[0]+'</span><span class="receipt-info-val">'+escHtml(r[1])+'</span></div>';
+  }).join('');
+  document.getElementById('receipt-info').innerHTML=infoHtml;
+
+  // Pay specific message
+  var payMsg='';
+  if(orderData.payment==='ເກັບປາຍທາງ COD') payMsg='⚠️ ໂອນມັດຈຳ 15,000₭ ກ່ອນ ແລ້ວຄ່ອຍຝາກຂອງ!';
+  else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈະກວດສອບການໂອນ ແລ້ວຈຶ່ງຈັດສົ່ງ';
+  else payMsg='💵 ຈ່າຍເງີນສົດເວລາຮັບເຄື່ອງ';
+  document.getElementById('pay-specific-msg').textContent=payMsg;
+
   document.getElementById('success-modal').classList.add('show');
 }
 
-function downloadBill(){
-  var d=lastOrderData,canvas=document.getElementById('bill-canvas');
-  var W=560,lineH=22,pad=24,rows=d.cart.length+6,H=pad*2+80+rows*lineH+60;
+// ─────────────────────────────────────────
+//  DOWNLOAD RECEIPT (Canvas-based)
+// ─────────────────────────────────────────
+function downloadReceipt(){
+  var d=lastOrderData;
+  if(!d||!d.code){alert('ບໍ່ມີຂໍ້ມູນໃບບິນ');return;}
+
+  // Get QR as image
+  var qrEl=document.getElementById('receipt-qr-code');
+  var qrImg=qrEl.querySelector('img')||qrEl.querySelector('canvas');
+
+  var W=520;
+  var lineH=20;
+  var pad=24;
+  var headerH=100;
+  var qrSize=120;
+  var rows=d.cart.length+6+(d.note?1:0);
+  var H=pad*2+headerH+qrSize+40+rows*lineH+160;
+
+  var canvas=document.createElement('canvas');
   canvas.width=W;canvas.height=H;
   var ctx=canvas.getContext('2d');
+
+  // BG
   ctx.fillStyle='#F0F4F8';ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#ffffff';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(12,12,W-24,H-24,12);else ctx.rect(12,12,W-24,H-24);ctx.fill();
-  ctx.fillStyle='#1B5E3A';ctx.fillRect(12,12,W-24,60);
-  ctx.fillStyle='#ffffff';ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.fillText('SOUDSADA SHOP',W/2,40);
-  ctx.font='11px sans-serif';ctx.fillText('ໃບບິນສັ່ງຊື້',W/2,60);
-  ctx.fillStyle='#2D7A55';ctx.font='bold 14px sans-serif';ctx.fillText('ລະຫັດ: '+d.code,W/2,100);
-  var y=120;ctx.fillStyle='#1A1A2E';ctx.textAlign='left';ctx.font='11px sans-serif';
-  ctx.strokeStyle='#E2E8F0';ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();ctx.setLineDash([]);y+=lineH;
-  d.cart.forEach(function(item){ctx.font='12px sans-serif';ctx.fillStyle='#1A1A2E';ctx.fillText(item.name+' ×'+item.qty,pad,y);ctx.textAlign='right';ctx.fillText(fN(item.price*item.qty)+' ₭',W-pad,y);ctx.textAlign='left';y+=lineH;});
-  [['👤 ຊື່',d.name+' | '+d.phone],['🚚 ຂົນສົ່ງ',d.shipping],['💳 ຊຳລະ',d.payment]].forEach(function(r){ctx.font='11px sans-serif';ctx.fillStyle='#6B7280';ctx.fillText(r[0],pad,y);ctx.fillStyle='#1A1A2E';ctx.textAlign='right';ctx.fillText(r[1],W-pad,y);ctx.textAlign='left';y+=lineH;});
-  ctx.strokeStyle='#2D7A55';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();y+=18;
-  ctx.font='bold 15px sans-serif';ctx.fillStyle='#2D7A55';ctx.fillText('ລວມທັງໝົດ',pad,y);ctx.textAlign='right';ctx.fillText(fN(d.total)+' ₭',W-pad,y);ctx.textAlign='center';y+=30;
-  ctx.font='10px sans-serif';ctx.fillStyle='#6B7280';ctx.fillText('ຂອບໃຈທີ່ສັ່ງຊື້ · SOUDSADA SHOP · WhatsApp 020 92833416',W/2,y);
-  var a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='SOUDSADA_Bill_'+d.code+'.png';a.click();
+  // Card
+  ctx.fillStyle='#ffffff';
+  roundRect(ctx,12,12,W-24,H-24,14);ctx.fill();
+
+  // Header gradient
+  var grad=ctx.createLinearGradient(0,12,0,headerH+12);
+  grad.addColorStop(0,'#1B5E3A');grad.addColorStop(1,'#2D7A55');
+  ctx.fillStyle=grad;
+  roundRectTop(ctx,12,12,W-24,headerH,14);ctx.fill();
+
+  // Header text
+  ctx.fillStyle='#ffffff';
+  ctx.font='bold 20px sans-serif';ctx.textAlign='center';
+  ctx.fillText('SOUDSADA SHOP',W/2,50);
+  ctx.font='12px sans-serif';ctx.fillText('ໃບບິນສັ່ງຊື້ / Order Receipt',W/2,72);
+  ctx.font='10px sans-serif';ctx.fillStyle='rgba(255,255,255,0.75)';
+  var now=lastOrderData._date?new Date(lastOrderData._date):new Date();
+  ctx.fillText(now.toLocaleString('lo-LA',{timeZone:'Asia/Vientiane'}),W/2,92);
+
+  var y=headerH+24;
+
+  // Order code box
+  ctx.fillStyle='#E8F5EE';
+  roundRect(ctx,pad,y,W-pad*2,36,8);ctx.fill();
+  ctx.fillStyle='#2D7A55';ctx.font='bold 11px sans-serif';ctx.textAlign='left';
+  ctx.fillText('ລະຫັດອໍເດີ້:',pad+10,y+14);
+  ctx.font='bold 16px monospace';ctx.textAlign='right';
+  ctx.fillText(d.code,W-pad-10,y+22);
+  y+=50;
+
+  // QR code image
+  ctx.fillStyle='#ffffff';
+  roundRect(ctx,(W-qrSize-20)/2,y,qrSize+20,qrSize+30,10);ctx.fill();
+  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;
+  roundRect(ctx,(W-qrSize-20)/2,y,qrSize+20,qrSize+30,10);ctx.stroke();
+
+  if(qrImg){
+    try{ctx.drawImage(qrImg,(W-qrSize)/2,y+10,qrSize,qrSize);}catch(e){}
+  }
+  ctx.fillStyle='#2D7A55';ctx.font='bold 11px monospace';ctx.textAlign='center';
+  ctx.fillText(d.code,W/2,y+qrSize+24);
+  y+=qrSize+44;
+
+  // Divider
+  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
+  ctx.setLineDash([]);y+=lineH;
+
+  // Items header
+  ctx.fillStyle='#6B7280';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
+  ctx.fillText('ລາຍການສິນຄ້າ',pad,y);y+=lineH;
+
+  d.cart.forEach(function(item){
+    ctx.font='12px sans-serif';ctx.fillStyle='#1A1A2E';ctx.textAlign='left';
+    ctx.fillText(item.name+' ×'+item.qty,pad,y);
+    ctx.textAlign='right';ctx.fillStyle='#2D7A55';ctx.font='bold 12px sans-serif';
+    ctx.fillText(fN(item.price*item.qty)+' ₭',W-pad,y);
+    ctx.textAlign='left';y+=lineH;
+  });
+
+  // Total line
+  ctx.fillStyle='#E8F5EE';roundRect(ctx,pad,y,W-pad*2,30,6);ctx.fill();
+  ctx.fillStyle='#2D7A55';ctx.font='bold 14px sans-serif';ctx.textAlign='left';
+  ctx.fillText('ລວມທັງໝົດ',pad+10,y+20);
+  ctx.textAlign='right';ctx.font='bold 16px sans-serif';
+  ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-10,y+20);y+=44;
+
+  // Info rows
+  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  [['👤 ຊື່',d.customerName+' | '+d.customerPhone],
+   ['📍 ທີ່ຢູ່',d.customerAddr],
+   ['🚚 ຂົນສົ່ງ',d.shipping],
+   ['💳 ຊຳລະ',d.payment],
+   d.note?['📝 ໝາຍເຫດ',d.note]:null
+  ].filter(Boolean).forEach(function(r){
+    ctx.font='10px sans-serif';ctx.fillStyle='#6B7280';ctx.textAlign='left';ctx.fillText(r[0],pad,y);
+    ctx.fillStyle='#1A1A2E';ctx.font='bold 10px sans-serif';ctx.textAlign='right';ctx.fillText(r[1],W-pad,y);
+    ctx.textAlign='left';ctx.beginPath();ctx.moveTo(pad,y+4);ctx.lineTo(W-pad,y+4);ctx.stroke();
+    y+=lineH;
+  });
+  ctx.setLineDash([]);y+=8;
+
+  // Footer notice
+  ctx.fillStyle='#FFFBEB';roundRect(ctx,pad,y,W-pad*2,38,6);ctx.fill();
+  ctx.strokeStyle='#FCD34D';ctx.lineWidth=1;roundRect(ctx,pad,y,W-pad*2,38,6);ctx.stroke();
+  ctx.fillStyle='#92400E';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
+  ctx.fillText('📸 ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້ · ຫາກ 1-2 ມື້ ບໍ່ໄດ້ຮັບ ຕິດຕໍ່ 020 92833416',W/2,y+16);
+  ctx.font='10px sans-serif';
+  ctx.fillText('SOUDSADA SHOP · soudsada2025@gmail.com',W/2,y+30);y+=50;
+
+  // Download
+  var link=document.createElement('a');
+  link.href=canvas.toDataURL('image/png');
+  link.download='SOUDSADA_Receipt_'+d.code+'.png';
+  link.click();
 }
 
-/* ── RESET ── */
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+function roundRectTop(ctx,x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+// ─────────────────────────────────────────
+//  RESET
+// ─────────────────────────────────────────
 function resetAll(){
   cart=[];selectedProd=null;selectedShip='';selectedPay='';slipBase64='';
   ['c-name','c-phone','c-addr-detail','c-branch','c-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('c-province').value='';document.getElementById('c-district').value='';
   document.querySelectorAll('.ship-opt,.pay-opt').forEach(function(o){o.classList.remove('active');});
-  document.getElementById('cod-warning').classList.remove('show');document.getElementById('qr-pay-box').classList.remove('show');document.getElementById('slip-section').style.display='none';
-  removeSlip();renderCart();filterProds();document.getElementById('success-modal').classList.remove('show');document.getElementById('qty-panel').classList.remove('open');
+  document.getElementById('cod-warning').classList.remove('show');
+  document.getElementById('qr-pay-box').classList.remove('show');
+  document.getElementById('slip-section').style.display='none';
+  removeSlip();renderCart();filterProds();
+  document.getElementById('success-modal').classList.remove('show');
+  document.getElementById('qty-panel').classList.remove('open');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ════════════════════════════════════════
-   ★ ADMIN
-════════════════════════════════════════ */
+// ─────────────────────────────────────────
+//  ADMIN
+// ─────────────────────────────────────────
 function openAdmin(){document.getElementById('admin-modal').classList.add('show');if(!adminLoggedIn)setTimeout(function(){document.getElementById('admin-pw').focus();},100);}
 function closeAdmin(){document.getElementById('admin-modal').classList.remove('show');closeAllPopups();}
-
 function adminLogin(){
   var pw=document.getElementById('admin-pw').value;
   if(pw===ADMIN_PASSWORD){
@@ -898,14 +1375,11 @@ function adminLogin(){
     adminLoadOrders();
   }else{document.getElementById('admin-login-err').style.display='block';document.getElementById('admin-pw').value='';}
 }
-
 function adminTab(tab,el){
   adminTabFilter=tab;
   document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});
-  el.classList.add('active');
-  adminRenderOrders();
+  el.classList.add('active');adminRenderOrders();
 }
-
 function adminLoadOrders(){
   document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr>';
   fetch(SCRIPT_URL+'?action=getAllOrders')
@@ -913,8 +1387,6 @@ function adminLoadOrders(){
     .then(function(d){adminOrders=Array.isArray(d)?d:[];adminRenderOrders();adminRenderStats();updateTabCounts();})
     .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--red)">❌ ໂຫຼດບໍ່ໄດ້</td></tr>';});
 }
-
-/* ★ ອັບເດດຈຳນວນໃນ tab badges */
 function updateTabCounts(){
   var all=adminOrders.length;
   var w=adminOrders.filter(function(o){return o.orderStatus==='ລໍຖ້າຮັບຍອດ';}).length;
@@ -927,7 +1399,6 @@ function updateTabCounts(){
   document.getElementById('tc-packing').textContent=p;
   document.getElementById('tc-shipped').textContent=s;
 }
-
 function adminRenderStats(){
   var total=adminOrders.length;
   var waiting=adminOrders.filter(function(o){return o.orderStatus==='ລໍຖ້າຮັບຍອດ';}).length;
@@ -939,36 +1410,26 @@ function adminRenderStats(){
     +'<div class="stat-card"><div class="stat-num">'+shipped+'</div><div class="stat-lbl">ສົ່ງແລ້ວ</div></div>'
     +'<div class="stat-card"><div class="stat-num">'+fN(revenue)+'</div><div class="stat-lbl">ລາຍຮັບ (₭)</div></div>';
 }
-
-/* ★ STATUS CONFIG */
 var STATUS_CFG=[
-  {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',cls:'s0',color:'#F59E0B',dot:'#F59E0B'},
-  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ',  icon:'✅',cls:'s1',color:'#3B82F6',dot:'#3B82F6'},
-  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',cls:'s2',color:'#8B5CF6',dot:'#8B5CF6'},
-  {key:'ຈັດສົ່ງສຳເລັດ',     icon:'🎉',cls:'s3',color:'#10B981',dot:'#10B981'}
+  {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',cls:'s0',dot:'#F59E0B'},
+  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ', icon:'✅',cls:'s1',dot:'#3B82F6'},
+  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',cls:'s2',dot:'#8B5CF6'},
+  {key:'ຈັດສົ່ງສຳເລັດ',    icon:'🎉',cls:'s3',dot:'#10B981'}
 ];
-
 function getStatusCfg(key){return STATUS_CFG.find(function(s){return s.key===key;})||STATUS_CFG[0];}
-
-/* ★ Render popup HTML */
 function buildPopup(code,currentStatus){
-  var items=STATUS_CFG.map(function(s){
-    var isCur=s.key===currentStatus;
-    return '<div class="status-popup-item'+(isCur?' current':'')+'" onclick="applyStatus(\''+code+'\',\''+s.key+'\')">'
-      +'<span class="status-popup-dot" style="background:'+s.dot+'"></span>'
-      +'<span class="status-popup-text">'+s.icon+' '+s.key+'</span>'
-      +(isCur?'<span class="status-popup-check">✓</span>':'')
-      +'</div>';
-  }).join('');
-  return '<div class="status-popup-header">ປ່ຽນສະຖານະ</div>'+items;
+  return '<div class="status-popup-header">ປ່ຽນສະຖານະ</div>'
+    +STATUS_CFG.map(function(s){
+      var isCur=s.key===currentStatus;
+      return '<div class="status-popup-item'+(isCur?' current':'')+'" onclick="applyStatus(\''+escHtml(code)+'\',\''+s.key+'\')">'
+        +'<span class="status-popup-dot" style="background:'+s.dot+'"></span>'
+        +'<span class="status-popup-text">'+s.icon+' '+s.key+'</span>'
+        +(isCur?'<span class="status-popup-check">✓</span>':'')
+        +'</div>';
+    }).join('');
 }
-
-/* ★ Toggle popup */
 function toggleStatusPopup(code,currentStatus,el){
-  // ປິດ popup ອື່ນ
-  document.querySelectorAll('.status-popup').forEach(function(p){
-    if(p.dataset.code!==code)p.classList.remove('open');
-  });
+  document.querySelectorAll('.status-popup').forEach(function(p){if(p.dataset.code!==code)p.classList.remove('open');});
   var popup=el.nextElementSibling;
   if(!popup||!popup.classList.contains('status-popup'))return;
   var isOpen=popup.classList.contains('open');
@@ -976,23 +1437,9 @@ function toggleStatusPopup(code,currentStatus,el){
   popup.innerHTML=buildPopup(code,currentStatus);
   openPopupCode=isOpen?null:code;
 }
-
-/* ★ ປິດ popup ທັງໝົດ */
-function closeAllPopups(){
-  document.querySelectorAll('.status-popup').forEach(function(p){p.classList.remove('open');});
-  openPopupCode=null;
-}
-
-/* ★ Apply status */
-function applyStatus(code,newStatus){
-  closeAllPopups();
-  updateOrderStatus(code,newStatus);
-}
-
-/* ★ Click outside = ປິດ popup */
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.status-btn-wrap'))closeAllPopups();
-});
+function closeAllPopups(){document.querySelectorAll('.status-popup').forEach(function(p){p.classList.remove('open');});openPopupCode=null;}
+function applyStatus(code,newStatus){closeAllPopups();updateOrderStatusAdmin(code,newStatus);}
+document.addEventListener('click',function(e){if(!e.target.closest('.status-btn-wrap'))closeAllPopups();});
 
 function adminRenderOrders(){
   var q=(document.getElementById('admin-search')||{}).value||'';
@@ -1007,37 +1454,29 @@ function adminRenderOrders(){
     if(!q)return true;
     return (o.code||'').toLowerCase().includes(q)||(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q);
   });
-
   if(!filtered.length){
     document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພົບລາຍການ</td></tr>';
     return;
   }
-
   var html='';
   filtered.slice().reverse().forEach(function(o){
     var cfg=getStatusCfg(o.orderStatus);
-    var slipHtml='<span style="color:var(--muted);font-size:10px">❌ ບໍ່ມີ</span>';
+    var slipHtml='<span style="color:var(--muted);font-size:10px">❌</span>';
     if(o.slipUrl){
       var thumb=o.slipUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
-      slipHtml='<img class="slip-thumb" src="'+thumb+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+o.slipUrl+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+o.slipUrl+'\')">ເບີ່ງ</button>';
-    }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+o.slipStatus+'</span>';}
-
-    // ★ Status pill + popup
+      slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')">ເບີ່ງ</button>';
+    }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+escHtml(o.slipStatus)+'</span>';}
     var statusHtml='<div class="status-btn-wrap">'
-      +'<button class="status-pill '+cfg.cls+'" onclick="toggleStatusPopup(\''+o.code+'\',\''+o.orderStatus+'\',this)">'+cfg.icon+' '+o.orderStatus+' ▾</button>'
-      +'<div class="status-popup" data-code="'+o.code+'"></div>'
+      +'<button class="status-pill '+cfg.cls+'" onclick="toggleStatusPopup(\''+escHtml(o.code)+'\',\''+escHtml(o.orderStatus)+'\',this)">'+cfg.icon+' '+escHtml(o.orderStatus)+' ▾</button>'
+      +'<div class="status-popup" data-code="'+escHtml(o.code)+'"></div>'
       +'</div>';
-
-    // ວັນທີ
-    var dt=o.submittedAt||'';
-
     html+='<tr>'
-      +'<td><span class="order-code">'+o.code+'</span><div style="font-size:9px;color:var(--muted);margin-top:2px">'+dt+'</div></td>'
-      +'<td><div style="font-weight:700;font-size:11px">'+o.customerName+'</div><div style="font-size:10px;color:var(--muted)">'+o.customerPhone+'</div><div style="font-size:9px;color:var(--muted)">'+o.customerAddr+'</div></td>'
-      +'<td style="font-size:10px;max-width:130px">'+o.itemsSummary.replace(/\n/g,'<br>')+'</td>'
+      +'<td><span class="order-code">'+escHtml(o.code)+'</span><div style="font-size:9px;color:var(--muted);margin-top:2px">'+escHtml(o.submittedAt||'')+'</div></td>'
+      +'<td><div style="font-weight:700;font-size:11px">'+escHtml(o.customerName)+'</div><div style="font-size:10px;color:var(--muted)">'+escHtml(o.customerPhone)+'</div><div style="font-size:9px;color:var(--muted)">'+escHtml(o.customerAddr)+'</div></td>'
+      +'<td style="font-size:10px;max-width:130px">'+escHtml(o.itemsSummary).replace(/\n/g,'<br>')+'</td>'
       +'<td style="font-weight:800;color:var(--green);font-size:11px;white-space:nowrap">'+fN(o.totalAmount)+' ₭</td>'
-      +'<td style="font-size:10px">'+o.shipping+'</td>'
-      +'<td style="font-size:10px">'+o.payment+'</td>'
+      +'<td style="font-size:10px">'+escHtml(o.shipping)+'</td>'
+      +'<td style="font-size:10px">'+escHtml(o.payment)+'</td>'
       +'<td>'+slipHtml+'</td>'
       +'<td>'+statusHtml+'</td>'
       +'</tr>';
@@ -1045,7 +1484,7 @@ function adminRenderOrders(){
   document.getElementById('orders-tbody').innerHTML=html;
 }
 
-function updateOrderStatus(code,newStatus){
+function updateOrderStatusAdmin(code,newStatus){
   var url=SCRIPT_URL+'?action=updateOrderStatus&code='+encodeURIComponent(code)+'&status='+encodeURIComponent(newStatus);
   fetch(url,{method:'GET'})
     .then(function(r){return r.json();})
@@ -1054,11 +1493,10 @@ function updateOrderStatus(code,newStatus){
         var o=adminOrders.find(function(x){return x.code===code;});
         if(o)o.orderStatus=newStatus;
         adminRenderOrders();adminRenderStats();updateTabCounts();
-        // flash
         setTimeout(function(){
           document.querySelectorAll('#orders-tbody tr').forEach(function(tr){
-            var code_cell=tr.querySelector('.order-code');
-            if(code_cell&&code_cell.textContent===code){
+            var cc=tr.querySelector('.order-code');
+            if(cc&&cc.textContent===code){
               tr.style.transition='background .3s';tr.style.background='#D1FAE5';
               setTimeout(function(){tr.style.background='';},1500);
             }
@@ -1070,10 +1508,14 @@ function updateOrderStatus(code,newStatus){
 
 function viewSlip(url){
   var v=url.includes('/view')?url.replace('/view','').replace('file/d/','uc?export=view&id='):url;
-  document.getElementById('slip-modal-img').src=v;document.getElementById('slip-modal').classList.add('show');
+  document.getElementById('slip-modal-img').src=v;
+  document.getElementById('slip-modal').classList.add('show');
 }
 function closeSlipModal(){document.getElementById('slip-modal').classList.remove('show');}
 
+// ─────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',loadProducts);
 </script>
 </body>
