@@ -1258,7 +1258,7 @@ function showSuccess(orderData,nowDate){
   var payMsg='';
   if(orderData.payment==='ເກັບປາຍທາງ COD') payMsg='⚠️ ໂອນມັດຈຳ 15,000₭ ກ່ອນ ແລ້ວຄ່ອຍຝາກຂອງ!';
   else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈະກວດສອບການໂອນ ແລ້ວຈຶ່ງຈັດສົ່ງ';
-  else payMsg='💵 ຈ່າຍເງີນສົດເວລາຮັບເຄື່ອງ';
+  else payMsg=' ມັດຈຳບັດຕື່ມເງີນຫຼັກ5 ຫຼັກ9 ';
   document.getElementById('pay-specific-msg').textContent=payMsg;
 
   document.getElementById('success-modal').classList.add('show');
