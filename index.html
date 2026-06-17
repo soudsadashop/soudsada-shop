@@ -78,6 +78,7 @@ input,select,textarea{font-family:inherit}
 .cam-hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5}
 .scan-result-badge{background:var(--green-lt);border:1.5px solid var(--green);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--green);margin-top:8px;display:none}
 .scan-result-badge.show{display:block}
+.cam-status-msg{font-size:10px;color:var(--muted);margin-top:6px;min-height:14px}
 
 /* Track result */
 .track-result{margin-top:10px}
@@ -189,6 +190,7 @@ input,select,textarea{font-family:inherit}
 .field input,.field select,.field textarea{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;color:var(--ink);background:var(--surface);outline:none;transition:border-color .2s}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green)}
 .field input.invalid,.field select.invalid,.field textarea.invalid{border-color:var(--red)}
+.field select:disabled{background:var(--bg);color:var(--muted);cursor:not-allowed}
 .field-row{display:flex;gap:7px}
 .field-row .field{flex:1;min-width:0}
 .field-error{font-size:10px;color:var(--red);margin-top:3px;display:none}
@@ -454,6 +456,7 @@ input,select,textarea{font-family:inherit}
           <button class="cam-btn cam-stop" onclick="stopCamera()" id="btn-cam-stop" style="display:none">⏹ ປິດກ້ອງ</button>
         </div>
         <div class="scan-result-badge" id="scan-result-badge"></div>
+        <div class="cam-status-msg" id="cam-status-msg"></div>
         <div class="cam-hint">ວາງ QR Code ຢູ່ໃນກ່ອງ · ລະບົບຈະສະແກນອັດຕະໂນມັດ<br>ຮັບຮອງ QR ຈາກໃບບິນ SOUDSADA SHOP</div>
       </div>
     </div>
@@ -520,11 +523,13 @@ input,select,textarea{font-family:inherit}
         <div class="form-section">
           <div class="form-section-title">📍 ທີ່ຢູ່ຈັດສົ່ງ</div>
           <div class="field"><label>ແຂວງ <span class="req">*</span></label>
-            <select id="c-province"><option value="">— ເລືອກແຂວງ —</option><option>ວຽງຈັນ (ນະຄອນຫຼວງ)</option><option>ວຽງຈັນ (ແຂວງ)</option><option>ບໍລິຄຳໄຊ</option><option>ຄຳມ່ວນ</option><option>ສະຫວັນນະເຂດ</option><option>ສາລະວັນ</option><option>ເຊກອງ</option><option>ຈຳປາສັກ</option><option>ອັດຕະປື</option><option>ຫຼວງພະບາງ</option><option>ຫຼວງນໍ້າທາ</option><option>ອຸດົມໄຊ</option><option>ບໍ່ແກ້ວ</option><option>ຜົ້ງສາລີ</option><option>ຫົວພັນ</option><option>ໄຊສົມບູນ</option><option>ໄຊຍະບູລີ</option><option>ຊຽງຂວາງ</option></select>
+            <select id="c-province" onchange="onProvinceChange()"><option value="">— ເລືອກແຂວງ —</option><option>ວຽງຈັນ (ນະຄອນຫຼວງ)</option><option>ວຽງຈັນ (ແຂວງ)</option><option>ບໍລິຄຳໄຊ</option><option>ຄຳມ່ວນ</option><option>ສະຫວັນນະເຂດ</option><option>ສາລະວັນ</option><option>ເຊກອງ</option><option>ຈຳປາສັກ</option><option>ອັດຕະປື</option><option>ຫຼວງພະບາງ</option><option>ຫຼວງນໍ້າທາ</option><option>ອຸດົມໄຊ</option><option>ບໍ່ແກ້ວ</option><option>ຜົ້ງສາລີ</option><option>ຫົວພັນ</option><option>ໄຊສົມບູນ</option><option>ໄຊຍະບູລີ</option><option>ຊຽງຂວາງ</option></select>
             <div class="field-error" id="err-province">ກະລຸນາເລືອກແຂວງ</div>
           </div>
-          <div class="field"><label>ເມືອງ <span class="req">*</span></label><input type="text" id="c-district" placeholder="ໃສ່ຊື່ເມືອງ / ບ້ານ"><div class="field-error" id="err-district">ກະລຸນາໃສ່ເມືອງ</div></div>
-          <div class="field"><label>ລາຍລະອຽດ</label><input type="text" id="c-addr-detail" placeholder="ໝູ່ / ຖະໜົນ / ຈຸດໝາຍ"></div>
+          <div class="field"><label>ເມືອງ <span class="req">*</span></label>
+            <select id="c-district" disabled><option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option></select>
+            <div class="field-error" id="err-district">ກະລຸນາເລືອກເມືອງ</div>
+          </div>
         </div>
         <div class="form-section">
           <div class="form-section-title">🚚 ຂົນສົ່ງ <span class="req">*</span></div>
@@ -802,93 +807,99 @@ function buildStatusHtml(d){
 }
 
 // ─────────────────────────────────────────
-//  CAMERA QR SCAN
+//  CAMERA QR SCAN  (jsQR — reliable across all browsers)
 // ─────────────────────────────────────────
+function setCamMsg(msg){
+  var el=document.getElementById('cam-status-msg');
+  if(el)el.textContent=msg||'';
+}
+
 function startCamera(){
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){alert('ບ​ຣາວ​ເຊີ​ນີ້​ບໍ່​ຮອງ​ຮັບ​ກ້ອງ');return;}
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    alert('ບຣາວເຊີນີ້ບໍ່ຮອງຮັບກ້ອງ');
+    return;
+  }
+  setCamMsg('⏳ ກຳລັງເປີດກ້ອງ...');
   navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
     .then(function(stream){
       cameraStream=stream;
       var video=document.getElementById('qr-video');
       video.srcObject=stream;
-      video.play();
+      var playPromise=video.play();
+      if(playPromise&&playPromise.catch)playPromise.catch(function(){});
       document.getElementById('btn-cam-start').style.display='none';
       document.getElementById('btn-cam-stop').style.display='';
-      startQRScan();
+      document.getElementById('scan-result-badge').classList.remove('show');
+      setCamMsg('🔎 ກຳລັງສະແກນ...');
+      loadJsQR(function(){ startQRScan(); });
     })
-    .catch(function(err){alert('ບໍ່ສາ​ມາດ​ເປີດ​ກ້ອງ: '+err.message);});
+    .catch(function(err){
+      setCamMsg('');
+      alert('ບໍ່ສາມາດເປີດກ້ອງໄດ້: '+err.message+'\\nກະລຸນາອະນຸຍາດການໃຊ້ກ້ອງ ແລະ ໃຊ້ໂດເມນ https');
+    });
 }
 
-function stopCamera(){
+function stopCamera(keepBadge){
   if(cameraStream){cameraStream.getTracks().forEach(function(t){t.stop();});cameraStream=null;}
   var video=document.getElementById('qr-video');
   if(video){video.srcObject=null;}
   clearInterval(scanInterval);scanInterval=null;
   document.getElementById('btn-cam-start').style.display='';
   document.getElementById('btn-cam-stop').style.display='none';
-  document.getElementById('scan-result-badge').classList.remove('show');
+  setCamMsg('');
+  if(!keepBadge)document.getElementById('scan-result-badge').classList.remove('show');
 }
 
-// Simple QR scan using canvas + BarcodeDetector API (modern browsers)
+// jsQR-based scan loop. jsQR is a pure-JS decoder that works the same
+// in every modern browser (unlike the native BarcodeDetector API, which
+// is missing or unreliable on many devices — this was the cause of
+// "scans but never finds anything").
 function startQRScan(){
   var video=document.getElementById('qr-video');
   var canvas=document.createElement('canvas');
-  var ctx=canvas.getContext('2d');
+  var ctx=canvas.getContext('2d',{willReadFrequently:true});
   var lastResult='';
+  var lastResultTime=0;
 
-  // Try BarcodeDetector first (Chrome/Edge)
-  if('BarcodeDetector' in window){
-    var detector=new BarcodeDetector({formats:['qr_code','code_128','code_39','ean_13']});
-    scanInterval=setInterval(function(){
-      if(!video.videoWidth)return;
-      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-      ctx.drawImage(video,0,0);
-      detector.detect(canvas).then(function(barcodes){
-        if(barcodes.length>0){
-          var val=barcodes[0].rawValue;
-          if(val&&val!==lastResult){
-            lastResult=val;
-            handleScanResult(val);
-          }
-        }
-      }).catch(function(){});
-    },500);
-  } else {
-    // Fallback: jsQR from CDN
-    loadJsQR(function(){
-      scanInterval=setInterval(function(){
-        if(!video.videoWidth)return;
-        canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-        ctx.drawImage(video,0,0);
-        var imageData=ctx.getImageData(0,0,canvas.width,canvas.height);
-        if(window.jsQR){
-          var code=window.jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'dontInvert'});
-          if(code&&code.data&&code.data!==lastResult){
-            lastResult=code.data;
-            handleScanResult(code.data);
-          }
-        }
-      },500);
-    });
-  }
+  clearInterval(scanInterval);
+  scanInterval=setInterval(function(){
+    if(!window.jsQR||!video||!video.videoWidth)return;
+    canvas.width=video.videoWidth;
+    canvas.height=video.videoHeight;
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    var imageData;
+    try{ imageData=ctx.getImageData(0,0,canvas.width,canvas.height); }
+    catch(e){ return; }
+    var code=window.jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'attemptBoth'});
+    if(code&&code.data){
+      var now=Date.now();
+      if(code.data!==lastResult||(now-lastResultTime)>4000){
+        lastResult=code.data;lastResultTime=now;
+        handleScanResult(code.data);
+      }
+    }
+  },300);
 }
 
 function loadJsQR(cb){
   if(window.jsQR){cb();return;}
   var s=document.createElement('script');
   s.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
-  s.onload=cb;document.head.appendChild(s);
+  s.onload=cb;
+  s.onerror=function(){setCamMsg('⚠️ ໂຫຼດໂມດູນສະແກນບໍ່ໄດ້ ກວດສອບອິນເຕີເນັດ');};
+  document.head.appendChild(s);
 }
 
 function handleScanResult(val){
   var badge=document.getElementById('scan-result-badge');
   badge.innerHTML='✅ ສະແກນໄດ້: <strong>'+escHtml(val)+'</strong>';
   badge.classList.add('show');
-  // Auto-search if looks like an order code
-  stopCamera();
+  // Keep the badge visible — only stop the camera feed, don't clear it
+  stopCamera(true);
+  var code=String(val).trim().toUpperCase();
   var res=document.getElementById('track-result');
   res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
-  fetch(SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(val))
+  fetch(SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(code))
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d||d.status==='not_found'){
@@ -897,7 +908,7 @@ function handleScanResult(val){
       }
       res.innerHTML=buildStatusHtml(d);
     })
-    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້</div></div>';});
+    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div></div>';});
 }
 
 // ─────────────────────────────────────────
@@ -1016,6 +1027,50 @@ function clearCart(){cart=[];renderCart();filterProds();}
 function scrollToCart(){document.getElementById('right-panel').scrollIntoView({behavior:'smooth'});}
 
 // ─────────────────────────────────────────
+//  PROVINCE → DISTRICT (ເມືອງ) DROPDOWN
+// ─────────────────────────────────────────
+var DISTRICTS_BY_PROVINCE={
+  'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
+  'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊະນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
+  'ບໍລິຄຳໄຊ':['ປາກຊັນ','ທ່າພະບາດ','ປາກກະດິງ','ຄຳເກີດ','ບໍລິຄັນ','ວຽງທອງ','ໄຊຈຳພອນ'],
+  'ຄຳມ່ວນ':['ທ່າແຂກ','ມະຫາໄຊ','ໜອງບົກ','ຫີນບູນ','ຍົມມະລາດ','ບົວລະພາ','ນາກາຍ','ເຊບັ້ງໄຟ','ໄຊບົວທອງ','ຄູນຄຳ'],
+  'ສະຫວັນນະເຂດ':['ໄກສອນ ພົມວິຫານ','ອຸທຸມພອນ','ອາດສະພັງທອງ','ພີນ','ເຊໂປນ','ນອງ','ທ່າປາງທອງ','ສອງຄອນ','ຈຳພອນ','ຊົນນະບູລີ','ໄຊບູລີ','ວິລະບູລີ','ອາດສະພອນ','ໄຊພູທອງ','ພະລານໄຊ'],
+  'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕະໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
+  'ເຊກອງ':['ທ່າແຕງ','ລະມາມ','ກະລຶມ','ດັກຈຶງ'],
+  'ຈຳປາສັກ':['ປາກເຊ','ຊະນະສົມບູນ','ບາຈຽງຈະເລີນສຸກ','ປາກຊ່ອງ','ປະທຸມພອນ','ໂພນທອງ','ຈຳປາສັກ','ສຸຂຸມາ','ມູນລະປະໂມກ','ໂຂງ'],
+  'ອັດຕະປື':['ໄຊເຊດຖາ','ສາມັກຄີໄຊ','ສະໜາມໄຊ','ຊານໄຊ','ພູວົງ'],
+  'ຫຼວງພະບາງ':['ຫຼວງພະບາງ','ຊຽງເງິນ','ນານ','ປາກອູ','ນ້ຳບາກ','ງອຍ','ປາກແຊງ','ໂພນໄຊ','ຈອມເພັດ','ວຽງຄຳ','ພູຄູນ','ໂພນທອງ'],
+  'ຫຼວງນໍ້າທາ':['ຫຼວງນໍ້າທາ','ສີງ','ລອງ','ວຽງພູຄາ','ນາແລ'],
+  'ອຸດົມໄຊ':['ໄຊ','ຫລາ','ນາໝໍ້','ງາ','ແບ່ງ','ຮຸນ','ປາກແບ່ງ'],
+  'ບໍ່ແກ້ວ':['ຫ້ວຍຊາຍ','ຕົ້ນເຜິ້ງ','ເມິງ','ຜາອຸດົມ','ປາກທາ'],
+  'ຜົ້ງສາລີ':['ບຸນໃຕ້','ຂວາ','ໃໝ່','ຍອດອູ','ຜົ້ງສາລີ','ສຳພັນ','ບຸນເໜືອ'],
+  'ຫົວພັນ':['ຊຳເໜືອ','ຊຽງຄໍ້','ຮ້ຽມ','ວຽງໄຊ','ຫົວເມືອງ','ຊຳໃຕ້','ສົບເບົາ','ແອດ','ກວັນ','ຊ່ອນ'],
+  'ໄຊສົມບູນ':['ລ້ອງແຈ້ງ','ທ່າໂທມ','ອະນຸວົງ','ລ້ອງຊານ','ຮົ່ມ'],
+  'ໄຊຍະບູລີ':['ບໍ່ແຕນ','ຫົງສາ','ແກ່ນທ້າວ','ຄອບ','ເງິນ','ປາກລາຍ','ພຽງ','ທົ່ງມີໄຊ','ໄຊຍະບູລີ','ຊຽງຮ່ອນ','ໄຊສະຖານ'],
+  'ຊຽງຂວາງ':['ແປກ (ໂພນສະຫວັນ)','ຄຳ','ໜອງແຮດ','ຄູນ','ໝອກ','ພູກູດ','ຜາໄຊ']
+};
+
+function onProvinceChange(){
+  var prov=document.getElementById('c-province').value;
+  var distSel=document.getElementById('c-district');
+  var list=DISTRICTS_BY_PROVINCE[prov]||[];
+  showErr('err-province',false);markField('c-province',false);
+  if(!prov||!list.length){
+    distSel.innerHTML='<option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option>';
+    distSel.disabled=true;
+    return;
+  }
+  distSel.disabled=false;
+  distSel.innerHTML='<option value="">— ເລືອກເມືອງ —</option>'+list.map(function(d){return '<option value="'+escHtml(d)+'">'+escHtml(d)+'</option>';}).join('');
+  showErr('err-district',false);markField('c-district',false);
+}
+function resetDistrictSelect(){
+  var distSel=document.getElementById('c-district');
+  distSel.innerHTML='<option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option>';
+  distSel.disabled=true;
+}
+
+// ─────────────────────────────────────────
 //  SHIP / PAY
 // ─────────────────────────────────────────
 function selectShip(el,val){
@@ -1084,7 +1139,7 @@ function validate(){
   var name=document.getElementById('c-name').value.trim();showErr('err-name',!name);markField('c-name',!name);if(!name)ok=false;
   var phone=document.getElementById('c-phone').value.trim();showErr('err-phone',!phone);markField('c-phone',!phone);if(!phone)ok=false;
   var prov=document.getElementById('c-province').value;showErr('err-province',!prov);markField('c-province',!prov);if(!prov)ok=false;
-  var dist=document.getElementById('c-district').value.trim();showErr('err-district',!dist);markField('c-district',!dist);if(!dist)ok=false;
+  var dist=document.getElementById('c-district').value;showErr('err-district',!dist);markField('c-district',!dist);if(!dist)ok=false;
   showErr('err-ship',!selectedShip);if(!selectedShip)ok=false;
   showErr('err-pay',!selectedPay);if(!selectedPay)ok=false;
   if(selectedPay==='ເກັບປາຍທາງ COD'&&selectedShip!=='ອານຸສິດ'){alert('⚠️ COD ໃຊ້ໄດ້ສະເພາະ ຂົນສົ່ງ ອານຸສິດ!');ok=false;}
@@ -1112,13 +1167,12 @@ function submitOrder(){
   var name=document.getElementById('c-name').value.trim();
   var phone=document.getElementById('c-phone').value.trim();
   var prov=document.getElementById('c-province').value;
-  var dist=document.getElementById('c-district').value.trim();
-  var addrD=document.getElementById('c-addr-detail').value.trim();
+  var dist=document.getElementById('c-district').value;
   var branch=document.getElementById('c-branch').value.trim();
   var note=document.getElementById('c-note').value.trim();
   var code=generateOrderCode(phone);
   var total=cart.reduce(function(s,c){return s+c.price*c.qty;},0);
-  var addr=[prov,dist,addrD].filter(Boolean).join(' - ');
+  var addr=[prov,dist].filter(Boolean).join(' - ');
   var shipping=[selectedShip,branch].filter(Boolean).join(': ');
   var now=new Date();
   var orderData={
@@ -1348,8 +1402,9 @@ function roundRectTop(ctx,x,y,w,h,r){
 // ─────────────────────────────────────────
 function resetAll(){
   cart=[];selectedProd=null;selectedShip='';selectedPay='';slipBase64='';
-  ['c-name','c-phone','c-addr-detail','c-branch','c-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('c-province').value='';document.getElementById('c-district').value='';
+  ['c-name','c-phone','c-branch','c-note'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('c-province').value='';
+  resetDistrictSelect();
   document.querySelectorAll('.ship-opt,.pay-opt').forEach(function(o){o.classList.remove('active');});
   document.getElementById('cod-warning').classList.remove('show');
   document.getElementById('qr-pay-box').classList.remove('show');
