@@ -555,12 +555,13 @@ input,select,textarea{font-family:inherit}
             <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ດາວໂຫຼດ QR</button></div>
           </div>
           <div class="cod-warning" id="cod-warning">⚠️ <strong>ເງື່ອນໄຂ COD:</strong><br>• ສະເພາະ <strong>ຂົນສົ່ງ ອານຸສິດ</strong> ເທົ່ານັ້ນ<br>• ກ່ອນຝາກ ຕ້ອງ <strong>ໂອນມັດຈຳ 15,000 ₭</strong> ກ່ອນ<br>• ສະແກນ QR ຂ້ານເທີ່ງ ແລ້ວ ອັບໂຫຼດສະລິບ</div>
+          <div class="cod-warning" id="card-warning">⚠️ <strong>ເງື່ອນໄຂ ມັດຈຳບັດເຕີມເງີນ:</strong><br>• ບັດຕ້ອງມີມູນຄ່າ <strong>ບໍ່ຕ່ຳກວ່າ 10,000 ກີບ</strong> (ຫຼັກ 5 ຫຼື ຫຼັກ 9)<br>• ກະລຸນາ <strong>ຖ່າຍຮູບໜ້າບັດ</strong> (ບ່ອນເຫັນລະຫັດບັດ) ແນບມານຳກ່ອນກົດຢືນຢັນສັ່ງຊື້</div>
         </div>
         <div class="form-section" id="slip-section" style="display:none">
-          <div class="form-section-title">📸 ສະລິບໂອນ <span class="req">*</span></div>
+          <div class="form-section-title" id="slip-section-title">📸 ສະລິບໂອນ <span class="req">*</span></div>
           <div class="file-upload-area" id="upload-area" onclick="triggerUpload()">
             <div class="file-upload-icon">📸</div>
-            <div class="file-upload-text"><strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB</div>
+            <div class="file-upload-text" id="upload-area-text"><strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB</div>
             <input type="file" id="slip-file" accept="image/*" onchange="previewSlip(this)">
           </div>
           <div class="file-preview" id="slip-preview"><img id="slip-preview-img" src="" alt="Slip"><button class="file-remove" onclick="removeSlip()">✕</button></div>
@@ -1031,21 +1032,21 @@ function scrollToCart(){document.getElementById('right-panel').scrollIntoView({b
 // ─────────────────────────────────────────
 var DISTRICTS_BY_PROVINCE={
   'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
-  'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊະນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
+  'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊะນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
   'ບໍລິຄຳໄຊ':['ປາກຊັນ','ທ່າພະບາດ','ປາກກະດິງ','ຄຳເກີດ','ບໍລິຄັນ','ວຽງທອງ','ໄຊຈຳພອນ'],
   'ຄຳມ່ວນ':['ທ່າແຂກ','ມະຫາໄຊ','ໜອງບົກ','ຫີນບູນ','ຍົມມະລາດ','ບົວລະພາ','ນາກາຍ','ເຊບັ້ງໄຟ','ໄຊບົວທອງ','ຄູນຄຳ'],
   'ສະຫວັນນະເຂດ':['ໄກສອນ ພົມວິຫານ','ອຸທຸມພອນ','ອາດສະພັງທອງ','ພີນ','ເຊໂປນ','ນອງ','ທ່າປາງທອງ','ສອງຄອນ','ຈຳພອນ','ຊົນນະບູລີ','ໄຊບູລີ','ວິລະບູລີ','ອາດສະພອນ','ໄຊພູທອງ','ພະລານໄຊ'],
-  'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕະໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
-  'ເຊກອງ':['ທ່າແຕງ','ລະມາມ','ກະລຶມ','ດັກຈຶງ'],
-  'ຈຳປາສັກ':['ປາກເຊ','ຊະນະສົມບູນ','ບາຈຽງຈະເລີນສຸກ','ປາກຊ່ອງ','ປະທຸມພອນ','ໂພນທອງ','ຈຳປາສັກ','ສຸຂຸມາ','ມູນລະປະໂມກ','ໂຂງ'],
-  'ອັດຕະປື':['ໄຊເຊດຖາ','ສາມັກຄີໄຊ','ສະໜາມໄຊ','ຊານໄຊ','ພູວົງ'],
-  'ຫຼວງພະບາງ':['ຫຼວງພະບາງ','ຊຽງເງິນ','ນານ','ປາກອູ','ນ້ຳບາກ','ງອຍ','ປາກແຊງ','ໂພນໄຊ','ຈອມເພັດ','ວຽງຄຳ','ພູຄູນ','ໂພນທອງ'],
+  'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕะໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
+  'ເຊກອງ':['ທ່າແຕງ','ລะมาม','ກะลึม','ดักจึง'],
+  'ຈຳປາສັກ':['ປາກເຊ','ຊะนะสมบูน','บาจึ่งจะเลิ่นสุก','ปากซ่อง','ประทุมพอน','โพนทอง','จำปาสัก','สุขุมา','มูนละปะโมก','โขง'],
+  'ອັດຕະປື':['ไซเซดถา','สามักคีไซ','สะหนามไซ','ซานไซ','พูวง'],
+  'ຫຼວງພະບາງ':['หลวงพะบาง','เชียงเงิน','นาน','ปากอู','น้ำบาก','งอย','ปากแซง','โพนไซ','จอมเพ็ด','เวียงคำ','พูคูน','โพนทอง'],
   'ຫຼວງນໍ້າທາ':['ຫຼວງນໍ້າທາ','ສີງ','ລອງ','ວຽງພູຄາ','ນາແລ'],
   'ອຸດົມໄຊ':['ໄຊ','ຫລາ','ນາໝໍ້','ງາ','ແບ່ງ','ຮຸນ','ປາກແບ່ງ'],
   'ບໍ່ແກ້ວ':['ຫ້ວຍຊາຍ','ຕົ້ນເຜິ້ງ','ເມິງ','ຜາອຸດົມ','ປາກທາ'],
   'ຜົ້ງສາລີ':['ບຸນໃຕ້','ຂວາ','ໃໝ່','ຍອດອູ','ຜົ້ງສາລີ','ສຳພັນ','ບຸນເໜືອ'],
   'ຫົວພັນ':['ຊຳເໜືອ','ຊຽງຄໍ້','ຮ້ຽມ','ວຽງໄຊ','ຫົວເມືອງ','ຊຳໃຕ້','ສົບເບົາ','ແອດ','ກວັນ','ຊ່ອນ'],
-  'ໄຊສົມບູນ':['ລ້ອງແຈ້ງ','ທ່າໂທມ','ອະນຸວົງ','ລ້ອງຊານ','ຮົ່ມ'],
+  'ໄຊສົມບູນ':['ລ້ອງແຈ້ງ','ທ່າໂທມ','ອะนุวง','ลองซาน','ห่ม'],
   'ໄຊຍະບູລີ':['ບໍ່ແຕນ','ຫົງສາ','ແກ່ນທ້າວ','ຄອບ','ເງິນ','ປາກລາຍ','ພຽງ','ທົ່ງມີໄຊ','ໄຊຍະບູລີ','ຊຽງຮ່ອນ','ໄຊສະຖານ'],
   'ຊຽງຂວາງ':['ແປກ (ໂພນສະຫວັນ)','ຄຳ','ໜອງແຮດ','ຄູນ','ໝອກ','ພູກູດ','ຜາໄຊ']
 };
@@ -1082,10 +1083,21 @@ function selectPay(el,val){
   el.classList.add('active');selectedPay=val;updatePayState();
 }
 function updatePayState(){
-  var isCOD=selectedPay==='ເກັບປາຍທາງ COD',isTransfer=selectedPay==='ໂອນຈ່າຍ',showQR=isCOD||isTransfer;
+  var isCOD=selectedPay==='ເກັບປາຍທາງ COD',isTransfer=selectedPay==='ໂອນຈ່າຍ',isCard=selectedPay==='ມັດຈຳບັດເຕີມເງີນ';
+  var showQR=isCOD||isTransfer,showSlip=isCOD||isTransfer||isCard;
   document.getElementById('qr-pay-box').classList.toggle('show',showQR);
   document.getElementById('cod-warning').classList.toggle('show',isCOD);
-  document.getElementById('slip-section').style.display=showQR?'block':'none';
+  document.getElementById('card-warning').classList.toggle('show',isCard);
+  document.getElementById('slip-section').style.display=showSlip?'block':'none';
+  if(isCard){
+    document.getElementById('slip-section-title').innerHTML='📸 ຮູບບັດເຕີມເງີນ <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດຮູບບັດເຕີມເງີນ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດຮູບບັດເຕີມເງີນ';
+  }else{
+    document.getElementById('slip-section-title').innerHTML='📸 ສະລິບໂອນ <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດສະລິບ';
+  }
   if(isCOD&&selectedShip!=='ອານຸສິດ'){
     document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});
     var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸສິດ';
@@ -1143,7 +1155,7 @@ function validate(){
   showErr('err-ship',!selectedShip);if(!selectedShip)ok=false;
   showErr('err-pay',!selectedPay);if(!selectedPay)ok=false;
   if(selectedPay==='ເກັບປາຍທາງ COD'&&selectedShip!=='ອານຸສິດ'){alert('⚠️ COD ໃຊ້ໄດ້ສະເພາະ ຂົນສົ່ງ ອານຸສິດ!');ok=false;}
-  var slipReq=selectedPay==='ເກັບປາຍທາງ COD'||selectedPay==='ໂອນຈ່າຍ';
+  var slipReq=selectedPay==='ເກັບປາຍທາງ COD'||selectedPay==='ໂອນຈ່າຍ'||selectedPay==='ມັດຈຳບັດເຕີມເງີນ';
   if(slipReq&&!slipBase64){showErr('err-slip',true);ok=false;}else showErr('err-slip',false);
   if(!ok){var fe=document.querySelector('.invalid,.field-error.show');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});}
   return ok;
@@ -1247,7 +1259,7 @@ function showSuccess(orderData,nowDate){
     ['📱 ເບີໂທ',orderData.customerPhone],
     ['📍 ທີ່ຢູ່',orderData.customerAddr],
     ['🚚 ຂົນສົ່ງ',orderData.shipping],
-    ['💳 ຊຳລະ',orderData.payment],
+    ['💳 ຊຳລะ',orderData.payment],
     orderData.note?['📝 ໝາຍເຫດ',orderData.note]:null
   ].filter(Boolean).map(function(r){
     return '<div class="receipt-info-row"><span class="receipt-info-label">'+r[0]+'</span><span class="receipt-info-val">'+escHtml(r[1])+'</span></div>';
@@ -1257,8 +1269,8 @@ function showSuccess(orderData,nowDate){
   // Pay specific message
   var payMsg='';
   if(orderData.payment==='ເກັບປາຍທາງ COD') payMsg='⚠️ ໂອນມັດຈຳ 15,000₭ ກ່ອນ ແລ້ວຄ່ອຍຝາກຂອງ!';
-  else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈະກວດສອບການໂອນ ແລ້ວຈຶ່ງຈັດສົ່ງ';
-  else payMsg='💵 ບັດຫຼັກ5 ຫຼັກ9 10,000ກີບ';
+  else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈะกวดสอบการโอน ແລ້ວຈຶ່ງຈັດສົ່ງ';
+  else payMsg='💵 ທາງຮ້ານຈະກວດສອບຮູບບັດເຕີມເງີນ ແລ້ວຈຶ່ງດຳເນີນການຈັດສົ່ງ';
   document.getElementById('pay-specific-msg').textContent=payMsg;
 
   document.getElementById('success-modal').classList.add('show');
@@ -1352,17 +1364,17 @@ function downloadReceipt(){
   // Total line
   ctx.fillStyle='#E8F5EE';roundRect(ctx,pad,y,W-pad*2,30,6);ctx.fill();
   ctx.fillStyle='#2D7A55';ctx.font='bold 14px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລວມທັງໝົດ',pad+10,y+20);
+  ctx.fillText('ລวมทั้งหมด',pad+10,y+20);
   ctx.textAlign='right';ctx.font='bold 16px sans-serif';
   ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-10,y+20);y+=44;
 
   // Info rows
   ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  [['👤 ຊື່',d.customerName+' | '+d.customerPhone],
-   ['📍 ທີ່ຢູ່',d.customerAddr],
-   ['🚚 ຂົນສົ່ງ',d.shipping],
-   ['💳 ຊຳລະ',d.payment],
-   d.note?['📝 ໝາຍເຫດ',d.note]:null
+  [['👤 ຊื่',d.customerName+' | '+d.customerPhone],
+   ['📍 ที่อยู่',d.customerAddr],
+   ['🚚 ขนส่ง',d.shipping],
+   ['💳 ชำระ',d.payment],
+   d.note?['📝 ໝາຍເຫด',d.note]:null
   ].filter(Boolean).forEach(function(r){
     ctx.font='10px sans-serif';ctx.fillStyle='#6B7280';ctx.textAlign='left';ctx.fillText(r[0],pad,y);
     ctx.fillStyle='#1A1A2E';ctx.font='bold 10px sans-serif';ctx.textAlign='right';ctx.fillText(r[1],W-pad,y);
@@ -1375,7 +1387,7 @@ function downloadReceipt(){
   ctx.fillStyle='#FFFBEB';roundRect(ctx,pad,y,W-pad*2,38,6);ctx.fill();
   ctx.strokeStyle='#FCD34D';ctx.lineWidth=1;roundRect(ctx,pad,y,W-pad*2,38,6);ctx.stroke();
   ctx.fillStyle='#92400E';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
-  ctx.fillText('📸 ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້ · ຫາກ 1-2 ມື້ ບໍ່ໄດ້ຮັບ ຕິດຕໍ່ 020 92833416',W/2,y+16);
+  ctx.fillText('📸 ກະລุนาบันทึกใบบินนี้ไว้ · หาก 1-2 มื้ บ่ได้ฮับ ติดต่อ 020 92833416',W/2,y+16);
   ctx.font='10px sans-serif';
   ctx.fillText('SOUDSADA SHOP · soudsada2025@gmail.com',W/2,y+30);y+=50;
 
@@ -1407,6 +1419,7 @@ function resetAll(){
   resetDistrictSelect();
   document.querySelectorAll('.ship-opt,.pay-opt').forEach(function(o){o.classList.remove('active');});
   document.getElementById('cod-warning').classList.remove('show');
+  document.getElementById('card-warning').classList.remove('show');
   document.getElementById('qr-pay-box').classList.remove('show');
   document.getElementById('slip-section').style.display='none';
   removeSlip();renderCart();filterProds();
@@ -1460,20 +1473,20 @@ function adminRenderStats(){
   var shipped=adminOrders.filter(function(o){return o.orderStatus==='ຈັດສົ່ງສຳເລັດ';}).length;
   var revenue=adminOrders.reduce(function(s,o){return s+(Number(o.totalAmount)||0);},0);
   document.getElementById('admin-stat').innerHTML=
-    '<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-lbl">ທັງໝົດ</div></div>'
-    +'<div class="stat-card"><div class="stat-num">'+waiting+'</div><div class="stat-lbl">ລໍຖ້າ</div></div>'
-    +'<div class="stat-card"><div class="stat-num">'+shipped+'</div><div class="stat-lbl">ສົ່ງແລ້ວ</div></div>'
-    +'<div class="stat-card"><div class="stat-num">'+fN(revenue)+'</div><div class="stat-lbl">ລາຍຮັບ (₭)</div></div>';
+    '<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-lbl">ທັງໝົด</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+waiting+'</div><div class="stat-lbl">ลำถ้า</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+shipped+'</div><div class="stat-lbl">สั่งแล้ว</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+fN(revenue)+'</div><div class="stat-lbl">ลายฮับ (₭)</div></div>';
 }
 var STATUS_CFG=[
   {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',cls:'s0',dot:'#F59E0B'},
-  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ', icon:'✅',cls:'s1',dot:'#3B82F6'},
+  {key:'ແມ່ຄ້າຮັບຍอดแล้ว', icon:'✅',cls:'s1',dot:'#3B82F6'},
   {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',cls:'s2',dot:'#8B5CF6'},
-  {key:'ຈັດສົ່ງສຳເລັດ',    icon:'🎉',cls:'s3',dot:'#10B981'}
+  {key:'ຈັດສົ່ງສຳເລັด',    icon:'🎉',cls:'s3',dot:'#10B981'}
 ];
 function getStatusCfg(key){return STATUS_CFG.find(function(s){return s.key===key;})||STATUS_CFG[0];}
 function buildPopup(code,currentStatus){
-  return '<div class="status-popup-header">ປ່ຽນສະຖານະ</div>'
+  return '<div class="status-popup-header">ปั่นสถานะ</div>'
     +STATUS_CFG.map(function(s){
       var isCur=s.key===currentStatus;
       return '<div class="status-popup-item'+(isCur?' current':'')+'" onclick="applyStatus(\''+escHtml(code)+'\',\''+s.key+'\')">'
@@ -1501,16 +1514,16 @@ function adminRenderOrders(){
   q=q.toLowerCase().trim();
   var filtered=adminOrders.filter(function(o){
     if(adminTabFilter==='waiting')  return o.orderStatus==='ລໍຖ້າຮັບຍອດ';
-    if(adminTabFilter==='accepted') return o.orderStatus==='ແມ່ຄ້າຮັບຍອດແລ້ວ';
+    if(adminTabFilter==='accepted') return o.orderStatus==='ແມ່ຄ້າຮັບຍອดแล้ว';
     if(adminTabFilter==='packing')  return o.orderStatus==='ກຳລັງກຽມການຈັດສົ່ງ';
-    if(adminTabFilter==='shipped')  return o.orderStatus==='ຈັດສົ່ງສຳເລັດ';
+    if(adminTabFilter==='shipped')  return o.orderStatus==='ຈັດສົ່ງສຳເລັด';
     return true;
   }).filter(function(o){
     if(!q)return true;
     return (o.code||'').toLowerCase().includes(q)||(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q);
   });
   if(!filtered.length){
-    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພົບລາຍການ</td></tr>';
+    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພบลายการ</td></tr>';
     return;
   }
   var html='';
@@ -1519,7 +1532,7 @@ function adminRenderOrders(){
     var slipHtml='<span style="color:var(--muted);font-size:10px">❌</span>';
     if(o.slipUrl){
       var thumb=o.slipUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
-      slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')">ເບີ່ງ</button>';
+      slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')">เบิ่ง</button>';
     }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+escHtml(o.slipStatus)+'</span>';}
     var statusHtml='<div class="status-btn-wrap">'
       +'<button class="status-pill '+cfg.cls+'" onclick="toggleStatusPopup(\''+escHtml(o.code)+'\',\''+escHtml(o.orderStatus)+'\',this)">'+cfg.icon+' '+escHtml(o.orderStatus)+' ▾</button>'
@@ -1557,8 +1570,8 @@ function updateOrderStatusAdmin(code,newStatus){
             }
           });
         },50);
-      }else{alert('❌ '+(res&&res.message?res.message:'ອັບເດດບໍ່ສຳເລັດ'));}
-    }).catch(function(){alert('❌ ເຊື່ອມຕໍ່ບໍ່ໄດ້');});
+      }else{alert('❌ '+(res&&res.message?res.message:'ອัพเดทบ่สำเล็ด'));}
+    }).catch(function(){alert('❌ ເຊื่อมต่อบ่ได้');});
 }
 
 function viewSlip(url){
