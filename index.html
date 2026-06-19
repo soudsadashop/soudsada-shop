@@ -509,7 +509,7 @@ input,select,textarea{font-family:inherit}
           <button class="cart-clear-btn" onclick="clearCart()">ລ້າງທັງໝົດ</button>
         </div>
         <div class="cart-items-wrap"><div class="cart-items" id="cart-items"><div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div></div></div>
-        <div class="cart-total-row"><span>ລວມທັງໝົດ</span><strong id="cart-total">0 ₭</strong></div>
+        <div class="cart-total-row"><span>ລວมทั้งหมด</span><strong id="cart-total">0 ₭</strong></div>
       </div>
 
       <div class="panel-card" id="form-anchor">
@@ -524,60 +524,60 @@ input,select,textarea{font-family:inherit}
           <div class="form-section-title">📍 ທີ່ຢູ່ຈັດສົ່ງ</div>
           <div class="field"><label>ແຂວງ <span class="req">*</span></label>
             <select id="c-province" onchange="onProvinceChange()"><option value="">— ເລືອກແຂວງ —</option><option>ວຽງຈັນ (ນະຄອນຫຼວງ)</option><option>ວຽງຈັນ (ແຂວງ)</option><option>ບໍລິຄຳໄຊ</option><option>ຄຳມ່ວນ</option><option>ສະຫວັນນະເຂດ</option><option>ສາລະວັນ</option><option>ເຊກອງ</option><option>ຈຳປາສັກ</option><option>ອັດຕະປື</option><option>ຫຼວງພະບາງ</option><option>ຫຼວງນໍ້າທາ</option><option>ອຸດົມໄຊ</option><option>ບໍ່ແກ້ວ</option><option>ຜົ້ງສາລີ</option><option>ຫົວພັນ</option><option>ໄຊສົມບູນ</option><option>ໄຊຍະບູລີ</option><option>ຊຽງຂວາງ</option></select>
-            <div class="field-error" id="err-province">ກະລຸນາເລືອກແຂວງ</div>
+            <div class="field-error" id="err-province">ກະລຸນາເລືອກແຂวง</div>
           </div>
-          <div class="field"><label>ເມືອງ <span class="req">*</span></label>
-            <select id="c-district" disabled><option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option></select>
-            <div class="field-error" id="err-district">ກະລຸນາເລືອກເມືອງ</div>
+          <div class="field"><label>ເมือง <span class="req">*</span></label>
+            <select id="c-district" disabled><option value="">— ກະລຸນາເລືອກແຂวงก่อน —</option></select>
+            <div class="field-error" id="err-district">ກະລຸນາເລືອກເมือง</div>
           </div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">🚚 ຂົນສົ່ງ <span class="req">*</span></div>
+          <div class="form-section-title">🚚 ຂົนส่ง <span class="req">*</span></div>
           <div class="ship-opts">
-            <label class="ship-opt" onclick="selectShip(this,'ອານຸສິດ')"><input type="radio" name="ship" value="ອານຸສິດ"> ✈️ ອານຸສິດ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ຮຸ່ງອາລຸນ')"><input type="radio" name="ship" value="ຮຸ່ງອາລຸນ"> 🚌 ຮຸ່ງອາລຸນ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ມີໄຊ')"><input type="radio" name="ship" value="ມີໄຊ"> 🚚 ມີໄຊ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ຢູ່ນິເທວ')"><input type="radio" name="ship" value="ຢູ່ນິເທວ"> 📦 ຢູ່ນິເທວ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ອານຸสิด')"><input type="radio" name="ship" value="ອານຸสิด"> ✈️ ອານຸสิด</label>
+            <label class="ship-opt" onclick="selectShip(this,'ฮุ่งอาลุน')"><input type="radio" name="ship" value="ฮุ่งอาลุน"> 🚌 ฮุ่งอาลุน</label>
+            <label class="ship-opt" onclick="selectShip(this,'มีไซ')"><input type="radio" name="ship" value="มีไซ"> 🚚 มีไซ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ยู่นิเทว')"><input type="radio" name="ship" value="ยู่นิเทว"> 📦 ยู่นิเทว</label>
           </div>
-          <div class="field-error" id="err-ship" style="margin-top:5px">ກະລຸນາເລືອກຂົນສົ່ງ</div>
-          <div class="field" style="margin-top:8px"><label>ສາຂາ / ຈຸດຮັບ</label><input type="text" id="c-branch" placeholder="ລະບຸສາຂາ"></div>
+          <div class="field-error" id="err-ship" style="margin-top:5px">ກະລຸນາເລືອกขนส่ง</div>
+          <div class="field" style="margin-top:8px"><label>ສาขา / จุดฮับ</label><input type="text" id="c-branch" placeholder="ละบุสาขา"></div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">💳 ຊຳລະ <span class="req">*</span></div>
+          <div class="form-section-title">💳 ชำละ <span class="req">*</span></div>
           <div class="pay-opts">
-            <label class="pay-opt" onclick="selectPay(this,'ໂອນຈ່າຍ')"><input type="radio" name="pay" value="ໂອນຈ່າຍ"><div class="pay-opt-icon">💳</div><div><div class="pay-opt-name">ໂອນຈ່າຍ</div><div class="pay-opt-desc">ສະແກນ QR · ໂອນກ່ອນສົ່ງ</div></div></label>
-            <label class="pay-opt" onclick="selectPay(this,'ມັດຈຳບັດເຕີມເງີນ')"><input type="radio" name="pay" value="ມັດຈຳບັດເຕີມເງີນ"><div class="pay-opt-icon">💵</div><div><div class="pay-opt-name">ມັດຈຳບັດເຕີມເງີນ</div><div class="pay-opt-desc">ບັດຫຼັກ5 ຫຼັກ9 10,000ກີບ</div></div></label>
-            <label class="pay-opt" onclick="selectPay(this,'ເກັບປາຍທາງ COD')"><input type="radio" name="pay" value="ເກັບປາຍທາງ COD"><div class="pay-opt-icon">📬</div><div><div class="pay-opt-name">ເກັບປາຍທາງ COD</div><div class="pay-opt-desc">ສະເພາະ ອານຸສິດ · ມັດຈຳ 15,000₭</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'ໂອນຈ่าย')"><input type="radio" name="pay" value="ໂອນຈ่าย"><div class="pay-opt-icon">💳</div><div><div class="pay-opt-name">ໂອນຈ่าย</div><div class="pay-opt-desc">สะแกน QR · โอนก่อนส่ง</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'มัดจำบัดเติมเงิน')"><input type="radio" name="pay" value="มัดจำบัดเติมเงิน"><div class="pay-opt-icon">💵</div><div><div class="pay-opt-name">มัดจำบัดเติมเงิน</div><div class="pay-opt-desc">บัดหลัก5 หลัก9 10,000ກີบ</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'เก็บปายทาง COD')"><input type="radio" name="pay" value="เก็บปายทาง COD"><div class="pay-opt-icon">📬</div><div><div class="pay-opt-name">เก็บปายทาง COD</div><div class="pay-opt-desc">สะเพาะ ອານຸสิด · มัดจำ 15,000₭</div></div></label>
           </div>
-          <div class="field-error" id="err-pay" style="margin-top:5px">ກະລຸນາເລືອກການຊຳລະ</div>
+          <div class="field-error" id="err-pay" style="margin-top:5px">ກะลุนาเลือกการชำละ</div>
           <div class="qr-pay-box" id="qr-pay-box">
-            <div class="qr-pay-title">📲 ສະແກນ QR ເພື່ອໂອນ (BCEL One / ທ/ຄ)</div>
-            <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ດາວໂຫຼດ QR</button></div>
+            <div class="qr-pay-title">📲 สะแกน QR เพื่อโอน (BCEL One / ท/ค)</div>
+            <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ดาวโหลด QR</button></div>
           </div>
-          <div class="cod-warning" id="cod-warning">⚠️ <strong>ເງື່ອນໄຂ COD:</strong><br>• ສະເພາະ <strong>ຂົນສົ່ງ ອານຸສິດ</strong> ເທົ່ານັ້ນ<br>• ກ່ອນຝາກ ຕ້ອງ <strong>ໂອນມັດຈຳ 15,000 ₭</strong> ກ່ອນ<br>• ສະແກນ QR ຂ້ານເທີ່ງ ແລ້ວ ອັບໂຫຼດສະລິບ</div>
-          <div class="cod-warning" id="card-warning">⚠️ <strong>ເງື່ອນໄຂ ມັດຈຳບັດເຕີມເງີນ:</strong><br>• ບັດຕ້ອງມີມູນຄ່າ <strong>ບໍ່ຕ່ຳກວ່າ 10,000 ກີບ</strong> (ຫຼັກ 5 ຫຼື ຫຼັກ 9)<br>• ກະລຸນາ <strong>ຖ່າຍຮູບໜ້າບັດ</strong> (ບ່ອນເຫັນລະຫັດບັດ) ແນບມານຳກ່ອນກົດຢືນຢັນສັ່ງຊື້</div>
+          <div class="cod-warning" id="cod-warning">⚠️ <strong>เงื่อนไข COD:</strong><br>• สะเพาะ <strong>ขนส่ง ອານຸสิด</strong> เท่านั้น<br>• ก่อนฝาก ต้อง <strong>โอนมัดจำ 15,000 ₭</strong> ก่อน<br>• สะแกน QR ข้านเทิ่ง แล้ว อับโหลดสะลิบ</div>
+          <div class="cod-warning" id="card-warning">⚠️ <strong>เงื่อนไข มัดจำบัดเติมเงิน:</strong><br>• บัดต้องมีมูนค่า <strong>บ่ต่ำกว่า 10,000 ກີบ</strong> (หลัก 5 หลัก 9)<br>• ກะลุนา <strong>ถ่ายฮูปหน้าบัด</strong> (บ่อนเห็นละหัดบัด) แนบมานำก่อนกดยืนยันสั่งซื้อ</div>
         </div>
         <div class="form-section" id="slip-section" style="display:none">
-          <div class="form-section-title" id="slip-section-title">📸 ສະລິບໂອນ <span class="req">*</span></div>
+          <div class="form-section-title" id="slip-section-title">📸 สะลิบโอน <span class="req">*</span></div>
           <div class="file-upload-area" id="upload-area" onclick="triggerUpload()">
             <div class="file-upload-icon">📸</div>
-            <div class="file-upload-text" id="upload-area-text"><strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB</div>
+            <div class="file-upload-text" id="upload-area-text"><strong>กดเพื่ออับโหลดสะลิบ</strong><br>JPG, PNG ≤ 5MB</div>
             <input type="file" id="slip-file" accept="image/*" onchange="previewSlip(this)">
           </div>
           <div class="file-preview" id="slip-preview"><img id="slip-preview-img" src="" alt="Slip"><button class="file-remove" onclick="removeSlip()">✕</button></div>
-          <div class="field-error" id="err-slip">ກະລຸນາອັບໂຫຼດສະລິບ</div>
+          <div class="field-error" id="err-slip">ກะลุนาอับโหลดสะลิบ</div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">📝 ໝາຍເຫດ</div>
-          <div class="field"><textarea id="c-note" rows="2" placeholder="ຂໍ້ຄວາມເພີ່ມເຕີມ..."></textarea></div>
+          <div class="form-section-title">📝 หมายเหด</div>
+          <div class="field"><textarea id="c-note" rows="2" placeholder="ข้อความเพิ่มเติม..."></textarea></div>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ຢືນຢັນການສັ່ງຊື້</button></div>
-<div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div></div>
+<div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ยืนยันการสั่งซื้อ</button></div>
+<div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">กำลังส่งคำสั่ง...</div></div>
 
 <!-- ★ SUCCESS RECEIPT MODAL -->
 <div class="modal-overlay" id="success-modal">
@@ -585,49 +585,49 @@ input,select,textarea{font-family:inherit}
     <!-- Header -->
     <div class="receipt-header">
       <div class="receipt-confetti">🎉</div>
-      <div class="receipt-success-title">ສັ່ງຊື້ສຳເລັດແລ້ວ!</div>
+      <div class="receipt-success-title">สั่งซื้อสำเล็ดแล้ว!</div>
       <div class="receipt-shop-name">SOUDSADA SHOP</div>
-      <div class="receipt-shop-sub">ຮ້ານຂາຍສິນຄ້າຄວາມງາມ · ຝາກສົ່ງທົ່ວລາວ</div>
+      <div class="receipt-shop-sub">ฮ้านขายสินค้าความงาม · ฝากส่งทั่วลาว</div>
       <div class="receipt-date" id="receipt-date"></div>
     </div>
     <!-- Body -->
     <div class="receipt-body">
       <!-- Order code -->
       <div class="receipt-code-row">
-        <div><div class="receipt-code-label">ລະຫັດອໍເດີ້</div><div class="receipt-code-val" id="receipt-code-val">—</div></div>
+        <div><div class="receipt-code-label">ละหัดอ์เดี้</div><div class="receipt-code-val" id="receipt-code-val">—</div></div>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D7A55" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       </div>
 
       <!-- QR code of OrderID -->
       <div class="receipt-qr-section">
-        <div class="receipt-qr-label">📲 QR Code ສຳລັບກວດສອບອໍເດີ້</div>
+        <div class="receipt-qr-label">📲 QR Code สำลับกวดสอบอ์เดี้</div>
         <div id="receipt-qr-code"></div>
         <div class="receipt-qr-code-text" id="receipt-qr-code-text"></div>
       </div>
 
       <!-- Items -->
-      <div class="receipt-section-title">🛍️ ລາຍການສິນຄ້າ</div>
+      <div class="receipt-section-title">🛍️ ลายการสินค้า</div>
       <div class="receipt-items" id="receipt-items"></div>
 
       <!-- Total -->
       <div class="receipt-total">
-        <span class="receipt-total-label">💰 ລວມທັງໝົດ</span>
+        <span class="receipt-total-label">💰 ลวมทั้งหมด</span>
         <span class="receipt-total-amount" id="receipt-total-amount">0 ₭</span>
       </div>
 
       <!-- Order info -->
-      <div class="receipt-section-title">📋 ຂໍ້ມູນການສັ່ງຊື້</div>
+      <div class="receipt-section-title">📋 ข้อมูนการสั่งซื้อ</div>
       <div class="receipt-info" id="receipt-info"></div>
 
       <!-- Notices -->
       <div class="receipt-notice yellow">
-        📸 <strong>ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້!</strong><br>
-        ດາວໂຫຼດຮູບໃບບິນ ຫຼື ແຄບຈໍໄວ້ ເພື່ອໃຊ້ຢືນຢັນການສັ່ງຊື້.<br>
+        📸 <strong>ກะลุนาบันทึกใบบินนี้ไว้!</strong><br>
+        ดาวโหลดฮูปใบบิน หรือ แคบจอไว้ เพื่อใช้ยืนยันการสั่งซื้อ.<br>
         <span id="pay-specific-msg"></span>
       </div>
       <div class="receipt-notice red">
-        ⚠️ <strong>ກໍລະນີ 1-2 ມື້ ຍັງບໍ່ໄດ້ຮັບການຕິດຕໍ່:</strong><br>
-        ຫາກ ໃນ 1-2 ມື້ ແມ່ຄ້າຍັງບໍ່ຕິດຕໍ່ຫາທ່ານ, <strong>ໃຫ້ຕິດຕໍ່ຫາແມ່ຄ້າດ່ວນ</strong> ເພື່ອຕວດສອບວ່າອໍເດີ້ຕົກຫຼົ່ນຫຼືບໍ່!
+        ⚠️ <strong>กรณี 1-2 มื้ ยังบ่ได้ฮับการติดต่อ:</strong><br>
+        หาก ใน 1-2 มื้ แม่ค้ายังบ่ติดต่อหาท่าน, <strong>ให้ติดต่อหาแม่ค้าด่วน</strong> เพื่อตวดสอบว่าอ์เดี้ตกหล่นหรือบ่!
         <a href="https://wa.link/3c7y89" target="_blank" class="wa-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp 020 92833416
@@ -636,8 +636,8 @@ input,select,textarea{font-family:inherit}
 
       <!-- Actions -->
       <div class="receipt-actions">
-        <button class="receipt-dl-btn" onclick="downloadReceipt()">⬇️ ດາວໂຫຼດໃບບິນ</button>
-        <button class="receipt-new-btn" onclick="resetAll()">🛒 ສັ່ງຊື້ໃໝ່</button>
+        <button class="receipt-dl-btn" onclick="downloadReceipt()">⬇️ ดาวโหลดใบบิน</button>
+        <button class="receipt-new-btn" onclick="resetAll()">🛒 สั่งซื้อใหม่</button>
       </div>
     </div>
   </div>
@@ -648,33 +648,33 @@ input,select,textarea{font-family:inherit}
   <div class="admin-box">
     <div class="admin-header">
       <h2>🔐 Admin Panel — SOUDSADA SHOP</h2>
-      <button class="admin-close" onclick="closeAdmin()">✕ ປິດ</button>
+      <button class="admin-close" onclick="closeAdmin()">✕ ปิด</button>
     </div>
     <div id="admin-login-box" class="admin-login-box">
-      <h3>🔑 ໃສ່ລະຫັດຜ່ານ Admin</h3>
-      <input class="admin-login-inp" type="password" id="admin-pw" placeholder="ລະຫັດຜ່ານ" onkeydown="if(event.key==='Enter')adminLogin()">
+      <h3>🔑 ใส่ละหัดผ่าน Admin</h3>
+      <input class="admin-login-inp" type="password" id="admin-pw" placeholder="ละหัดผ่าน" onkeydown="if(event.key==='Enter')adminLogin()">
       <div style="margin-bottom:8px"></div>
-      <button class="admin-login-btn" onclick="adminLogin()">🔓 ເຂົ້າລະບົບ</button>
-      <div id="admin-login-err" style="color:var(--red);font-size:11px;margin-top:10px;display:none">❌ ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ</div>
+      <button class="admin-login-btn" onclick="adminLogin()">🔓 เข้าละบบ</button>
+      <div id="admin-login-err" style="color:var(--red);font-size:11px;margin-top:10px;display:none">❌ ละหัดผ่านบ่ถืกต้อง</div>
     </div>
     <div id="admin-dashboard" style="display:none">
       <div class="admin-content">
         <div class="admin-stat" id="admin-stat"></div>
         <div class="admin-tabs">
-          <button class="admin-tab active" onclick="adminTab('all',this)">📋 ທັງໝົດ<span class="tab-count" id="tc-all">0</span></button>
-          <button class="admin-tab" onclick="adminTab('waiting',this)">⏳ ລໍຖ້າ<span class="tab-count" id="tc-waiting">0</span></button>
-          <button class="admin-tab" onclick="adminTab('accepted',this)">✅ ຮັບຍອດ<span class="tab-count" id="tc-accepted">0</span></button>
-          <button class="admin-tab" onclick="adminTab('packing',this)">📦 ກຽມສົ່ງ<span class="tab-count" id="tc-packing">0</span></button>
-          <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ສົ່ງແລ້ວ<span class="tab-count" id="tc-shipped">0</span></button>
+          <button class="admin-tab active" onclick="adminTab('all',this)">📋 ทั้งหมด<span class="tab-count" id="tc-all">0</span></button>
+          <button class="admin-tab" onclick="adminTab('waiting',this)">⏳ ลำถ้า<span class="tab-count" id="tc-waiting">0</span></button>
+          <button class="admin-tab" onclick="adminTab('accepted',this)">✅ ฮับยอด<span class="tab-count" id="tc-accepted">0</span></button>
+          <button class="admin-tab" onclick="adminTab('packing',this)">📦 เกียมส่ง<span class="tab-count" id="tc-packing">0</span></button>
+          <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ส่งแล้ว<span class="tab-count" id="tc-shipped">0</span></button>
         </div>
         <div class="admin-filter">
-          <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ເລກບິນ / ເບີ..." oninput="adminRenderOrders()">
-          <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 ໂຫຼດໃໝ່</button>
+          <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ค้นหา ชื่อ / เลขบิน / เบิ..." oninput="adminRenderOrders()">
+          <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 โหลดใหม่</button>
         </div>
         <div class="orders-table-wrap">
           <table class="orders-table">
-            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ສະຖານະ</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
+            <thead><tr><th>ละหัด / วันที</th><th>ลูกค้า</th><th>สินค้า</th><th>ลวม</th><th>ขนส่ง</th><th>ชำละ</th><th>สะลิบ</th><th>สะถานะ</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ กำลังโหลด...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -697,6 +697,17 @@ input,select,textarea{font-family:inherit}
 var SCRIPT_URL    = 'https://script.google.com/macros/s/AKfycbwYP0bCa0PubM1Taf5btkBPD7lgo0MpQnWzntWGc4KP9HZrlWBvIWM0j2EhAat9707Gvg/exec';
 var ADMIN_PASSWORD = 'soudsada2025';
 var QR_IMG_URL    = 'https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ';
+
+// ★ STATUS — ໃຊ້ໂຄ້ດເລກ (0-3) ສົ່ງໃຫ້ backend ເພື່ອບໍ່ໃຫ້ມີບັນຫາ encoding ຂອງຕົວອັກສອນລາວຜ່ານ URL
+// 0=ລໍຖ້າຮັບຍອດ, 1=ແມ່ຄ້າຮັບຍອດແລ້ວ, 2=ກຳລັງກຽມການຈັດສົ່ງ, 3=ຈັດສົ່ງສຳເລັດ
+var STATUS_LIST=[
+  {code:'0',key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',cls:'s0',dot:'#F59E0B',badge:'badge-waiting', lbl:'ລໍຖ້າ\nຮັບຍອດ'},
+  {code:'1',key:'ແມ່ຄ້າຮັບຍອດແລ້ວ', icon:'✅',cls:'s1',dot:'#3B82F6',badge:'badge-accepted',lbl:'ຮັບຍອດ\nແລ້ວ'},
+  {code:'2',key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',cls:'s2',dot:'#8B5CF6',badge:'badge-packing', lbl:'ກຽມ\nຈັດສົ່ງ'},
+  {code:'3',key:'ຈັດສົ່ງສຳເລັດ',    icon:'🎉',cls:'s3',dot:'#10B981',badge:'badge-shipped', lbl:'ສົ່ງ\nສຳເລັດ'}
+];
+function statusIndexByKey(key){var i=STATUS_LIST.findIndex(function(s){return s.key===key;});return i<0?0:i;}
+function statusCfgByKey(key){return STATUS_LIST[statusIndexByKey(key)];}
 
 // ─────────────────────────────────────────
 //  STATE
@@ -732,21 +743,11 @@ function switchTrackTab(tab,el){
 }
 
 // ─────────────────────────────────────────
-//  STATUS STEPS
-// ─────────────────────────────────────────
-var STATUS_STEPS=[
-  {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',lbl:'ລໍຖ້າ\nຮັບຍອດ',   cls:'badge-waiting'},
-  {key:'ແມ່ຄ້າຮັບຍອດແລ້ວ', icon:'✅',lbl:'ຮັບຍອດ\nແລ້ວ',    cls:'badge-accepted'},
-  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',lbl:'ກຽມ\nຈັດສົ່ງ',   cls:'badge-packing'},
-  {key:'ຈັດສົ່ງສຳເລັດ',    icon:'🎉',lbl:'ສົ່ງ\nສຳເລັດ',   cls:'badge-shipped'}
-];
-
-// ─────────────────────────────────────────
 //  TRACK BY ORDER ID
 // ─────────────────────────────────────────
 function trackByOrder(){
   var code=document.getElementById('inp-order').value.trim().toUpperCase();
-  if(!code){alert('ກະລຸນາໃສ່ເລກບິນ');return;}
+  if(!code){alert('ກะลุนาใส่เลขบิน');return;}
   doTrack('code',code);
 }
 
@@ -755,7 +756,7 @@ function trackByOrder(){
 // ─────────────────────────────────────────
 function trackByPhone(){
   var phone=document.getElementById('inp-phone').value.trim();
-  if(!phone){alert('ກະລຸນາໃສ່ເບີໂທ');return;}
+  if(!phone){alert('ກะลุนาใส่เบิโท');return;}
   doTrack('phone',phone);
 }
 
@@ -764,46 +765,44 @@ function trackByPhone(){
 // ─────────────────────────────────────────
 function doTrack(mode,value){
   var res=document.getElementById('track-result');
-  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
+  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ กำลังกวดสอบ...</div></div>';
   var url=SCRIPT_URL+'?action=getOrderStatus&'+mode+'='+encodeURIComponent(value);
   if(mode==='code') url=SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(value);
-  if(mode==='phone') url=SCRIPT_URL+'?action=getOrderByPhone&phone='+encodeURIComponent(value);
+  if(mode==='phone') url=SCRIPT_URL+'?action=getOrderStatus&phone='+encodeURIComponent(value);
   fetch(url)
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d||d.status==='not_found'){
-        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບຂໍ້ມູນ <strong>'+escHtml(value)+'</strong><br><small>ກວດສອບຕົວອັກສອນ ຫຼື ລອງໃໝ່</small></div></div>';
+        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ บ่พบข้อมูล <strong>'+escHtml(value)+'</strong><br><small>กวดสอบตัวอักสอน หรือ ลองใหม่</small></div></div>';
         return;
       }
-      // If multiple orders by phone
       if(Array.isArray(d.orders)&&d.orders.length>0){
-        var html='<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">ພົບ '+d.orders.length+' ອໍເດີ້ ສຳລັບເບີໂທ '+escHtml(value)+'</div>';
+        var html='<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">พบ '+d.orders.length+' อ์เดี้ สำลับเบิโท '+escHtml(value)+'</div>';
         d.orders.forEach(function(order){html+=buildStatusHtml(order);html+='<div style="height:8px"></div>';});
         res.innerHTML=html;
       }else{
         res.innerHTML=buildStatusHtml(d);
       }
     })
-    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div></div>';});
+    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ กวดสอบบ่ได้ กะลุนาลองใหม่</div></div>';});
 }
 
 function buildStatusHtml(d){
-  var cur=d.orderStatus||'ລໍຖ້າຮັບຍອດ';
-  var idx=STATUS_STEPS.findIndex(function(s){return s.key===cur;});
-  if(idx<0)idx=0;
-  var step=STATUS_STEPS[idx];
-  var pct=idx===0?0:(idx/(STATUS_STEPS.length-1))*100;
-  var stepsHtml=STATUS_STEPS.map(function(s,i){
+  var cur=d.orderStatus||STATUS_LIST[0].key;
+  var idx=statusIndexByKey(cur);
+  var step=STATUS_LIST[idx];
+  var pct=idx===0?0:(idx/(STATUS_LIST.length-1))*100;
+  var stepsHtml=STATUS_LIST.map(function(s,i){
     var cls=i<idx?'done':i===idx?'active':'';
     return '<div class="step-item '+cls+'"><div class="step-dot '+cls+'">'+s.icon+'</div><div class="step-lbl">'+s.lbl.replace('\n','<br>')+'</div></div>';
   }).join('');
-  var rows=[['📦','ລະຫັດ',d.code],['👤','ຊື່',d.customerName],['📱','ເບີ',d.customerPhone],
-    ['🚚','ຂົນສົ່ງ',d.shipping],['💳','ຊຳລະ',d.payment],
-    ['💰','ລວມ',fN(d.totalAmount||0)+' ₭'],['📅','ວັນທີ',d.submittedAt||'']
+  var rows=[['📦','ละหัด',d.code],['👤','ชื่อ',d.customerName],['📱','เบิ',d.customerPhone],
+    ['🚚','ขนส่ง',d.shipping],['💳','ชำละ',d.payment],
+    ['💰','ลวม',fN(d.totalAmount||0)+' ₭'],['📅','วันที',d.submittedAt||'']
   ].filter(function(r){return r[2];}).map(function(r){
     return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+escHtml(String(r[2]))+'</span></div>';
   }).join('');
-  return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.cls+'">'+step.icon+' '+cur+'</span></div>'
+  return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.badge+'">'+step.icon+' '+cur+'</span></div>'
     +'<div class="status-box-body"><div class="step-tracker"><div class="step-progress" style="width:calc('+pct+'% - 24px)"></div>'+stepsHtml+'</div>'+rows+'</div></div>';
 }
 
@@ -817,10 +816,10 @@ function setCamMsg(msg){
 
 function startCamera(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    alert('ບຣາວເຊີນີ້ບໍ່ຮອງຮັບກ້ອງ');
+    alert('บราวเซิอนี้บ่รองรับกล้อง');
     return;
   }
-  setCamMsg('⏳ ກຳລັງເປີດກ້ອງ...');
+  setCamMsg('⏳ กำลังเปิดกล้อง...');
   navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
     .then(function(stream){
       cameraStream=stream;
@@ -831,12 +830,12 @@ function startCamera(){
       document.getElementById('btn-cam-start').style.display='none';
       document.getElementById('btn-cam-stop').style.display='';
       document.getElementById('scan-result-badge').classList.remove('show');
-      setCamMsg('🔎 ກຳລັງສະແກນ...');
+      setCamMsg('🔎 กำลังสะแกน...');
       loadJsQR(function(){ startQRScan(); });
     })
     .catch(function(err){
       setCamMsg('');
-      alert('ບໍ່ສາມາດເປີດກ້ອງໄດ້: '+err.message+'\\nກະລຸນາອະນຸຍາດການໃຊ້ກ້ອງ ແລະ ໃຊ້ໂດເມນ https');
+      alert('บ่สามาดเปิดกล้องได้: '+err.message+'\\nกะลุนาอะนุยาดการใช้กล้อง และ ใช้โดเมน https');
     });
 }
 
@@ -851,10 +850,6 @@ function stopCamera(keepBadge){
   if(!keepBadge)document.getElementById('scan-result-badge').classList.remove('show');
 }
 
-// jsQR-based scan loop. jsQR is a pure-JS decoder that works the same
-// in every modern browser (unlike the native BarcodeDetector API, which
-// is missing or unreliable on many devices — this was the cause of
-// "scans but never finds anything").
 function startQRScan(){
   var video=document.getElementById('qr-video');
   var canvas=document.createElement('canvas');
@@ -887,29 +882,28 @@ function loadJsQR(cb){
   var s=document.createElement('script');
   s.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
   s.onload=cb;
-  s.onerror=function(){setCamMsg('⚠️ ໂຫຼດໂມດູນສະແກນບໍ່ໄດ້ ກວດສອບອິນເຕີເນັດ');};
+  s.onerror=function(){setCamMsg('⚠️ โหลดโมดูนสะแกนบ่ได้ กวดสอบอินเตอเนัด');};
   document.head.appendChild(s);
 }
 
 function handleScanResult(val){
   var badge=document.getElementById('scan-result-badge');
-  badge.innerHTML='✅ ສະແກນໄດ້: <strong>'+escHtml(val)+'</strong>';
+  badge.innerHTML='✅ สะแกนได้: <strong>'+escHtml(val)+'</strong>';
   badge.classList.add('show');
-  // Keep the badge visible — only stop the camera feed, don't clear it
   stopCamera(true);
   var code=String(val).trim().toUpperCase();
   var res=document.getElementById('track-result');
-  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ ກຳລັງກວດສອບ...</div></div>';
+  res.innerHTML='<div class="status-box"><div class="status-not-found">⏳ กำลังกวดสอบ...</div></div>';
   fetch(SCRIPT_URL+'?action=getOrderStatus&code='+encodeURIComponent(code))
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d||d.status==='not_found'){
-        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບ QR Code ນີ້ ຫຼື ບໍ່ແມ່ນໃບບິນ SOUDSADA SHOP</div></div>';
+        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ บ่พบ QR Code นี้ หรือ บ่แม่นใบบิน SOUDSADA SHOP</div></div>';
         return;
       }
       res.innerHTML=buildStatusHtml(d);
     })
-    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ ກວດສອບບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</div></div>';});
+    .catch(function(){res.innerHTML='<div class="status-box"><div class="status-not-found">⚠️ กวดสอบบ่ได้ กะลุนาลองใหม่</div></div>';});
 }
 
 // ─────────────────────────────────────────
@@ -919,7 +913,7 @@ function loadProducts(){
   fetch(SCRIPT_URL+'?action=getProducts')
     .then(function(r){return r.json();})
     .then(function(d){allProds=Array.isArray(d)?d:[];renderProds(allProds);})
-    .catch(function(){document.getElementById('prod-grid').innerHTML='<div class="empty-state"><div class="eicon">❌</div><div>ໂຫຼດບໍ່ສຳເລັດ <button onclick="loadProducts()" style="margin-left:6px;padding:4px 10px;background:var(--green);color:#fff;border:none;border-radius:6px;cursor:pointer">ລອງໃໝ່</button></div></div>';});
+    .catch(function(){document.getElementById('prod-grid').innerHTML='<div class="empty-state"><div class="eicon">❌</div><div>โหลดบ่สำเล็ด <button onclick="loadProducts()" style="margin-left:6px;padding:4px 10px;background:var(--green);color:#fff;border:none;border-radius:6px;cursor:pointer">ลองใหม่</button></div></div>';});
 }
 
 function filterProds(){
@@ -943,13 +937,13 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt
 
 function renderProds(prods){
   var grid=document.getElementById('prod-grid');
-  document.getElementById('prod-count-lbl').textContent=prods.length?prods.length+' ລາຍການ':'';
-  if(!prods.length){grid.innerHTML='<div class="empty-state"><div class="eicon">🔍</div><div>ບໍ່ພົບສິນຄ້າ</div></div>';return;}
+  document.getElementById('prod-count-lbl').textContent=prods.length?prods.length+' ลายการ':'';
+  if(!prods.length){grid.innerHTML='<div class="empty-state"><div class="eicon">🔍</div><div>บ่พบสินค้า</div></div>';return;}
   var html='';
   prods.forEach(function(r){
     var name=r[0],price=Number(r[2])||0,qty=Number(r[3])||0,img=r[4]?convertGD(r[4]):'';
     var bc=qty<=0?'badge-out':qty<=5?'badge-low':'badge-ok';
-    var bt=qty<=0?'🚨 ໝົດ':qty<=5?'⚠️ '+qty+' ຊີ້ນ':'✅ '+qty+' ຊີ້ນ';
+    var bt=qty<=0?'🚨 หมด':qty<=5?'⚠️ '+qty+' ชิ้น':'✅ '+qty+' ชิ้น';
     var sn=name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     var ci=cart.find(function(c){return c.name===name;});
     var inC=!!ci,cQ=ci?ci.qty:0;
@@ -972,7 +966,7 @@ function selectProd(name){
   selectedProd=prod;
   var ex=cart.find(function(c){return c.name===name;});
   document.getElementById('qty-name').textContent='🛍️ '+name;
-  document.getElementById('qty-stock').textContent='ຄົງເຫຼືອ: '+prod[3]+' ຊີ້ນ';
+  document.getElementById('qty-stock').textContent='คงเหลือ: '+prod[3]+' ชิ้น';
   document.getElementById('qty-num').value=ex?ex.qty:1;
   document.getElementById('qty-num').max=prod[3];
   document.getElementById('qty-panel').classList.add('open');
@@ -1003,7 +997,7 @@ function renderCart(){
   document.getElementById('cart-count').textContent=cart.reduce(function(s,c){return s+c.qty;},0);
   document.getElementById('cart-total').textContent=fN(total)+' ₭';
   var el=document.getElementById('cart-items');
-  if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div>';return;}
+  if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ยังบ่ทันเลือกสินค้า<br><small>กดที่สินค้าเพื่อเพิ่ม</small></div>';return;}
   var html='';
   cart.forEach(function(item,i){
     var sub=item.price*item.qty;
@@ -1012,7 +1006,7 @@ function renderCart(){
       +'<div class="cart-item-actions"><button class="cart-qty-btn" onclick="cartChangeQty('+i+',-1)">−</button>'
       +'<span class="cart-qty-num">'+item.qty+'</span>'
       +'<button class="cart-qty-btn" onclick="cartChangeQty('+i+',1)">+</button>'
-      +'<button class="cart-remove" onclick="removeFromCart('+i+')">✕ ລຶບ</button></div></div>'
+      +'<button class="cart-remove" onclick="removeFromCart('+i+')">✕ ลึบ</button></div></div>'
       +'<div class="cart-item-right"><div class="cart-item-price">'+fN(sub)+' ₭</div></div></div>';
   });
   el.innerHTML=html;
@@ -1028,27 +1022,27 @@ function clearCart(){cart=[];renderCart();filterProds();}
 function scrollToCart(){document.getElementById('right-panel').scrollIntoView({behavior:'smooth'});}
 
 // ─────────────────────────────────────────
-//  PROVINCE → DISTRICT (ເມືອງ) DROPDOWN
+//  PROVINCE → DISTRICT (เมือง) DROPDOWN
 // ─────────────────────────────────────────
 var DISTRICTS_BY_PROVINCE={
   'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
-  'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊะນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
-  'ບໍລິຄຳໄຊ':['ປາກຊັນ','ທ່າພະບາດ','ປາກກະດິງ','ຄຳເກີດ','ບໍລິຄັນ','ວຽງທອງ','ໄຊຈຳພອນ'],
-  'ຄຳມ່ວນ':['ທ່າແຂກ','ມະຫາໄຊ','ໜອງບົກ','ຫີນບູນ','ຍົມມະລາດ','ບົວລະພາ','ນາກາຍ','ເຊບັ້ງໄຟ','ໄຊບົວທອງ','ຄູນຄຳ'],
-  'ສະຫວັນນະເຂດ':['ໄກສອນ ພົມວິຫານ','ອຸທຸມພອນ','ອາດສະພັງທອງ','ພີນ','ເຊໂປນ','ນອງ','ທ່າປາງທອງ','ສອງຄອນ','ຈຳພອນ','ຊົນນະບູລີ','ໄຊບູລີ','ວິລະບູລີ','ອາດສະພອນ','ໄຊພູທອງ','ພະລານໄຊ'],
-  'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕะໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
-  'ເຊກອງ':['ທ່າແຕງ','ລะมาม','ກะลึม','ดักจึง'],
-  'ຈຳປາສັກ':['ປາກເຊ','ຊะนะสมบูน','บาจึ่งจะเลิ่นสุก','ปากซ่อง','ประทุมพอน','โพนทอง','จำปาสัก','สุขุมา','มูนละปะโมก','โขง'],
+  'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊะนะคาม','ວຽງຄຳ','ໝື່ນ'],
+  'ບໍລິຄຳໄຊ':['ປາກຊັນ','ທ่าพะบาด','ปากกะดิง','คำเกิด','บอลิคัน','เวียงทอง','ไซจำพอน'],
+  'ຄຳມ່ວນ':['ท่าแขก','มะหาไซ','หนองบก','หินบูน','ยมมะลาด','บัวละพา','นากาย','เซบั้งไฟ','ไซบัวทอง','คูนคำ'],
+  'ສະຫວັນນະເຂດ':['ไกสอน พมวิหาน','อุทุมพอน','อาดสะพังทอง','พิน','เซโปน','นอง','ท่าปางทอง','สองคอน','จำพอน','ชนนะบุลี','ไซบุลี','วิละบุลี','อาดสะพอน','ไซพูทอง','พะลานไซ'],
+  'ສາລະວັນ':['สาละวัน','ละคอนเพ็ง','วาปี','เล่างาม','ตุ้มลาน','ตะโอ้ย','คงเซโดน','สะม้วย'],
+  'ເຊກອງ':['ท่าแตง','ละมาม','กะลึม','ดักจึง'],
+  'ຈຳປາສັກ':['ปากเซ','ชะนะสมบูน','บาจึ่งจะเลิ่นสุก','ปากซ่อง','ประทุมพอน','โพนทอง','จำปาสัก','สุขุมา','มูนละปะโมก','โขง'],
   'ອັດຕະປື':['ไซเซดถา','สามักคีไซ','สะหนามไซ','ซานไซ','พูวง'],
   'ຫຼວງພະບາງ':['หลวงพะบาง','เชียงเงิน','นาน','ปากอู','น้ำบาก','งอย','ปากแซง','โพนไซ','จอมเพ็ด','เวียงคำ','พูคูน','โพนทอง'],
-  'ຫຼວງນໍ້າທາ':['ຫຼວງນໍ້າທາ','ສີງ','ລອງ','ວຽງພູຄາ','ນາແລ'],
-  'ອຸດົມໄຊ':['ໄຊ','ຫລາ','ນາໝໍ້','ງາ','ແບ່ງ','ຮຸນ','ປາກແບ່ງ'],
-  'ບໍ່ແກ້ວ':['ຫ້ວຍຊາຍ','ຕົ້ນເຜິ້ງ','ເມິງ','ຜາອຸດົມ','ປາກທາ'],
-  'ຜົ້ງສາລີ':['ບຸນໃຕ້','ຂວາ','ໃໝ່','ຍອດອູ','ຜົ້ງສາລີ','ສຳພັນ','ບຸນເໜືອ'],
-  'ຫົວພັນ':['ຊຳເໜືອ','ຊຽງຄໍ້','ຮ້ຽມ','ວຽງໄຊ','ຫົວເມືອງ','ຊຳໃຕ້','ສົບເບົາ','ແອດ','ກວັນ','ຊ່ອນ'],
-  'ໄຊສົມບູນ':['ລ້ອງແຈ້ງ','ທ່າໂທມ','ອะนุวง','ลองซาน','ห่ม'],
-  'ໄຊຍະບູລີ':['ບໍ່ແຕນ','ຫົງສາ','ແກ່ນທ້າວ','ຄອບ','ເງິນ','ປາກລາຍ','ພຽງ','ທົ່ງມີໄຊ','ໄຊຍະບູລີ','ຊຽງຮ່ອນ','ໄຊສະຖານ'],
-  'ຊຽງຂວາງ':['ແປກ (ໂພນສະຫວັນ)','ຄຳ','ໜອງແຮດ','ຄູນ','ໝອກ','ພູກູດ','ຜາໄຊ']
+  'ຫຼວງນໍ້າທາ':['หลวงน้ำทา','สิง','ลอง','เวียงพูคา','นาแล'],
+  'ອຸດົມໄຊ':['ไซ','หลา','นาหม้อ','งา','แบ่ง','ฮุน','ปากแบ่ง'],
+  'ບໍ່ແກ້ວ':['ห้วยซาย','ต้นเผิ้ง','เมิง','ผาอุดม','ปากทา'],
+  'ຜົ້ງສາລີ':['บุนใต้','ขวา','ใหม่','ยอดอู','ผ้งสาลี','สำพัน','บุนเหนือ'],
+  'ຫົວພັນ':['ซำเหนือ','เซียงคั้อ','ฮ้วม','เวียงไซ','หัวเมือง','ซำใต้','สบเบา','แอด','กวัน','ซ่อน'],
+  'ໄຊສົມບູນ':['ล้องแจ้ง','ท่าโทม','อะนุวง','ลองซาน','ห่ม'],
+  'ໄຊຍະບູລີ':['บ่แตน','หงสา','แก่นท้าว','คอบ','เงิน','ปากลาย','เพียง','ทุ่งมีไซ','ไซยะบุลี','เซียงฮ่อน','ไซสะถาน'],
+  'ຊຽງຂວາງ':['แปก (โพนสะหวัน)','คำ','หนองแฮด','คูน','หมอก','พูกูด','ผาไซ']
 };
 
 function onProvinceChange(){
@@ -1057,17 +1051,17 @@ function onProvinceChange(){
   var list=DISTRICTS_BY_PROVINCE[prov]||[];
   showErr('err-province',false);markField('c-province',false);
   if(!prov||!list.length){
-    distSel.innerHTML='<option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option>';
+    distSel.innerHTML='<option value="">— กะลุนาเลือกแขวงก่อน —</option>';
     distSel.disabled=true;
     return;
   }
   distSel.disabled=false;
-  distSel.innerHTML='<option value="">— ເລືອກເມືອງ —</option>'+list.map(function(d){return '<option value="'+escHtml(d)+'">'+escHtml(d)+'</option>';}).join('');
+  distSel.innerHTML='<option value="">— เลือกเมือง —</option>'+list.map(function(d){return '<option value="'+escHtml(d)+'">'+escHtml(d)+'</option>';}).join('');
   showErr('err-district',false);markField('c-district',false);
 }
 function resetDistrictSelect(){
   var distSel=document.getElementById('c-district');
-  distSel.innerHTML='<option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option>';
+  distSel.innerHTML='<option value="">— กะลุนาเลือกแขวงก่อน —</option>';
   distSel.disabled=true;
 }
 
@@ -1083,24 +1077,24 @@ function selectPay(el,val){
   el.classList.add('active');selectedPay=val;updatePayState();
 }
 function updatePayState(){
-  var isCOD=selectedPay==='ເກັບປາຍທາງ COD',isTransfer=selectedPay==='ໂອນຈ່າຍ',isCard=selectedPay==='ມັດຈຳບັດເຕີມເງີນ';
+  var isCOD=selectedPay==='เก็บปายทาง COD',isTransfer=selectedPay==='ໂອນຈ่าย',isCard=selectedPay==='มัดจำบัดเติมเงิน';
   var showQR=isCOD||isTransfer,showSlip=isCOD||isTransfer||isCard;
   document.getElementById('qr-pay-box').classList.toggle('show',showQR);
   document.getElementById('cod-warning').classList.toggle('show',isCOD);
   document.getElementById('card-warning').classList.toggle('show',isCard);
   document.getElementById('slip-section').style.display=showSlip?'block':'none';
   if(isCard){
-    document.getElementById('slip-section-title').innerHTML='📸 ຮູບບັດເຕີມເງີນ <span class="req">*</span>';
-    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດຮູບບັດເຕີມເງີນ</strong><br>JPG, PNG ≤ 5MB';
-    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດຮູບບັດເຕີມເງີນ';
+    document.getElementById('slip-section-title').innerHTML='📸 ฮูปบัดเติมเงิน <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>กดเพื่ออับโหลดฮูปบัดเติมเงิน</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='กะลุนาอับโหลดฮูปบัดเติมเงิน';
   }else{
-    document.getElementById('slip-section-title').innerHTML='📸 ສະລິບໂອນ <span class="req">*</span>';
-    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB';
-    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດສະລິບ';
+    document.getElementById('slip-section-title').innerHTML='📸 สะลิบโอน <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>กดเพื่ออับโหลดสะลิบ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='กะลุนาอับโหลดสะลิบ';
   }
-  if(isCOD&&selectedShip!=='ອານຸສິດ'){
+  if(isCOD&&selectedShip!=='ອານຸสิด'){
     document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});
-    var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸສິດ';
+    var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸสิด';
   }
 }
 function downloadQR(){window.open(QR_IMG_URL,'_blank');}
@@ -1111,7 +1105,7 @@ function downloadQR(){window.open(QR_IMG_URL,'_blank');}
 function triggerUpload(){document.getElementById('slip-file').click();}
 function previewSlip(input){
   var file=input.files[0];if(!file)return;
-  if(file.size>5*1024*1024){alert('ຮູບໃຫຍ່ເກີນໄປ (≤ 5MB)');return;}
+  if(file.size>5*1024*1024){alert('ฮูปใหญ่เกินไป (≤ 5MB)');return;}
   var reader=new FileReader();
   reader.onload=function(e){
     var img=new Image();
@@ -1147,15 +1141,15 @@ function showErr(id,show){var el=document.getElementById(id);if(el)show?el.class
 function markField(id,inv){var el=document.getElementById(id);if(el)inv?el.classList.add('invalid'):el.classList.remove('invalid');}
 function validate(){
   var ok=true;
-  if(!cart.length){alert('⚠️ ກະລຸນາເລືອກສິນຄ້າ ແລະ ກົດ "ຢືນຢັນ" ກ່ອນ!');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
+  if(!cart.length){alert('⚠️ กะลุนาเลือกสินค้า และ กดยืนยันก่อน!');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
   var name=document.getElementById('c-name').value.trim();showErr('err-name',!name);markField('c-name',!name);if(!name)ok=false;
   var phone=document.getElementById('c-phone').value.trim();showErr('err-phone',!phone);markField('c-phone',!phone);if(!phone)ok=false;
   var prov=document.getElementById('c-province').value;showErr('err-province',!prov);markField('c-province',!prov);if(!prov)ok=false;
   var dist=document.getElementById('c-district').value;showErr('err-district',!dist);markField('c-district',!dist);if(!dist)ok=false;
   showErr('err-ship',!selectedShip);if(!selectedShip)ok=false;
   showErr('err-pay',!selectedPay);if(!selectedPay)ok=false;
-  if(selectedPay==='ເກັບປາຍທາງ COD'&&selectedShip!=='ອານຸສິດ'){alert('⚠️ COD ໃຊ້ໄດ້ສະເພາະ ຂົນສົ່ງ ອານຸສິດ!');ok=false;}
-  var slipReq=selectedPay==='ເກັບປາຍທາງ COD'||selectedPay==='ໂອນຈ່າຍ'||selectedPay==='ມັດຈຳບັດເຕີມເງີນ';
+  if(selectedPay==='เก็บปายทาง COD'&&selectedShip!=='ອານຸสิด'){alert('⚠️ COD ใช้ได้สะเพาะ ขนส่ง ອານຸสิด!');ok=false;}
+  var slipReq=selectedPay==='เก็บปายทาง COD'||selectedPay==='ໂອນຈ่าย'||selectedPay==='มัดจำบัดเติมเงิน';
   if(slipReq&&!slipBase64){showErr('err-slip',true);ok=false;}else showErr('err-slip',false);
   if(!ok){var fe=document.querySelector('.invalid,.field-error.show');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});}
   return ok;
@@ -1194,7 +1188,7 @@ function submitOrder(){
   };
   var loadEl=document.getElementById('loading');
   loadEl.classList.add('show');
-  document.getElementById('loading-text').textContent='ກຳລັງສົ່ງຄຳສັ່ງ...';
+  document.getElementById('loading-text').textContent='กำลังส่งคำสั่ง...';
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'submitCustomerOrder',data:orderData})})
     .then(function(){loadEl.classList.remove('show');showSuccess(orderData,now);})
     .catch(function(){submitViaGet(orderData,now);});
@@ -1205,7 +1199,7 @@ function submitViaGet(orderData,now){
   var params=new URLSearchParams({action:'submitCustomerOrder',code:orderData.code,customerName:orderData.customerName,customerPhone:orderData.customerPhone,customerAddr:orderData.customerAddr,shipping:orderData.shipping,payment:orderData.payment,note:orderData.note||'',totalAmount:orderData.totalAmount,items:JSON.stringify(orderData.cart),submittedAt:orderData.submittedAt});
   fetch(SCRIPT_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})
     .then(function(){loadEl.classList.remove('show');showSuccess(orderData,now);})
-    .catch(function(){loadEl.classList.remove('show');alert('❌ ສົ່ງບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');});
+    .catch(function(){loadEl.classList.remove('show');alert('❌ ส่งบ่สำเล็ด กะลุนาลองใหม่');});
 }
 
 // ─────────────────────────────────────────
@@ -1215,16 +1209,13 @@ function showSuccess(orderData,nowDate){
   lastOrderData=JSON.parse(JSON.stringify(orderData));
   lastOrderData._date=nowDate||new Date();
 
-  // Date string
   var now=nowDate||new Date();
   var dateStr=now.toLocaleString('lo-LA',{timeZone:'Asia/Vientiane',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
   document.getElementById('receipt-date').textContent='📅 '+dateStr;
 
-  // Code
   document.getElementById('receipt-code-val').textContent=orderData.code;
   document.getElementById('receipt-qr-code-text').textContent=orderData.code;
 
-  // Generate QR Code for the OrderID
   var qrEl=document.getElementById('receipt-qr-code');
   qrEl.innerHTML='';
   try{
@@ -1238,7 +1229,6 @@ function showSuccess(orderData,nowDate){
     qrEl.innerHTML='<div style="width:128px;height:128px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:10px;color:#6B7280;border-radius:6px">QR: '+escHtml(orderData.code)+'</div>';
   }
 
-  // Items
   var itemsHtml='';
   orderData.cart.forEach(function(item){
     var sub=item.price*item.qty;
@@ -1250,27 +1240,24 @@ function showSuccess(orderData,nowDate){
   });
   document.getElementById('receipt-items').innerHTML=itemsHtml;
 
-  // Total
   document.getElementById('receipt-total-amount').textContent=fN(orderData.totalAmount)+' ₭';
 
-  // Info rows
   var infoHtml=[
-    ['👤 ຊື່',orderData.customerName],
-    ['📱 ເບີໂທ',orderData.customerPhone],
-    ['📍 ທີ່ຢູ່',orderData.customerAddr],
-    ['🚚 ຂົນສົ່ງ',orderData.shipping],
-    ['💳 ຊຳລะ',orderData.payment],
-    orderData.note?['📝 ໝາຍເຫດ',orderData.note]:null
+    ['👤 ชื่อ',orderData.customerName],
+    ['📱 เบิโท',orderData.customerPhone],
+    ['📍 ที่อยู่',orderData.customerAddr],
+    ['🚚 ขนส่ง',orderData.shipping],
+    ['💳 ชำละ',orderData.payment],
+    orderData.note?['📝 หมายเหด',orderData.note]:null
   ].filter(Boolean).map(function(r){
     return '<div class="receipt-info-row"><span class="receipt-info-label">'+r[0]+'</span><span class="receipt-info-val">'+escHtml(r[1])+'</span></div>';
   }).join('');
   document.getElementById('receipt-info').innerHTML=infoHtml;
 
-  // Pay specific message
   var payMsg='';
-  if(orderData.payment==='ເກັບປາຍທາງ COD') payMsg='⚠️ ໂອນມັດຈຳ 15,000₭ ກ່ອນ ແລ້ວຄ່ອຍຝາກຂອງ!';
-  else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈะกวดสอบการโอน ແລ້ວຈຶ່ງຈັດສົ່ງ';
-  else payMsg='💵 ທາງຮ້ານຈະກວດສອບຮູບບັດເຕີມເງີນ ແລ້ວຈຶ່ງດຳເນີນການຈັດສົ່ງ';
+  if(orderData.payment==='เก็บปายทาง COD') payMsg='⚠️ โอนมัดจำ 15,000₭ ก่อน แล้วค่อยฝากของ!';
+  else if(orderData.payment==='ໂອນຈ่าย') payMsg='💳 ทางฮ้านจะกวดสอบการโอน แล้วจึงจัดส่ง';
+  else payMsg='💵 ทางฮ้านจะกวดสอบฮูปบัดเติมเงิน แล้วจึงดำเนินการจัดส่ง';
   document.getElementById('pay-specific-msg').textContent=payMsg;
 
   document.getElementById('success-modal').classList.add('show');
@@ -1281,9 +1268,8 @@ function showSuccess(orderData,nowDate){
 // ─────────────────────────────────────────
 function downloadReceipt(){
   var d=lastOrderData;
-  if(!d||!d.code){alert('ບໍ່ມີຂໍ້ມູນໃບບິນ');return;}
+  if(!d||!d.code){alert('บ่มีข้อมูนใบบิน');return;}
 
-  // Get QR as image
   var qrEl=document.getElementById('receipt-qr-code');
   var qrImg=qrEl.querySelector('img')||qrEl.querySelector('canvas');
 
@@ -1299,19 +1285,15 @@ function downloadReceipt(){
   canvas.width=W;canvas.height=H;
   var ctx=canvas.getContext('2d');
 
-  // BG
   ctx.fillStyle='#F0F4F8';ctx.fillRect(0,0,W,H);
-  // Card
   ctx.fillStyle='#ffffff';
   roundRect(ctx,12,12,W-24,H-24,14);ctx.fill();
 
-  // Header gradient
   var grad=ctx.createLinearGradient(0,12,0,headerH+12);
   grad.addColorStop(0,'#1B5E3A');grad.addColorStop(1,'#2D7A55');
   ctx.fillStyle=grad;
   roundRectTop(ctx,12,12,W-24,headerH,14);ctx.fill();
 
-  // Header text
   ctx.fillStyle='#ffffff';
   ctx.font='bold 20px sans-serif';ctx.textAlign='center';
   ctx.fillText('SOUDSADA SHOP',W/2,50);
@@ -1322,16 +1304,14 @@ function downloadReceipt(){
 
   var y=headerH+24;
 
-  // Order code box
   ctx.fillStyle='#E8F5EE';
   roundRect(ctx,pad,y,W-pad*2,36,8);ctx.fill();
   ctx.fillStyle='#2D7A55';ctx.font='bold 11px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລະຫັດອໍເດີ້:',pad+10,y+14);
+  ctx.fillText('ละหัดอ์เดี้:',pad+10,y+14);
   ctx.font='bold 16px monospace';ctx.textAlign='right';
   ctx.fillText(d.code,W-pad-10,y+22);
   y+=50;
 
-  // QR code image
   ctx.fillStyle='#ffffff';
   roundRect(ctx,(W-qrSize-20)/2,y,qrSize+20,qrSize+30,10);ctx.fill();
   ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;
@@ -1344,14 +1324,12 @@ function downloadReceipt(){
   ctx.fillText(d.code,W/2,y+qrSize+24);
   y+=qrSize+44;
 
-  // Divider
   ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([4,3]);
   ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
   ctx.setLineDash([]);y+=lineH;
 
-  // Items header
   ctx.fillStyle='#6B7280';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລາຍການສິນຄ້າ',pad,y);y+=lineH;
+  ctx.fillText('ลายการสินค้า',pad,y);y+=lineH;
 
   d.cart.forEach(function(item){
     ctx.font='12px sans-serif';ctx.fillStyle='#1A1A2E';ctx.textAlign='left';
@@ -1361,20 +1339,18 @@ function downloadReceipt(){
     ctx.textAlign='left';y+=lineH;
   });
 
-  // Total line
   ctx.fillStyle='#E8F5EE';roundRect(ctx,pad,y,W-pad*2,30,6);ctx.fill();
   ctx.fillStyle='#2D7A55';ctx.font='bold 14px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລวมทั้งหมด',pad+10,y+20);
+  ctx.fillText('ลวมทั้งหมด',pad+10,y+20);
   ctx.textAlign='right';ctx.font='bold 16px sans-serif';
   ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-10,y+20);y+=44;
 
-  // Info rows
   ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  [['👤 ຊื่',d.customerName+' | '+d.customerPhone],
+  [['👤 ชื่อ',d.customerName+' | '+d.customerPhone],
    ['📍 ที่อยู่',d.customerAddr],
    ['🚚 ขนส่ง',d.shipping],
-   ['💳 ชำระ',d.payment],
-   d.note?['📝 ໝາຍເຫด',d.note]:null
+   ['💳 ชำละ',d.payment],
+   d.note?['📝 หมายเหด',d.note]:null
   ].filter(Boolean).forEach(function(r){
     ctx.font='10px sans-serif';ctx.fillStyle='#6B7280';ctx.textAlign='left';ctx.fillText(r[0],pad,y);
     ctx.fillStyle='#1A1A2E';ctx.font='bold 10px sans-serif';ctx.textAlign='right';ctx.fillText(r[1],W-pad,y);
@@ -1383,15 +1359,13 @@ function downloadReceipt(){
   });
   ctx.setLineDash([]);y+=8;
 
-  // Footer notice
   ctx.fillStyle='#FFFBEB';roundRect(ctx,pad,y,W-pad*2,38,6);ctx.fill();
   ctx.strokeStyle='#FCD34D';ctx.lineWidth=1;roundRect(ctx,pad,y,W-pad*2,38,6);ctx.stroke();
   ctx.fillStyle='#92400E';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
-  ctx.fillText('📸 ກະລุนาบันทึกใบบินนี้ไว้ · หาก 1-2 มื้ บ่ได้ฮับ ติดต่อ 020 92833416',W/2,y+16);
+  ctx.fillText('📸 กะลุนาบันทึกใบบินนี้ไว้ · หาก 1-2 มื้ บ่ได้ฮับ ติดต่อ 020 92833416',W/2,y+16);
   ctx.font='10px sans-serif';
   ctx.fillText('SOUDSADA SHOP · soudsada2025@gmail.com',W/2,y+30);y+=50;
 
-  // Download
   var link=document.createElement('a');
   link.href=canvas.toDataURL('image/png');
   link.download='SOUDSADA_Receipt_'+d.code+'.png';
@@ -1449,18 +1423,18 @@ function adminTab(tab,el){
   el.classList.add('active');adminRenderOrders();
 }
 function adminLoadOrders(){
-  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr>';
+  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ กำลังโหลด...</td></tr>';
   fetch(SCRIPT_URL+'?action=getAllOrders')
     .then(function(r){return r.json();})
     .then(function(d){adminOrders=Array.isArray(d)?d:[];adminRenderOrders();adminRenderStats();updateTabCounts();})
-    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--red)">❌ ໂຫຼດບໍ່ໄດ້</td></tr>';});
+    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--red)">❌ โหลดบ่ได้</td></tr>';});
 }
 function updateTabCounts(){
   var all=adminOrders.length;
-  var w=adminOrders.filter(function(o){return o.orderStatus==='ລໍຖ້າຮັບຍອດ';}).length;
-  var a=adminOrders.filter(function(o){return o.orderStatus==='ແມ່ຄ້າຮັບຍອດແລ້ວ';}).length;
-  var p=adminOrders.filter(function(o){return o.orderStatus==='ກຳລັງກຽມການຈັດສົ່ງ';}).length;
-  var s=adminOrders.filter(function(o){return o.orderStatus==='ຈັດສົ່ງສຳເລັດ';}).length;
+  var w=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[0].key;}).length;
+  var a=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[1].key;}).length;
+  var p=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[2].key;}).length;
+  var s=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[3].key;}).length;
   document.getElementById('tc-all').textContent=all;
   document.getElementById('tc-waiting').textContent=w;
   document.getElementById('tc-accepted').textContent=a;
@@ -1469,66 +1443,63 @@ function updateTabCounts(){
 }
 function adminRenderStats(){
   var total=adminOrders.length;
-  var waiting=adminOrders.filter(function(o){return o.orderStatus==='ລໍຖ້າຮັບຍອດ';}).length;
-  var shipped=adminOrders.filter(function(o){return o.orderStatus==='ຈັດສົ່ງສຳເລັດ';}).length;
+  var waiting=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[0].key;}).length;
+  var shipped=adminOrders.filter(function(o){return o.orderStatus===STATUS_LIST[3].key;}).length;
   var revenue=adminOrders.reduce(function(s,o){return s+(Number(o.totalAmount)||0);},0);
   document.getElementById('admin-stat').innerHTML=
-    '<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-lbl">ທັງໝົด</div></div>'
+    '<div class="stat-card"><div class="stat-num">'+total+'</div><div class="stat-lbl">ทั้งหมด</div></div>'
     +'<div class="stat-card"><div class="stat-num">'+waiting+'</div><div class="stat-lbl">ลำถ้า</div></div>'
-    +'<div class="stat-card"><div class="stat-num">'+shipped+'</div><div class="stat-lbl">สั่งแล้ว</div></div>'
+    +'<div class="stat-card"><div class="stat-num">'+shipped+'</div><div class="stat-lbl">ส่งแล้ว</div></div>'
     +'<div class="stat-card"><div class="stat-num">'+fN(revenue)+'</div><div class="stat-lbl">ลายฮับ (₭)</div></div>';
 }
-var STATUS_CFG=[
-  {key:'ລໍຖ້າຮັບຍອດ',       icon:'⏳',cls:'s0',dot:'#F59E0B'},
-  {key:'ແມ່ຄ້າຮັບຍอดแล้ว', icon:'✅',cls:'s1',dot:'#3B82F6'},
-  {key:'ກຳລັງກຽມການຈັດສົ່ງ',icon:'📦',cls:'s2',dot:'#8B5CF6'},
-  {key:'ຈັດສົ່ງສຳເລັด',    icon:'🎉',cls:'s3',dot:'#10B981'}
-];
-function getStatusCfg(key){return STATUS_CFG.find(function(s){return s.key===key;})||STATUS_CFG[0];}
-function buildPopup(code,currentStatus){
+
+// ★ build popup using numeric codes — onclick passes code, not Lao text
+function buildPopup(orderCode,currentStatusKey){
   return '<div class="status-popup-header">ปั่นสถานะ</div>'
-    +STATUS_CFG.map(function(s){
-      var isCur=s.key===currentStatus;
-      return '<div class="status-popup-item'+(isCur?' current':'')+'" onclick="applyStatus(\''+escHtml(code)+'\',\''+s.key+'\')">'
+    +STATUS_LIST.map(function(s){
+      var isCur=s.key===currentStatusKey;
+      return '<div class="status-popup-item'+(isCur?' current':'')+'" onclick="applyStatus(\''+escHtml(orderCode)+'\',\''+s.code+'\')">'
         +'<span class="status-popup-dot" style="background:'+s.dot+'"></span>'
         +'<span class="status-popup-text">'+s.icon+' '+s.key+'</span>'
         +(isCur?'<span class="status-popup-check">✓</span>':'')
         +'</div>';
     }).join('');
 }
-function toggleStatusPopup(code,currentStatus,el){
+function toggleStatusPopup(code,currentStatusKey,el){
   document.querySelectorAll('.status-popup').forEach(function(p){if(p.dataset.code!==code)p.classList.remove('open');});
   var popup=el.nextElementSibling;
   if(!popup||!popup.classList.contains('status-popup'))return;
   var isOpen=popup.classList.contains('open');
   popup.classList.toggle('open',!isOpen);
-  popup.innerHTML=buildPopup(code,currentStatus);
+  popup.innerHTML=buildPopup(code,currentStatusKey);
   openPopupCode=isOpen?null:code;
 }
 function closeAllPopups(){document.querySelectorAll('.status-popup').forEach(function(p){p.classList.remove('open');});openPopupCode=null;}
-function applyStatus(code,newStatus){closeAllPopups();updateOrderStatusAdmin(code,newStatus);}
+
+// ★ applyStatus now receives a numeric status CODE ('0'-'3'), not Lao text
+function applyStatus(code,statusCode){closeAllPopups();updateOrderStatusAdmin(code,statusCode);}
 document.addEventListener('click',function(e){if(!e.target.closest('.status-btn-wrap'))closeAllPopups();});
 
 function adminRenderOrders(){
   var q=(document.getElementById('admin-search')||{}).value||'';
   q=q.toLowerCase().trim();
   var filtered=adminOrders.filter(function(o){
-    if(adminTabFilter==='waiting')  return o.orderStatus==='ລໍຖ້າຮັບຍອດ';
-    if(adminTabFilter==='accepted') return o.orderStatus==='ແມ່ຄ້າຮັບຍອดแล้ว';
-    if(adminTabFilter==='packing')  return o.orderStatus==='ກຳລັງກຽມການຈັດສົ່ງ';
-    if(adminTabFilter==='shipped')  return o.orderStatus==='ຈັດສົ່ງສຳເລັด';
+    if(adminTabFilter==='waiting')  return o.orderStatus===STATUS_LIST[0].key;
+    if(adminTabFilter==='accepted') return o.orderStatus===STATUS_LIST[1].key;
+    if(adminTabFilter==='packing')  return o.orderStatus===STATUS_LIST[2].key;
+    if(adminTabFilter==='shipped')  return o.orderStatus===STATUS_LIST[3].key;
     return true;
   }).filter(function(o){
     if(!q)return true;
     return (o.code||'').toLowerCase().includes(q)||(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q);
   });
   if(!filtered.length){
-    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພบลายการ</td></tr>';
+    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 บ่พบลายการ</td></tr>';
     return;
   }
   var html='';
   filtered.slice().reverse().forEach(function(o){
-    var cfg=getStatusCfg(o.orderStatus);
+    var cfg=statusCfgByKey(o.orderStatus);
     var slipHtml='<span style="color:var(--muted);font-size:10px">❌</span>';
     if(o.slipUrl){
       var thumb=o.slipUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
@@ -1552,14 +1523,15 @@ function adminRenderOrders(){
   document.getElementById('orders-tbody').innerHTML=html;
 }
 
-function updateOrderStatusAdmin(code,newStatus){
-  var url=SCRIPT_URL+'?action=updateOrderStatus&code='+encodeURIComponent(code)+'&status='+encodeURIComponent(newStatus);
+// ★ Sends numeric statusCode ('0'-'3') instead of Lao text — avoids URL/UTF-8 mismatch entirely
+function updateOrderStatusAdmin(code,statusCode){
+  var url=SCRIPT_URL+'?action=updateOrderStatus&code='+encodeURIComponent(code)+'&status='+encodeURIComponent(statusCode);
   fetch(url,{method:'GET'})
     .then(function(r){return r.json();})
     .then(function(res){
       if(res&&res.status==='ok'){
         var o=adminOrders.find(function(x){return x.code===code;});
-        if(o)o.orderStatus=newStatus;
+        if(o)o.orderStatus=res.newStatus;
         adminRenderOrders();adminRenderStats();updateTabCounts();
         setTimeout(function(){
           document.querySelectorAll('#orders-tbody tr').forEach(function(tr){
@@ -1570,8 +1542,8 @@ function updateOrderStatusAdmin(code,newStatus){
             }
           });
         },50);
-      }else{alert('❌ '+(res&&res.message?res.message:'ອัพเดทบ่สำเล็ด'));}
-    }).catch(function(){alert('❌ ເຊื่อมต่อบ่ได้');});
+      }else{alert('❌ '+(res&&res.message?res.message:'อัพเดทบ่สำเล็ด'));}
+    }).catch(function(){alert('❌ เชื่อมต่อบ่ได้');});
 }
 
 function viewSlip(url){
