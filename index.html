@@ -110,8 +110,11 @@ input,select,textarea{font-family:inherit}
 /* ★ Shipping bill — customer tracking display */
 .status-shipbill-box{margin-top:10px;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;padding:10px 12px;text-align:center}
 .status-shipbill-title{font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
-.status-shipbill-img{max-width:100%;max-height:220px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;background:#fff;object-fit:contain}
+.status-shipbill-img{max-width:100%;max-height:220px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;background:#fff;object-fit:contain;display:block;margin:0 auto}
+.status-shipbill-viewbtn{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer}
+.status-shipbill-viewbtn:hover{background:var(--green-dk)}
 .status-shipbill-hint{font-size:9px;color:var(--muted);margin-top:5px}
+.status-shipbill-pending{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:10px;padding:10px 12px;margin-top:10px;text-align:center;font-size:11px;color:#92400E;font-weight:700}
 
 /* ── MAIN ── */
 .main{max-width:1200px;margin:0 auto;padding:12px 12px 80px}
@@ -824,15 +827,19 @@ function buildStatusHtml(d){
     return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+escHtml(String(r[2]))+'</span></div>';
   }).join('');
 
-  // ★ ຖ້າແອັດມິນອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໄວ້ແລ້ວ — ໂຊໃຫ້ລູກຄ້າເຫັນຢູ່ນີ້
+  // ★ ຖ້າແອັດມິນອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໄວ້ແລ້ວ — ໂຊໃຫ້ລູກຄ້າເຫັນຢູ່ນີ້ ພ້ອມປຸ່ມເບິ່ງເຕັມຈໍ
+  // ຖ້າຍັງບໍ່ມີ ແຕ່ສະຖານະຮອດ "ກຳລັງກຽມການຈັດສົ່ງ" ຫຼື ສູງກວ່າ — ໂຊຂໍ້ຄວາມລໍຖ້າແທນ
   var shipBillHtml='';
   if(d.shippingBillUrl){
     var sbThumb=d.shippingBillUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
     shipBillHtml='<div class="status-shipbill-box">'
       +'<div class="status-shipbill-title">🚚 ບິນຂົນສົ່ງ</div>'
       +'<img class="status-shipbill-img" src="'+escHtml(sbThumb)+'" alt="shipping bill" onclick="viewSlip(\''+escHtml(d.shippingBillUrl)+'\')" onerror="this.style.display=\'none\'">'
-      +'<div class="status-shipbill-hint">ກົດທີ່ຮູບເພື່ອເບິ່ງເຕັມຈໍ</div>'
+      +'<button class="status-shipbill-viewbtn" onclick="viewSlip(\''+escHtml(d.shippingBillUrl)+'\')">🔍 ເບິ່ງບິນຂົນສົ່ງເຕັມຈໍ</button>'
+      +'<div class="status-shipbill-hint">ກົດທີ່ຮູບ ຫຼື ປຸ່ມ ເພື່ອເບິ່ງເຕັມຈໍ</div>'
       +'</div>';
+  }else if(idx>=2){
+    shipBillHtml='<div class="status-shipbill-pending">⏳ ແອັດມິນກຳລັງກະກຽມບິນຂົນສົ່ງ ກະລຸນາກວດສອບອີກຄັ້ງພາຍຫຼັງ</div>';
   }
 
   return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.badge+'">'+step.icon+' '+cur+'</span></div>'
