@@ -509,7 +509,7 @@ input,select,textarea{font-family:inherit}
           <button class="cart-clear-btn" onclick="clearCart()">ລ້າງທັງໝົດ</button>
         </div>
         <div class="cart-items-wrap"><div class="cart-items" id="cart-items"><div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div></div></div>
-        <div class="cart-total-row"><span>ລວมทั้งหมด</span><strong id="cart-total">0 ₭</strong></div>
+        <div class="cart-total-row"><span>ລວມທັງໝົດ</span><strong id="cart-total">0 ₭</strong></div>
       </div>
 
       <div class="panel-card" id="form-anchor">
@@ -524,60 +524,60 @@ input,select,textarea{font-family:inherit}
           <div class="form-section-title">📍 ທີ່ຢູ່ຈັດສົ່ງ</div>
           <div class="field"><label>ແຂວງ <span class="req">*</span></label>
             <select id="c-province" onchange="onProvinceChange()"><option value="">— ເລືອກແຂວງ —</option><option>ວຽງຈັນ (ນະຄອນຫຼວງ)</option><option>ວຽງຈັນ (ແຂວງ)</option><option>ບໍລິຄຳໄຊ</option><option>ຄຳມ່ວນ</option><option>ສະຫວັນນະເຂດ</option><option>ສາລະວັນ</option><option>ເຊກອງ</option><option>ຈຳປາສັກ</option><option>ອັດຕະປື</option><option>ຫຼວງພະບາງ</option><option>ຫຼວງນໍ້າທາ</option><option>ອຸດົມໄຊ</option><option>ບໍ່ແກ້ວ</option><option>ຜົ້ງສາລີ</option><option>ຫົວພັນ</option><option>ໄຊສົມບູນ</option><option>ໄຊຍະບູລີ</option><option>ຊຽງຂວາງ</option></select>
-            <div class="field-error" id="err-province">ກະລຸນາເລືອກແຂวง</div>
+            <div class="field-error" id="err-province">ກະລຸນາເລືອກແຂວງ</div>
           </div>
-          <div class="field"><label>ເมือง <span class="req">*</span></label>
-            <select id="c-district" disabled><option value="">— ກະລຸນາເລືອກແຂวงก่อน —</option></select>
-            <div class="field-error" id="err-district">ກະລຸນາເລືອກເมือง</div>
+          <div class="field"><label>ເມືອງ <span class="req">*</span></label>
+            <select id="c-district" disabled><option value="">— ກະລຸນາເລືອກແຂວງກ່ອນ —</option></select>
+            <div class="field-error" id="err-district">ກະລຸນາເລືອກເມືອງ</div>
           </div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">🚚 ຂົนส่ง <span class="req">*</span></div>
+          <div class="form-section-title">🚚 ຂົນສົ່ງ <span class="req">*</span></div>
           <div class="ship-opts">
-            <label class="ship-opt" onclick="selectShip(this,'ອານຸสิด')"><input type="radio" name="ship" value="ອານຸสิด"> ✈️ ອານຸสิด</label>
-            <label class="ship-opt" onclick="selectShip(this,'ฮุ่งอาลุน')"><input type="radio" name="ship" value="ฮุ่งอาลุน"> 🚌 ฮุ่งอาลุน</label>
-            <label class="ship-opt" onclick="selectShip(this,'มีไซ')"><input type="radio" name="ship" value="มีไซ"> 🚚 มีไซ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ยู่นิเทว')"><input type="radio" name="ship" value="ยู่นิเทว"> 📦 ยู่นิเทว</label>
+            <label class="ship-opt" onclick="selectShip(this,'ອານຸສິດ')"><input type="radio" name="ship" value="ອານຸສິດ"> ✈️ ອານຸສິດ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ຮຸ່ງອາລຸນ')"><input type="radio" name="ship" value="ຮຸ່ງອາລຸນ"> 🚌 ຮຸ່ງອາລຸນ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ມີໄຊ')"><input type="radio" name="ship" value="ມີໄຊ"> 🚚 ມີໄຊ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ຢູ່ນິເທວ')"><input type="radio" name="ship" value="ຢູ່ນິເທວ"> 📦 ຢູ່ນິເທວ</label>
           </div>
-          <div class="field-error" id="err-ship" style="margin-top:5px">ກະລຸນາເລືອกขนส่ง</div>
-          <div class="field" style="margin-top:8px"><label>ສาขา / จุดฮับ</label><input type="text" id="c-branch" placeholder="ละบุสาขา"></div>
+          <div class="field-error" id="err-ship" style="margin-top:5px">ກະລຸນາເລືອກຂົນສົ່ງ</div>
+          <div class="field" style="margin-top:8px"><label>ສາຂາ / ຈຸດຮັບ</label><input type="text" id="c-branch" placeholder="ລະບຸສາຂາ"></div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">💳 ชำละ <span class="req">*</span></div>
+          <div class="form-section-title">💳 ຊຳລະ <span class="req">*</span></div>
           <div class="pay-opts">
-            <label class="pay-opt" onclick="selectPay(this,'ໂອນຈ่าย')"><input type="radio" name="pay" value="ໂອນຈ่าย"><div class="pay-opt-icon">💳</div><div><div class="pay-opt-name">ໂອນຈ่าย</div><div class="pay-opt-desc">สะแกน QR · โอนก่อนส่ง</div></div></label>
-            <label class="pay-opt" onclick="selectPay(this,'มัดจำบัดเติมเงิน')"><input type="radio" name="pay" value="มัดจำบัดเติมเงิน"><div class="pay-opt-icon">💵</div><div><div class="pay-opt-name">มัดจำบัดเติมเงิน</div><div class="pay-opt-desc">บัดหลัก5 หลัก9 10,000ກີบ</div></div></label>
-            <label class="pay-opt" onclick="selectPay(this,'เก็บปายทาง COD')"><input type="radio" name="pay" value="เก็บปายทาง COD"><div class="pay-opt-icon">📬</div><div><div class="pay-opt-name">เก็บปายทาง COD</div><div class="pay-opt-desc">สะเพาะ ອານຸสิด · มัดจำ 15,000₭</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'ໂອນຈ່າຍ')"><input type="radio" name="pay" value="ໂອນຈ່າຍ"><div class="pay-opt-icon">💳</div><div><div class="pay-opt-name">ໂອນຈ່າຍ</div><div class="pay-opt-desc">ສະແກນ QR · ໂອນກ່ອນສົ່ງ</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'ມັດຈຳບັດເຕີມເງິນ')"><input type="radio" name="pay" value="ມັດຈຳບັດເຕີມເງິນ"><div class="pay-opt-icon">💵</div><div><div class="pay-opt-name">ມັດຈຳບັດເຕີມເງິນ</div><div class="pay-opt-desc">ບັດຫຼັກ5 ຫຼັກ9 10,000ກີບ</div></div></label>
+            <label class="pay-opt" onclick="selectPay(this,'ເກັບປາຍທາງ COD')"><input type="radio" name="pay" value="ເກັບປາຍທາງ COD"><div class="pay-opt-icon">📬</div><div><div class="pay-opt-name">ເກັບປາຍທາງ COD</div><div class="pay-opt-desc">ສະເພາະ ອານຸສິດ · ມັດຈຳ 15,000₭</div></div></label>
           </div>
-          <div class="field-error" id="err-pay" style="margin-top:5px">ກะลุนาเลือกการชำละ</div>
+          <div class="field-error" id="err-pay" style="margin-top:5px">ກະລຸນາເລືອກການຊຳລະ</div>
           <div class="qr-pay-box" id="qr-pay-box">
-            <div class="qr-pay-title">📲 สะแกน QR เพื่อโอน (BCEL One / ท/ค)</div>
-            <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ดาวโหลด QR</button></div>
+            <div class="qr-pay-title">📲 ສະແກນ QR ເພື່ອໂອນ (BCEL One / ທ/ຄ)</div>
+            <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ດາວໂຫຼດ QR</button></div>
           </div>
-          <div class="cod-warning" id="cod-warning">⚠️ <strong>เงื่อนไข COD:</strong><br>• สะเพาะ <strong>ขนส่ง ອານຸสิด</strong> เท่านั้น<br>• ก่อนฝาก ต้อง <strong>โอนมัดจำ 15,000 ₭</strong> ก่อน<br>• สะแกน QR ข้านเทิ่ง แล้ว อับโหลดสะลิบ</div>
-          <div class="cod-warning" id="card-warning">⚠️ <strong>เงื่อนไข มัดจำบัดเติมเงิน:</strong><br>• บัดต้องมีมูนค่า <strong>บ่ต่ำกว่า 10,000 ກີบ</strong> (หลัก 5 หลัก 9)<br>• ກะลุนา <strong>ถ่ายฮูปหน้าบัด</strong> (บ่อนเห็นละหัดบัด) แนบมานำก่อนกดยืนยันสั่งซื้อ</div>
+          <div class="cod-warning" id="cod-warning">⚠️ <strong>ເງື່ອນໄຂ COD:</strong><br>• ສະເພາະ <strong>ຂົນສົ່ງ ອານຸສິດ</strong> ເທົ່ານັ້ນ<br>• ກ່ອນຝາກ ຕ້ອງ <strong>ໂອນມັດຈຳ 15,000 ₭</strong> ກ່ອນ<br>• ສະແກນ QR ຂ້າງເທິງ ແລ້ວ ອັບໂຫຼດສະລິບ</div>
+          <div class="cod-warning" id="card-warning">⚠️ <strong>ເງື່ອນໄຂ ມັດຈຳບັດເຕີມເງິນ:</strong><br>• ບັດຕ້ອງມີມູນຄ່າ <strong>ບໍ່ຕ່ຳກວ່າ 10,000 ກີບ</strong> (ຫຼັກ 5 ຫຼື ຫຼັກ 9)<br>• ກະລຸນາ <strong>ຖ່າຍຮູບໜ້າບັດ</strong> (ບ່ອນເຫັນລະຫັດບັດ) ແນບມານຳກ່ອນກົດຢືນຢັນສັ່ງຊື້</div>
         </div>
         <div class="form-section" id="slip-section" style="display:none">
-          <div class="form-section-title" id="slip-section-title">📸 สะลิบโอน <span class="req">*</span></div>
+          <div class="form-section-title" id="slip-section-title">📸 ສະລິບໂອນ <span class="req">*</span></div>
           <div class="file-upload-area" id="upload-area" onclick="triggerUpload()">
             <div class="file-upload-icon">📸</div>
-            <div class="file-upload-text" id="upload-area-text"><strong>กดเพื่ออับโหลดสะลิบ</strong><br>JPG, PNG ≤ 5MB</div>
+            <div class="file-upload-text" id="upload-area-text"><strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB</div>
             <input type="file" id="slip-file" accept="image/*" onchange="previewSlip(this)">
           </div>
           <div class="file-preview" id="slip-preview"><img id="slip-preview-img" src="" alt="Slip"><button class="file-remove" onclick="removeSlip()">✕</button></div>
-          <div class="field-error" id="err-slip">ກะลุนาอับโหลดสะลิบ</div>
+          <div class="field-error" id="err-slip">ກະລຸນາອັບໂຫຼດສະລິບ</div>
         </div>
         <div class="form-section">
-          <div class="form-section-title">📝 หมายเหด</div>
-          <div class="field"><textarea id="c-note" rows="2" placeholder="ข้อความเพิ่มเติม..."></textarea></div>
+          <div class="form-section-title">📝 ໝາຍເຫດ</div>
+          <div class="field"><textarea id="c-note" rows="2" placeholder="ຂໍ້ຄວາມເພີ່ມເຕີມ..."></textarea></div>
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ยืนยันการสั่งซื้อ</button></div>
-<div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">กำลังส่งคำสั่ง...</div></div>
+<div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ຢືນຢັນການສັ່ງຊື້</button></div>
+<div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div></div>
 
 <!-- ★ SUCCESS RECEIPT MODAL -->
 <div class="modal-overlay" id="success-modal">
@@ -585,49 +585,49 @@ input,select,textarea{font-family:inherit}
     <!-- Header -->
     <div class="receipt-header">
       <div class="receipt-confetti">🎉</div>
-      <div class="receipt-success-title">สั่งซื้อสำเล็ดแล้ว!</div>
+      <div class="receipt-success-title">ສັ່ງຊື້ສຳເລັດແລ້ວ!</div>
       <div class="receipt-shop-name">SOUDSADA SHOP</div>
-      <div class="receipt-shop-sub">ฮ้านขายสินค้าความงาม · ฝากส่งทั่วลาว</div>
+      <div class="receipt-shop-sub">ຮ້ານຂາຍສິນຄ້າຄວາມງາມ · ຝາກສົ່ງທົ່ວລາວ</div>
       <div class="receipt-date" id="receipt-date"></div>
     </div>
     <!-- Body -->
     <div class="receipt-body">
       <!-- Order code -->
       <div class="receipt-code-row">
-        <div><div class="receipt-code-label">ละหัดอ์เดี้</div><div class="receipt-code-val" id="receipt-code-val">—</div></div>
+        <div><div class="receipt-code-label">ລະຫັດອໍເດີ້</div><div class="receipt-code-val" id="receipt-code-val">—</div></div>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2D7A55" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
       </div>
 
       <!-- QR code of OrderID -->
       <div class="receipt-qr-section">
-        <div class="receipt-qr-label">📲 QR Code สำลับกวดสอบอ์เดี้</div>
+        <div class="receipt-qr-label">📲 QR Code ສຳລັບກວດສອບອໍເດີ້</div>
         <div id="receipt-qr-code"></div>
         <div class="receipt-qr-code-text" id="receipt-qr-code-text"></div>
       </div>
 
       <!-- Items -->
-      <div class="receipt-section-title">🛍️ ลายการสินค้า</div>
+      <div class="receipt-section-title">🛍️ ລາຍການສິນຄ້າ</div>
       <div class="receipt-items" id="receipt-items"></div>
 
       <!-- Total -->
       <div class="receipt-total">
-        <span class="receipt-total-label">💰 ลวมทั้งหมด</span>
+        <span class="receipt-total-label">💰 ລວມທັງໝົດ</span>
         <span class="receipt-total-amount" id="receipt-total-amount">0 ₭</span>
       </div>
 
       <!-- Order info -->
-      <div class="receipt-section-title">📋 ข้อมูนการสั่งซื้อ</div>
+      <div class="receipt-section-title">📋 ຂໍ້ມູນການສັ່ງຊື້</div>
       <div class="receipt-info" id="receipt-info"></div>
 
       <!-- Notices -->
       <div class="receipt-notice yellow">
-        📸 <strong>ກะลุนาบันทึกใบบินนี้ไว้!</strong><br>
-        ดาวโหลดฮูปใบบิน หรือ แคบจอไว้ เพื่อใช้ยืนยันการสั่งซื้อ.<br>
+        📸 <strong>ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້!</strong><br>
+        ດາວໂຫຼດຮູບໃບບິນ ຫຼື ແຄບຈໍໄວ້ ເພື່ອໃຊ້ຢືນຢັນການສັ່ງຊື້.<br>
         <span id="pay-specific-msg"></span>
       </div>
       <div class="receipt-notice red">
-        ⚠️ <strong>กรณี 1-2 มื้ ยังบ่ได้ฮับการติดต่อ:</strong><br>
-        หาก ใน 1-2 มื้ แม่ค้ายังบ่ติดต่อหาท่าน, <strong>ให้ติดต่อหาแม่ค้าด่วน</strong> เพื่อตวดสอบว่าอ์เดี้ตกหล่นหรือบ่!
+        ⚠️ <strong>ກໍລະນີ 1-2 ມື້ ຍັງບໍ່ໄດ້ຮັບການຕິດຕໍ່:</strong><br>
+        ຫາກ ໃນ 1-2 ມື້ ແມ່ຄ້າຍັງບໍ່ຕິດຕໍ່ຫາທ່ານ, <strong>ໃຫ້ຕິດຕໍ່ຫາແມ່ຄ້າດ່ວນ</strong> ເພື່ອຕວດສອບວ່າອໍເດີ້ຕົກຫຼົ່ນຫຼືບໍ່!
         <a href="https://wa.link/3c7y89" target="_blank" class="wa-btn">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp 020 92833416
@@ -636,8 +636,8 @@ input,select,textarea{font-family:inherit}
 
       <!-- Actions -->
       <div class="receipt-actions">
-        <button class="receipt-dl-btn" onclick="downloadReceipt()">⬇️ ดาวโหลดใบบิน</button>
-        <button class="receipt-new-btn" onclick="resetAll()">🛒 สั่งซื้อใหม่</button>
+        <button class="receipt-dl-btn" onclick="downloadReceipt()">⬇️ ດາວໂຫຼດໃບບິນ</button>
+        <button class="receipt-new-btn" onclick="resetAll()">🛒 ສັ່ງຊື້ໃໝ່</button>
       </div>
     </div>
   </div>
@@ -648,33 +648,33 @@ input,select,textarea{font-family:inherit}
   <div class="admin-box">
     <div class="admin-header">
       <h2>🔐 Admin Panel — SOUDSADA SHOP</h2>
-      <button class="admin-close" onclick="closeAdmin()">✕ ปิด</button>
+      <button class="admin-close" onclick="closeAdmin()">✕ ປິດ</button>
     </div>
     <div id="admin-login-box" class="admin-login-box">
-      <h3>🔑 ใส่ละหัดผ่าน Admin</h3>
-      <input class="admin-login-inp" type="password" id="admin-pw" placeholder="ละหัดผ่าน" onkeydown="if(event.key==='Enter')adminLogin()">
+      <h3>🔑 ໃສ່ລະຫັດຜ່ານ Admin</h3>
+      <input class="admin-login-inp" type="password" id="admin-pw" placeholder="ລະຫັດຜ່ານ" onkeydown="if(event.key==='Enter')adminLogin()">
       <div style="margin-bottom:8px"></div>
-      <button class="admin-login-btn" onclick="adminLogin()">🔓 เข้าละบบ</button>
-      <div id="admin-login-err" style="color:var(--red);font-size:11px;margin-top:10px;display:none">❌ ละหัดผ่านบ่ถืกต้อง</div>
+      <button class="admin-login-btn" onclick="adminLogin()">🔓 ເຂົ້າລະບົບ</button>
+      <div id="admin-login-err" style="color:var(--red);font-size:11px;margin-top:10px;display:none">❌ ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ</div>
     </div>
     <div id="admin-dashboard" style="display:none">
       <div class="admin-content">
         <div class="admin-stat" id="admin-stat"></div>
         <div class="admin-tabs">
-          <button class="admin-tab active" onclick="adminTab('all',this)">📋 ทั้งหมด<span class="tab-count" id="tc-all">0</span></button>
-          <button class="admin-tab" onclick="adminTab('waiting',this)">⏳ ลำถ้า<span class="tab-count" id="tc-waiting">0</span></button>
-          <button class="admin-tab" onclick="adminTab('accepted',this)">✅ ฮับยอด<span class="tab-count" id="tc-accepted">0</span></button>
-          <button class="admin-tab" onclick="adminTab('packing',this)">📦 เกียมส่ง<span class="tab-count" id="tc-packing">0</span></button>
-          <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ส่งแล้ว<span class="tab-count" id="tc-shipped">0</span></button>
+          <button class="admin-tab active" onclick="adminTab('all',this)">📋 ທັງໝົດ<span class="tab-count" id="tc-all">0</span></button>
+          <button class="admin-tab" onclick="adminTab('waiting',this)">⏳ ລໍຖ້າ<span class="tab-count" id="tc-waiting">0</span></button>
+          <button class="admin-tab" onclick="adminTab('accepted',this)">✅ ຮັບຍອດ<span class="tab-count" id="tc-accepted">0</span></button>
+          <button class="admin-tab" onclick="adminTab('packing',this)">📦 ກຽມສົ່ງ<span class="tab-count" id="tc-packing">0</span></button>
+          <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ສົ່ງແລ້ວ<span class="tab-count" id="tc-shipped">0</span></button>
         </div>
         <div class="admin-filter">
-          <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ค้นหา ชื่อ / เลขบิน / เบิ..." oninput="adminRenderOrders()">
-          <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 โหลดใหม่</button>
+          <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ເລກບິນ / ເບີ..." oninput="adminRenderOrders()">
+          <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 ໂຫຼດໃໝ່</button>
         </div>
         <div class="orders-table-wrap">
           <table class="orders-table">
-            <thead><tr><th>ละหัด / วันที</th><th>ลูกค้า</th><th>สินค้า</th><th>ลวม</th><th>ขนส่ง</th><th>ชำละ</th><th>สะลิบ</th><th>สะถานะ</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ กำลังโหลด...</td></tr></tbody>
+            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ສະຖານະ</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
           </table>
         </div>
       </div>
