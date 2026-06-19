@@ -107,6 +107,12 @@ input,select,textarea{font-family:inherit}
 .step-item.active .step-lbl{color:var(--gold)}
 .status-not-found{text-align:center;padding:14px;font-size:12px;color:var(--muted)}
 
+/* ★ Shipping bill — customer tracking display */
+.status-shipbill-box{margin-top:10px;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;padding:10px 12px;text-align:center}
+.status-shipbill-title{font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
+.status-shipbill-img{max-width:100%;max-height:220px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;background:#fff;object-fit:contain}
+.status-shipbill-hint{font-size:9px;color:var(--muted);margin-top:5px}
+
 /* ── MAIN ── */
 .main{max-width:1200px;margin:0 auto;padding:12px 12px 80px}
 .shop-layout{display:grid;grid-template-columns:1fr 380px;gap:12px;align-items:start}
@@ -365,6 +371,17 @@ input,select,textarea{font-family:inherit}
 .slip-modal img{max-width:90vw;max-height:90vh;border-radius:10px;object-fit:contain}
 .slip-modal-close{position:absolute;top:16px;right:16px;background:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;font-weight:900;cursor:pointer}
 #bill-canvas{display:none}
+
+/* ★ Shipping bill — admin table column */
+.shipbill-thumb{width:46px;height:38px;object-fit:cover;border-radius:5px;border:1px solid var(--border);cursor:pointer;transition:transform .15s}
+.shipbill-thumb:hover{transform:scale(1.1)}
+.shipbill-actions{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.shipbill-replace-btn{color:var(--green);font-size:9px;font-weight:700;background:none;border:none;cursor:pointer;text-decoration:underline;padding:0}
+.shipbill-upload-btn{display:inline-flex;align-items:center;gap:4px;background:var(--green-lt);border:1.5px solid var(--green);color:var(--green);border-radius:7px;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap}
+.shipbill-upload-btn:hover{background:#C5E8D4}
+.shipbill-upload-btn:disabled{opacity:.6;cursor:not-allowed}
+.shipbill-upload-btn.urgent{background:#FFFBEB;border-color:#F59E0B;color:#92400E;animation:shipbill-pulse 1.6s infinite}
+@keyframes shipbill-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.35)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
 </style>
 </head>
 <body>
@@ -673,8 +690,8 @@ input,select,textarea{font-family:inherit}
         </div>
         <div class="orders-table-wrap">
           <table class="orders-table">
-            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ສະຖານະ</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
+            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ບິນຂົນສົ່ງ</th><th>ສະຖານະ</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -682,11 +699,14 @@ input,select,textarea{font-family:inherit}
   </div>
 </div>
 
-<!-- Slip fullscreen -->
+<!-- Slip / Shipping-bill fullscreen viewer (shared) -->
 <div class="slip-modal" id="slip-modal" onclick="closeSlipModal()">
   <button class="slip-modal-close" onclick="closeSlipModal()">✕</button>
   <img id="slip-modal-img" src="" alt="Slip">
 </div>
+
+<!-- ★ Hidden file input used by admin to upload "ບິນຂົນສົ່ງ" for any order -->
+<input type="file" id="shipbill-file-input" accept="image/*" style="display:none" onchange="handleShipBillFileChange(this)">
 
 <canvas id="bill-canvas"></canvas>
 
@@ -718,6 +738,7 @@ var adminOrders=[],adminTabFilter='all',adminLoggedIn=false;
 var lastOrderData={};
 var openPopupCode=null;
 var cameraStream=null,scanInterval=null;
+var shipBillTargetCode=''; // ★ ລະຫັດອໍເດີ້ທີ່ກຳລັງຈະອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໃສ່
 var noImg="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%23d1d5db' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
 
 // ─────────────────────────────────────────
@@ -802,8 +823,20 @@ function buildStatusHtml(d){
   ].filter(function(r){return r[2];}).map(function(r){
     return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+escHtml(String(r[2]))+'</span></div>';
   }).join('');
+
+  // ★ ຖ້າແອັດມິນອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໄວ້ແລ້ວ — ໂຊໃຫ້ລູກຄ້າເຫັນຢູ່ນີ້
+  var shipBillHtml='';
+  if(d.shippingBillUrl){
+    var sbThumb=d.shippingBillUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
+    shipBillHtml='<div class="status-shipbill-box">'
+      +'<div class="status-shipbill-title">🚚 ບິນຂົນສົ່ງ</div>'
+      +'<img class="status-shipbill-img" src="'+escHtml(sbThumb)+'" alt="shipping bill" onclick="viewSlip(\''+escHtml(d.shippingBillUrl)+'\')" onerror="this.style.display=\'none\'">'
+      +'<div class="status-shipbill-hint">ກົດທີ່ຮູບເພື່ອເບິ່ງເຕັມຈໍ</div>'
+      +'</div>';
+  }
+
   return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.badge+'">'+step.icon+' '+cur+'</span></div>'
-    +'<div class="status-box-body"><div class="step-tracker"><div class="step-progress" style="width:calc('+pct+'% - 24px)"></div>'+stepsHtml+'</div>'+rows+'</div></div>';
+    +'<div class="status-box-body"><div class="step-tracker"><div class="step-progress" style="width:calc('+pct+'% - 24px)"></div>'+stepsHtml+'</div>'+rows+shipBillHtml+'</div></div>';
 }
 
 // ─────────────────────────────────────────
@@ -1027,7 +1060,7 @@ function scrollToCart(){document.getElementById('right-panel').scrollIntoView({b
 var DISTRICTS_BY_PROVINCE={
   'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
   'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊะนะคาม','ວຽງຄຳ','ໝື່ນ'],
-  'ບໍລິຄຳໄຊ':['ປາກຊັນ','ທ่าพะบาด','ปากกะดิง','คำเกิด','บอลิคัน','เวียงทอง','ไซจำพอน'],
+  'ບໍລິຄຳໄຊ':['ປາກຊັນ','ท่าพะบาด','ปากกะดิง','คำเกิด','บอลิคัน','เวียงทอง','ไซจำพอน'],
   'ຄຳມ່ວນ':['ท่าแขก','มะหาไซ','หนองบก','หินบูน','ยมมะลาด','บัวละพา','นากาย','เซบั้งไฟ','ไซบัวทอง','คูนคำ'],
   'ສະຫວັນນະເຂດ':['ไกสอน พมวิหาน','อุทุมพอน','อาดสะพังทอง','พิน','เซโปน','นอง','ท่าปางทอง','สองคอน','จำพอน','ชนนะบุลี','ไซบุลี','วิละบุลี','อาดสะพอน','ไซพูทอง','พะลานไซ'],
   'ສາລະວັນ':['สาละวัน','ละคอนเพ็ง','วาปี','เล่างาม','ตุ้มลาน','ตะโอ้ย','คงเซโดน','สะม้วย'],
@@ -1423,11 +1456,11 @@ function adminTab(tab,el){
   el.classList.add('active');adminRenderOrders();
 }
 function adminLoadOrders(){
-  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">⏳ กำลังโหลด...</td></tr>';
+  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">⏳ กำลังโหลด...</td></tr>';
   fetch(SCRIPT_URL+'?action=getAllOrders')
     .then(function(r){return r.json();})
     .then(function(d){adminOrders=Array.isArray(d)?d:[];adminRenderOrders();adminRenderStats();updateTabCounts();})
-    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--red)">❌ โหลดบ่ได้</td></tr>';});
+    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--red)">❌ โหลดบ่ได้</td></tr>';});
 }
 function updateTabCounts(){
   var all=adminOrders.length;
@@ -1477,7 +1510,10 @@ function toggleStatusPopup(code,currentStatusKey,el){
 function closeAllPopups(){document.querySelectorAll('.status-popup').forEach(function(p){p.classList.remove('open');});openPopupCode=null;}
 
 // ★ applyStatus now receives a numeric status CODE ('0'-'3'), not Lao text
-function applyStatus(code,statusCode){closeAllPopups();updateOrderStatusAdmin(code,statusCode);}
+function applyStatus(code,statusCode){
+  closeAllPopups();
+  updateOrderStatusAdmin(code,statusCode);
+}
 document.addEventListener('click',function(e){if(!e.target.closest('.status-btn-wrap'))closeAllPopups();});
 
 function adminRenderOrders(){
@@ -1494,7 +1530,7 @@ function adminRenderOrders(){
     return (o.code||'').toLowerCase().includes(q)||(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q);
   });
   if(!filtered.length){
-    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">📭 บ่พบลายการ</td></tr>';
+    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">📭 บ่พบลายการ</td></tr>';
     return;
   }
   var html='';
@@ -1505,6 +1541,21 @@ function adminRenderOrders(){
       var thumb=o.slipUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
       slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')">เบิ่ง</button>';
     }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+escHtml(o.slipStatus)+'</span>';}
+
+    // ★ "ບິນຂົນສົ່ง" column — thumbnail+replace if uploaded, otherwise an upload button
+    // (highlighted/pulsing when status is "ກຳລັງກຽມການຈັດສົ່ງ" and not yet uploaded)
+    var shipBillHtml;
+    if(o.shippingBillUrl){
+      var sbThumb=o.shippingBillUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
+      shipBillHtml='<div class="shipbill-actions">'
+        +'<img class="shipbill-thumb" src="'+escHtml(sbThumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.shippingBillUrl)+'\')" alt="shipbill">'
+        +'<button class="shipbill-replace-btn" onclick="triggerShipBillUpload(\''+escHtml(o.code)+'\')">🔄 ปี่ยนฮูป</button>'
+        +'</div>';
+    }else{
+      var isPacking=o.orderStatus===STATUS_LIST[2].key;
+      shipBillHtml='<button class="shipbill-upload-btn'+(isPacking?' urgent':'')+'" data-shipbill-code="'+escHtml(o.code)+'" onclick="triggerShipBillUpload(\''+escHtml(o.code)+'\')">📤 อับโหลดบิลขนส่ง</button>';
+    }
+
     var statusHtml='<div class="status-btn-wrap">'
       +'<button class="status-pill '+cfg.cls+'" onclick="toggleStatusPopup(\''+escHtml(o.code)+'\',\''+escHtml(o.orderStatus)+'\',this)">'+cfg.icon+' '+escHtml(o.orderStatus)+' ▾</button>'
       +'<div class="status-popup" data-code="'+escHtml(o.code)+'"></div>'
@@ -1517,6 +1568,7 @@ function adminRenderOrders(){
       +'<td style="font-size:10px">'+escHtml(o.shipping)+'</td>'
       +'<td style="font-size:10px">'+escHtml(o.payment)+'</td>'
       +'<td>'+slipHtml+'</td>'
+      +'<td>'+shipBillHtml+'</td>'
       +'<td>'+statusHtml+'</td>'
       +'</tr>';
   });
@@ -1544,6 +1596,58 @@ function updateOrderStatusAdmin(code,statusCode){
         },50);
       }else{alert('❌ '+(res&&res.message?res.message:'อัพเดทบ่สำเล็ด'));}
     }).catch(function(){alert('❌ เชื่อมต่อบ่ได้');});
+}
+
+// ─────────────────────────────────────────
+//  ★ "ບິນຂົນສົ່ง" UPLOAD — Admin chooses an image, it's resized,
+//  then sent to the backend and attached to the matching order
+// ─────────────────────────────────────────
+function triggerShipBillUpload(code){
+  shipBillTargetCode=code;
+  var inp=document.getElementById('shipbill-file-input');
+  inp.value='';
+  inp.click();
+}
+
+function handleShipBillFileChange(input){
+  var file=input.files[0];
+  if(!file||!shipBillTargetCode)return;
+  if(file.size>6*1024*1024){alert('ฮูปใหญ่เกินไป (≤ 6MB)');return;}
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var canvas=document.createElement('canvas');
+      var maxW=900,maxH=900,w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      if(h>maxH){w=Math.round(w*maxH/h);h=maxH;}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      var base64=canvas.toDataURL('image/jpeg',.78);
+      uploadShippingBillAdmin(shipBillTargetCode,base64);
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadShippingBillAdmin(code,base64){
+  var btn=document.querySelector('[data-shipbill-code="'+code+'"]');
+  if(btn){btn.disabled=true;btn.textContent='⏳ ກຳລັງອັບໂຫຼດ...';}
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({action:'uploadShippingBill',code:code,shipBillBase64:base64})
+  })
+    .then(function(){
+      // ★ no-cors ทำให้บ่สามาดอ่าน response ได้ตงๆ — เลยรอแล้วโหลดตาลางใหม่ทั้งหมด
+      setTimeout(function(){adminLoadOrders();},1300);
+    })
+    .catch(function(){
+      alert('❌ อับโหลดบิลขนส่งบ่ได้ กะลุนาลองใหม่');
+      if(btn){btn.disabled=false;btn.textContent='📤 อับโหลดบิลขนส่ง';}
+    });
 }
 
 function viewSlip(url){
