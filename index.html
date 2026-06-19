@@ -973,6 +973,26 @@ function convertGD(url){
   return url;
 }
 
+// ★ ດຶງ Google Drive fileId ຈາກ URL ໃນຮູບແບບໃດກໍໄດ້ (file/d/, ?id=, uc?, thumbnail?)
+function driveFileId(url){
+  if(!url)return'';
+  var m=String(url).match(/\/d\/([a-zA-Z0-9_-]{10,})/)||String(url).match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  return m?m[1]:'';
+}
+// ★ URL ສຳລັບເບິ່ງຮູບເຕັມຈໍ/ຂະໜາດໃຫຍ່ — ໃຊ້ thumbnail?sz=w1000 ແທນ uc?export=view
+// ເພາະ uc?export=view ມັກບໍ່ໝັ້ນຄົງ (Google ບາງເທື່ອບລັອກ hotlink ຫຼື rate-limit)
+function driveFullUrl(url){
+  var id=driveFileId(url);
+  if(id)return'https://drive.google.com/thumbnail?id='+id+'&sz=w1000';
+  return url||'';
+}
+// ★ ຮູບແບບສຳຮອງ (fallback) ຖ້າ thumbnail ບໍ່ຂຶ້ນ — ໃຊ້ lh3.googleusercontent.com
+function driveFullUrlFallback(url){
+  var id=driveFileId(url);
+  if(id)return'https://lh3.googleusercontent.com/d/'+id;
+  return url||'';
+}
+
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function renderProds(prods){
