@@ -435,6 +435,19 @@ input,select,textarea{font-family:inherit}
 .od-delete-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:2px solid var(--red);color:var(--red);border-radius:10px;padding:11px;font-size:12px;font-weight:800;width:100%;margin-top:10px}
 .od-delete-btn:hover{background:#FEF2F2}
 
+/* ★ NEW — Order Detail proof-image blocks (ສະລິບ / ບິນຂົນສົ່ງ) */
+.od-proof-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:380px){.od-proof-grid{grid-template-columns:1fr 1fr}}
+.od-proof-box{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:8px;text-align:center}
+.od-proof-label{font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.od-proof-img{width:100%;height:120px;object-fit:cover;border-radius:7px;border:1.5px solid var(--border);cursor:pointer;background:#fff;transition:transform .15s}
+.od-proof-img:hover{transform:scale(1.03)}
+.od-proof-empty{height:120px;display:flex;align-items:center;justify-content:center;border-radius:7px;border:1.5px dashed var(--border);color:var(--muted);font-size:10px;background:#fff;text-align:center;padding:6px}
+.od-proof-viewbtn{display:block;width:100%;margin-top:6px;background:var(--green-lt);border:1.5px solid var(--green);color:var(--green);border-radius:7px;padding:6px 0;font-size:10px;font-weight:700}
+.od-proof-viewbtn:hover{background:#C5E8D4}
+.od-proof-uploadbtn{display:block;width:100%;margin-top:6px;background:#FFFBEB;border:1.5px solid #F59E0B;color:#92400E;border-radius:7px;padding:6px 0;font-size:10px;font-weight:700}
+.od-proof-uploadbtn:hover{background:#FEF3C7}
+
 /* ★ Delete confirm popup */
 .confirm-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999999;align-items:center;justify-content:center;padding:16px}
 .confirm-modal.show{display:flex}
@@ -1894,7 +1907,7 @@ function updateOrderStatusAdmin(code,statusCode){
 }
 
 // ─────────────────────────────────────────
-//  ★ ORDER DETAIL MODAL — click order code to view full info + WhatsApp button
+//  ★ ORDER DETAIL MODAL — click order code to view full info + slip/shipbill images + WhatsApp button
 // ─────────────────────────────────────────
 function openOrderDetail(code){
   var o=adminOrders.find(function(x){return x.code===code;});
@@ -1924,6 +1937,36 @@ function openOrderDetail(code){
     html+='<div class="od-section-title">📝 ໝາຍເຫດ</div>';
     html+='<div class="od-items-box">'+escHtml(o.note)+'</div>';
   }
+
+  // ★ ໃໝ່: ສະລິບໂອນ + ບິນຂົນສົ່ງ — ໂຊຮູບໃຫ້ເຫັນທັງສອງຢ່າງໃນກ່ອງດຽວກັນ
+  html+='<div class="od-section-title">📸 ຫຼັກຖານ ສະລິບ / ບິນຂົນສົ່ງ</div>';
+  html+='<div class="od-proof-grid">';
+
+  // ── ສະລິບໂອນ ──
+  html+='<div class="od-proof-box"><div class="od-proof-label">💳 ສະລິບໂອນ</div>';
+  if(o.slipUrl){
+    var slipUrlEsc2=escHtml(o.slipUrl).replace(/'/g,'&#39;');
+    html+='<img class="od-proof-img" src="'+escHtml(driveThumb(o.slipUrl,400))+'" alt="slip" onclick="viewSlip(\''+slipUrlEsc2+'\')" onerror="this.style.display=\'none\'">'
+      +'<button class="od-proof-viewbtn" onclick="viewSlip(\''+slipUrlEsc2+'\')">🔍 ເບິ່ງເຕັມຈໍ</button>';
+  }else{
+    html+='<div class="od-proof-empty">'+(o.slipStatus?escHtml(o.slipStatus):'❌ ບໍ່ມີສະລິບ')+'</div>';
+  }
+  html+='</div>';
+
+  // ── ບິນຂົນສົ່ງ ──
+  html+='<div class="od-proof-box"><div class="od-proof-label">🚚 ບິນຂົນສົ່ງ</div>';
+  if(o.shippingBillUrl){
+    var sbUrlEsc2=escHtml(o.shippingBillUrl).replace(/'/g,'&#39;');
+    html+='<img class="od-proof-img" src="'+escHtml(driveThumb(o.shippingBillUrl,400))+'" alt="shipbill" onclick="viewSlip(\''+sbUrlEsc2+'\')" onerror="this.style.display=\'none\'">'
+      +'<button class="od-proof-viewbtn" onclick="viewSlip(\''+sbUrlEsc2+'\')">🔍 ເບິ່ງເຕັມຈໍ</button>'
+      +'<button class="od-proof-uploadbtn" onclick="triggerShipBillUpload(\''+escHtml(o.code)+'\')">🔄 ປ່ຽນຮູບ</button>';
+  }else{
+    html+='<div class="od-proof-empty">❌ ຍັງບໍ່ມີບິນຂົນສົ່ງ</div>'
+      +'<button class="od-proof-uploadbtn" onclick="triggerShipBillUpload(\''+escHtml(o.code)+'\')">📤 ອັບໂຫຼດບິນຂົນສົ່ງ</button>';
+  }
+  html+='</div>';
+
+  html+='</div>'; // .od-proof-grid
 
   if(waUrl){
     html+='<a class="od-wa-big" href="'+waUrl+'" target="_blank">'
@@ -2017,7 +2060,13 @@ function uploadShippingBillAdmin(code,base64){
   })
     .then(function(){
       // ★ no-cors ทำให้ไม่สามารถอ่าน response ได้โดยตรง — จึงรอแล้วโหลดตารางใหม่ทั้งหมด
-      setTimeout(function(){adminLoadOrders();},1300);
+      setTimeout(function(){
+        adminLoadOrders();
+        // ★ ຖ້າ Order Detail Modal ກຳລັງເປີດຢູ່ — refresh ໃຫ້ເຫັນຮູບໃໝ່ດ້ວຍ
+        if(document.getElementById('order-detail-modal').classList.contains('show')){
+          openOrderDetail(code);
+        }
+      },1300);
     })
     .catch(function(){
       alert('❌ ອັບໂຫຼດບິນຂົນສົ່ງບໍ່ໄດ້ ກະລຸນາລອງໃໝ່');
