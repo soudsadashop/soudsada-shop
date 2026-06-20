@@ -110,11 +110,9 @@ input,select,textarea{font-family:inherit}
 /* ★ Shipping bill — customer tracking display */
 .status-shipbill-box{margin-top:10px;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;padding:10px 12px;text-align:center}
 .status-shipbill-title{font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
-.status-shipbill-img{max-width:100%;max-height:220px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;background:#fff;object-fit:contain;display:block;margin:0 auto}
-.status-shipbill-viewbtn{display:inline-flex;align-items:center;gap:6px;background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer}
-.status-shipbill-viewbtn:hover{background:var(--green-dk)}
-.status-shipbill-hint{font-size:9px;color:var(--muted);margin-top:5px}
-.status-shipbill-pending{background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:10px;padding:10px 12px;margin-top:10px;text-align:center;font-size:11px;color:#92400E;font-weight:700}
+.status-shipbill-img{max-width:100%;max-height:220px;border-radius:8px;border:1.5px solid var(--border);cursor:pointer;background:#fff;object-fit:contain;margin:0 auto 8px}
+.status-shipbill-btn{display:inline-flex;align-items:center;gap:5px;background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:11px;font-weight:700}
+.status-shipbill-btn:hover{background:var(--green-dk)}
 
 /* ── MAIN ── */
 .main{max-width:1200px;margin:0 auto;padding:12px 12px 80px}
@@ -703,9 +701,12 @@ input,select,textarea{font-family:inherit}
 </div>
 
 <!-- Slip / Shipping-bill fullscreen viewer (shared) -->
-<div class="slip-modal" id="slip-modal" onclick="closeSlipModal()">
+<div class="slip-modal" id="slip-modal" onclick="if(event.target===this)closeSlipModal()">
   <button class="slip-modal-close" onclick="closeSlipModal()">✕</button>
-  <img id="slip-modal-img" src="" alt="Slip">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+    <img id="slip-modal-img" src="" alt="Slip" onclick="event.stopPropagation()">
+    <a id="slip-modal-drive-link" href="#" target="_blank" rel="noopener" style="background:rgba(255,255,255,.95);color:#1B5E3A;font-weight:700;font-size:12px;padding:7px 16px;border-radius:8px;text-decoration:none">🔗 ເບິ່ງຢູ່ Google Drive ໂດຍກົງ</a>
+  </div>
 </div>
 
 <!-- ★ Hidden file input used by admin to upload "ບິນຂົນສົ່ງ" for any order -->
@@ -827,19 +828,17 @@ function buildStatusHtml(d){
     return '<div class="status-info-row"><span class="sil">'+r[0]+' '+r[1]+'</span><span class="siv">'+escHtml(String(r[2]))+'</span></div>';
   }).join('');
 
-  // ★ ຖ້າແອັດມິນອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໄວ້ແລ້ວ — ໂຊໃຫ້ລູກຄ້າເຫັນຢູ່ນີ້ ພ້ອມປຸ່ມເບິ່ງເຕັມຈໍ
-  // ຖ້າຍັງບໍ່ມີ ແຕ່ສະຖານະຮອດ "ກຳລັງກຽມການຈັດສົ່ງ" ຫຼື ສູງກວ່າ — ໂຊຂໍ້ຄວາມລໍຖ້າແທນ
+  // ★ ຖ້າແອັດມິນອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໄວ້ແລ້ວ — ໂຊໃຫ້ລູກຄ້າເຫັນຢູ່ນີ້
+  // (ມີປຸ່ມໃຫ້ກົດສະເໝີ ເຖິງຮູບຕົວຢ່າງຈະໂຫຼດບໍ່ຂຶ້ນກໍ່ຕາມ)
   var shipBillHtml='';
   if(d.shippingBillUrl){
-    var sbThumb=d.shippingBillUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
+    var sbThumb=driveThumb(d.shippingBillUrl,800);
+    var sbUrlEsc=escHtml(d.shippingBillUrl).replace(/'/g,'&#39;');
     shipBillHtml='<div class="status-shipbill-box">'
       +'<div class="status-shipbill-title">🚚 ບິນຂົນສົ່ງ</div>'
-      +'<img class="status-shipbill-img" src="'+escHtml(sbThumb)+'" alt="shipping bill" onclick="viewSlip(\''+escHtml(d.shippingBillUrl)+'\')" onerror="this.style.display=\'none\'">'
-      +'<button class="status-shipbill-viewbtn" onclick="viewSlip(\''+escHtml(d.shippingBillUrl)+'\')">🔍 ເບິ່ງບິນຂົນສົ່ງເຕັມຈໍ</button>'
-      +'<div class="status-shipbill-hint">ກົດທີ່ຮູບ ຫຼື ປຸ່ມ ເພື່ອເບິ່ງເຕັມຈໍ</div>'
+      +'<img class="status-shipbill-img" src="'+escHtml(sbThumb)+'" alt="shipping bill" onclick="viewSlip(\''+sbUrlEsc+'\')" onerror="this.style.display=\'none\'">'
+      +'<button class="status-shipbill-btn" onclick="viewSlip(\''+sbUrlEsc+'\')">🔍 ກົດເພື່ອເບິ່ງບິນຂົນສົ່ງເຕັມຈໍ</button>'
       +'</div>';
-  }else if(idx>=2){
-    shipBillHtml='<div class="status-shipbill-pending">⏳ ແອັດມິນກຳລັງກະກຽມບິນຂົນສົ່ງ ກະລຸນາກວດສອບອີກຄັ້ງພາຍຫຼັງ</div>';
   }
 
   return '<div class="status-box"><div class="status-box-header"><span class="status-code-lbl">📦 '+escHtml(d.code||'')+'</span><span class="status-badge '+step.badge+'">'+step.icon+' '+cur+'</span></div>'
@@ -973,27 +972,24 @@ function convertGD(url){
   return url;
 }
 
-// ★ ດຶງ Google Drive fileId ຈາກ URL ໃນຮູບແບບໃດກໍໄດ້ (file/d/, ?id=, uc?, thumbnail?)
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ★ ດຶງ Google Drive File ID ອອກຈາກ URL ໄດ້ທຸກຮູບແບບ (file/d/.../view, ?id=..., uc?id=...)
 function driveFileId(url){
   if(!url)return'';
-  var m=String(url).match(/\/d\/([a-zA-Z0-9_-]{10,})/)||String(url).match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
-  return m?m[1]:'';
+  var m=String(url).match(/\/d\/([a-zA-Z0-9_-]{10,})/);
+  if(m)return m[1];
+  var m2=String(url).match(/[?&]id=([a-zA-Z0-9_-]{10,})/);
+  if(m2)return m2[1];
+  return'';
 }
-// ★ URL ສຳລັບເບິ່ງຮູບເຕັມຈໍ/ຂະໜາດໃຫຍ່ — ໃຊ້ thumbnail?sz=w1000 ແທນ uc?export=view
-// ເພາະ uc?export=view ມັກບໍ່ໝັ້ນຄົງ (Google ບາງເທື່ອບລັອກ hotlink ຫຼື rate-limit)
-function driveFullUrl(url){
+// ★ ສ້າງ URL ສຳລັບໂຊຮູບ inline — ໃຊ້ "thumbnail" endpoint ສະເໝີ
+// (ໜ້າເຊື່ອຖືກວ່າ "uc?export=view" ຫຼາຍ — ບໍ່ໂຊໜ້າ "ບໍ່ສາມາດສະແດງຕົວຢ່າງ" ຂອງ Google Drive)
+function driveThumb(url,size){
   var id=driveFileId(url);
-  if(id)return'https://drive.google.com/thumbnail?id='+id+'&sz=w1000';
-  return url||'';
+  if(!id)return url||'';
+  return'https://drive.google.com/thumbnail?id='+id+'&sz=w'+(size||400);
 }
-// ★ ຮູບແບບສຳຮອງ (fallback) ຖ້າ thumbnail ບໍ່ຂຶ້ນ — ໃຊ້ lh3.googleusercontent.com
-function driveFullUrlFallback(url){
-  var id=driveFileId(url);
-  if(id)return'https://lh3.googleusercontent.com/d/'+id;
-  return url||'';
-}
-
-function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function renderProds(prods){
   var grid=document.getElementById('prod-grid');
@@ -1565,17 +1561,20 @@ function adminRenderOrders(){
     var cfg=statusCfgByKey(o.orderStatus);
     var slipHtml='<span style="color:var(--muted);font-size:10px">❌</span>';
     if(o.slipUrl){
-      var thumb=o.slipUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
-      slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+escHtml(o.slipUrl)+'\')">เบิ่ง</button>';
+      var thumb=driveThumb(o.slipUrl,150);
+      var slipUrlEsc=escHtml(o.slipUrl).replace(/'/g,'&#39;');
+      slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+slipUrlEsc+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+slipUrlEsc+'\')">เบิ่ง</button>';
     }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+escHtml(o.slipStatus)+'</span>';}
 
-    // ★ "ບິນຂົນສົ່ง" column — thumbnail+replace if uploaded, otherwise an upload button
+    // ★ "ບິນຂົນສົ່ง" column — thumbnail+ view/replace if uploaded, otherwise an upload button
     // (highlighted/pulsing when status is "ກຳລັງກຽມການຈັດສົ່ງ" and not yet uploaded)
     var shipBillHtml;
     if(o.shippingBillUrl){
-      var sbThumb=o.shippingBillUrl.replace('/view','').replace('file/d/','uc?export=view&id=');
+      var sbThumb=driveThumb(o.shippingBillUrl,150);
+      var sbUrlEsc=escHtml(o.shippingBillUrl).replace(/'/g,'&#39;');
       shipBillHtml='<div class="shipbill-actions">'
-        +'<img class="shipbill-thumb" src="'+escHtml(sbThumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+escHtml(o.shippingBillUrl)+'\')" alt="shipbill">'
+        +'<img class="shipbill-thumb" src="'+escHtml(sbThumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+sbUrlEsc+'\')" alt="shipbill">'
+        +'<button class="shipbill-replace-btn" onclick="viewSlip(\''+sbUrlEsc+'\')">👁 เบิ่ง</button>'
         +'<button class="shipbill-replace-btn" onclick="triggerShipBillUpload(\''+escHtml(o.code)+'\')">🔄 ปี่ยนฮูป</button>'
         +'</div>';
     }else{
@@ -1677,12 +1676,26 @@ function uploadShippingBillAdmin(code,base64){
     });
 }
 
+// ★ ເບິ່ງຮູບເຕັມຈໍ (ສະລິບ ຫຼື ບິນຂົນສົ່ງ) — ໃຊ້ thumbnail endpoint ທີ່ໜ້າເຊື່ອຖືກວ່າ
+// ຖ້າຮູບໂຫຼດບໍ່ໄດ້ແທ້ໆ (ໄຟລ໌ໃຫຍ່ຫຼາຍ ຫຼື Drive ບລັອກ) ຈະເປີດລິ້ງ Google Drive ໂດຍກົງໃນແທັບໃໝ່ໃຫ້ທັນທີ
 function viewSlip(url){
-  var v=url.includes('/view')?url.replace('/view','').replace('file/d/','uc?export=view&id='):url;
-  document.getElementById('slip-modal-img').src=v;
-  document.getElementById('slip-modal').classList.add('show');
+  if(!url)return;
+  var modalImg=document.getElementById('slip-modal-img');
+  var modal=document.getElementById('slip-modal');
+  var driveLink=document.getElementById('slip-modal-drive-link');
+  if(driveLink)driveLink.href=url;
+  modalImg.onerror=function(){
+    modal.classList.remove('show');
+    modalImg.onerror=null;
+    window.open(url,'_blank');
+  };
+  modalImg.src=driveThumb(url,1600);
+  modal.classList.add('show');
 }
-function closeSlipModal(){document.getElementById('slip-modal').classList.remove('show');}
+function closeSlipModal(){
+  document.getElementById('slip-modal').classList.remove('show');
+  document.getElementById('slip-modal-img').onerror=null;
+}
 
 // ─────────────────────────────────────────
 //  INIT
