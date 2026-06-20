@@ -569,10 +569,10 @@ input,select,textarea{font-family:inherit}
           </div>
           <div class="field-error" id="err-pay" style="margin-top:5px">ກະລຸນາເລືອກການຊຳລະ</div>
           <div class="qr-pay-box" id="qr-pay-box">
-            <div class="qr-pay-title">📲 ສະແກນ QR ເພື່ອໂອນ (BCEL One / ທ/ຄ)</div>
+            <div class="qr-pay-title" id="qr-pay-title">📲 ສະແກນ QR ເພື່ອໂອນ (BCEL One / ທ/ຄ)</div>
             <div class="qr-img-wrap"><img class="qr-img" id="qr-img" src="https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ" onerror="this.src='https://drive.google.com/thumbnail?id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ&sz=w400'" alt="QR Code"><button class="qr-dl-btn" onclick="downloadQR()">⬇️ ດາວໂຫຼດ QR</button></div>
           </div>
-          <div class="cod-warning" id="cod-warning">⚠️ <strong>ເງື່ອນໄຂ COD:</strong><br>• ສະເພາະ <strong>ຂົນສົ່ງ ອານຸສິດ</strong> ເທົ່ານັ້ນ<br>• ກ່ອນຝາກ ຕ້ອງ <strong>ໂອນມັດຈຳ 15,000 ₭</strong> ກ່ອນ<br>• ສະແກນ QR ຂ້າງເທິງ ແລ້ວ ອັບໂຫຼດສະລິບ</div>
+          <div class="cod-warning" id="cod-warning">⚠️ <strong>ເງື່ອນໄຂ ເກັບປາຍທາງ COD:</strong><br>• ສະເພາະ <strong>ຂົນສົ່ງ ອານຸສິດ</strong> ເທົ່ານັ້ນ<br>• ກ່ອນຝາກ ຕ້ອງ <strong>ໂອນມັດຈຳ 15,000 ₭</strong> ກ່ອນ ແລ້ວອັບໂຫຼດສະລິບແນບມານຳ<br>• 💚 <strong>ມັດຈຳນີ້ບໍ່ເສຍເພີ່ມ</strong> — ຈະຖືກ <strong>ຫັກອອກຈາກຍອດທີ່ຕ້ອງຈ່າຍປາຍທາງ</strong> ໂດຍກົງ<br>• 🛡️ ມັດຈຳນີ້ມີໄວ້ປ້ອງກັນກໍລະນີລູກຄ້າບໍ່ໄປຮັບເຄື່ອງ ເຮັດໃຫ້ແມ່ຄ້າຕ້ອງເສຍຄ່າຝາກເອງ</div>
           <div class="cod-warning" id="card-warning">⚠️ <strong>ເງື່ອນໄຂ ມັດຈຳບັດເຕີມເງິນ:</strong><br>• ບັດຕ້ອງມີມູນຄ່າ <strong>ບໍ່ຕ່ຳກວ່າ 10,000 ກີບ</strong> (ຫຼັກ 5 ຫຼື ຫຼັກ 9)<br>• ກະລຸນາ <strong>ຖ່າຍຮູບໜ້າບັດ</strong> (ບ່ອນເຫັນລະຫັດບັດ) ແນບມານຳກ່ອນກົດຢືນຢັນສັ່ງຊື້</div>
         </div>
         <div class="form-section" id="slip-section" style="display:none">
@@ -583,7 +583,7 @@ input,select,textarea{font-family:inherit}
             <input type="file" id="slip-file" accept="image/*" onchange="previewSlip(this)">
           </div>
           <div class="file-preview" id="slip-preview"><img id="slip-preview-img" src="" alt="Slip"><button class="file-remove" onclick="removeSlip()">✕</button></div>
-          <div class="field-error" id="err-slip">ກະລຸນາອັບໂຫຼດສະລິບ</div>
+          <div class="field-error" id="err-slip">ກະລຸນາອັບໂຫຼດສະລິບ ກ່ອນຈິ່ງຢືນຢັນສັ່ງຊື້ໄດ້</div>
         </div>
         <div class="form-section">
           <div class="form-section-title">📝 ໝາຍເຫດ</div>
@@ -1133,24 +1133,33 @@ function selectPay(el,val){
   el.classList.add('active');selectedPay=val;updatePayState();
 }
 function updatePayState(){
-  var isCOD=selectedPay==='เก็บปายทาง COD',isTransfer=selectedPay==='ໂອນຈ่าย',isCard=selectedPay==='มัดจำบัดเติมเงิน';
+  var isCOD=selectedPay==='ເກັບປາຍທາງ COD',isTransfer=selectedPay==='ໂອນຈ່າຍ',isCard=selectedPay==='ມັດຈຳບັດເຕີມເງິນ';
   var showQR=isCOD||isTransfer,showSlip=isCOD||isTransfer||isCard;
   document.getElementById('qr-pay-box').classList.toggle('show',showQR);
   document.getElementById('cod-warning').classList.toggle('show',isCOD);
   document.getElementById('card-warning').classList.toggle('show',isCard);
   document.getElementById('slip-section').style.display=showSlip?'block':'none';
-  if(isCard){
-    document.getElementById('slip-section-title').innerHTML='📸 ฮูปบัดเติมเงิน <span class="req">*</span>';
-    document.getElementById('upload-area-text').innerHTML='<strong>กดเพื่ออับโหลดฮูปบัดเติมเงิน</strong><br>JPG, PNG ≤ 5MB';
-    document.getElementById('err-slip').textContent='กะลุนาอับโหลดฮูปบัดเติมเงิน';
+  if(isCOD){
+    document.getElementById('qr-pay-title').innerHTML='📲 ສະແກນ QR ເພື່ອໂອນ <strong>ມັດຈຳ 15,000 ₭</strong> (BCEL One / ທ/ຄ)';
   }else{
-    document.getElementById('slip-section-title').innerHTML='📸 สะลิบโอน <span class="req">*</span>';
-    document.getElementById('upload-area-text').innerHTML='<strong>กดเพื่ออับโหลดสะลิบ</strong><br>JPG, PNG ≤ 5MB';
-    document.getElementById('err-slip').textContent='กะลุนาอับโหลดสะลิบ';
+    document.getElementById('qr-pay-title').innerHTML='📲 ສະແກນ QR ເພື່ອໂອນ (BCEL One / ທ/ຄ)';
   }
-  if(isCOD&&selectedShip!=='ອານຸสิด'){
+  if(isCard){
+    document.getElementById('slip-section-title').innerHTML='📸 ຮູບບັດເຕີມເງິນ <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດຮູບບັດເຕີມເງິນ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດຮູບບັດເຕີມເງິນ ກ່ອນຈິ່ງຢືນຢັນສັ່ງຊື້ໄດ້';
+  }else if(isCOD){
+    document.getElementById('slip-section-title').innerHTML='📸 ສະລິບໂອນມັດຈຳ COD (15,000₭) <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດສະລິບໂອນມັດຈຳ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດສະລິບໂອນມັດຈຳ ກ່ອນຈິ່ງຢືນຢັນສັ່ງຊື້ໄດ້';
+  }else{
+    document.getElementById('slip-section-title').innerHTML='📸 ສະລິບໂອນ <span class="req">*</span>';
+    document.getElementById('upload-area-text').innerHTML='<strong>ກົດເພື່ອອັບໂຫຼດສະລິບ</strong><br>JPG, PNG ≤ 5MB';
+    document.getElementById('err-slip').textContent='ກະລຸນາອັບໂຫຼດສະລິບ ກ່ອນຈິ່ງຢືນຢັນສັ່ງຊື້ໄດ້';
+  }
+  if(isCOD&&selectedShip!=='ອານຸສິດ'){
     document.querySelectorAll('.ship-opt').forEach(function(o){o.classList.remove('active');});
-    var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸสิด';
+    var f=document.querySelector('.ship-opt');if(f)f.classList.add('active');selectedShip='ອານຸສິດ';
   }
 }
 function downloadQR(){window.open(QR_IMG_URL,'_blank');}
@@ -1204,8 +1213,8 @@ function validate(){
   var dist=document.getElementById('c-district').value;showErr('err-district',!dist);markField('c-district',!dist);if(!dist)ok=false;
   showErr('err-ship',!selectedShip);if(!selectedShip)ok=false;
   showErr('err-pay',!selectedPay);if(!selectedPay)ok=false;
-  if(selectedPay==='เก็บปายทาง COD'&&selectedShip!=='ອານຸสิด'){alert('⚠️ COD ใช้ได้สะเพาะ ขนส่ง ອານຸสิด!');ok=false;}
-  var slipReq=selectedPay==='เก็บปายทาง COD'||selectedPay==='ໂອນຈ่าย'||selectedPay==='มัดจำบัดเติมเงิน';
+  if(selectedPay==='ເກັບປາຍທາງ COD'&&selectedShip!=='ອານຸສິດ'){alert('⚠️ COD ໃຊ້ໄດ້ສະເພາະ ຂົນສົ່ງ ອານຸສິດ!');ok=false;}
+  var slipReq=selectedPay==='ເກັບປາຍທາງ COD'||selectedPay==='ໂອນຈ່າຍ'||selectedPay==='ມັດຈຳບັດເຕີມເງິນ';
   if(slipReq&&!slipBase64){showErr('err-slip',true);ok=false;}else showErr('err-slip',false);
   if(!ok){var fe=document.querySelector('.invalid,.field-error.show');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});}
   return ok;
@@ -1311,9 +1320,9 @@ function showSuccess(orderData,nowDate){
   document.getElementById('receipt-info').innerHTML=infoHtml;
 
   var payMsg='';
-  if(orderData.payment==='เก็บปายทาง COD') payMsg='⚠️ โอนมัดจำ 15,000₭ ก่อน แล้วค่อยฝากของ!';
-  else if(orderData.payment==='ໂອນຈ่าย') payMsg='💳 ทางฮ้านจะกวดสอบการโอน แล้วจึงจัดส่ง';
-  else payMsg='💵 ทางฮ้านจะกวดสอบฮูปบัดเติมเงิน แล้วจึงดำเนินการจัดส่ง';
+  if(orderData.payment==='ເກັບປາຍທາງ COD') payMsg='⚠️ ມັດຈຳ 15,000 ₭ ທີ່ໂອນແລ້ວ ຈະຫັກອອກຈາກຍອດທີ່ຕ້ອງຈ່າຍປາຍທາງ — ກະລຸນາໄປຮັບເຄື່ອງຕາມກຳນົດ';
+  else if(orderData.payment==='ໂອນຈ່າຍ') payMsg='💳 ທາງຮ້ານຈະກວດສອບການໂອນ ແລ້ວຈິ່ງດຳເນີນການຈັດສົ່ງ';
+  else payMsg='💵 ທາງຮ້ານຈະກວດສອບຮູບບັດເຕີມເງິນ ແລ້ວຈິ່ງດຳເນີນການຈັດສົ່ງ';
   document.getElementById('pay-specific-msg').textContent=payMsg;
 
   document.getElementById('success-modal').classList.add('show');
