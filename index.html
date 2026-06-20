@@ -206,6 +206,9 @@ input,select,textarea{font-family:inherit}
 .ship-opt{display:flex;align-items:center;gap:4px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;user-select:none}
 .ship-opt input{display:none}
 .ship-opt.active{background:var(--green-lt);border-color:var(--green);color:var(--green)}
+.ship-opt.suspended{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B;cursor:not-allowed;opacity:.85}
+.ship-opt.suspended:hover{background:#FEF2F2}
+.ship-suspended-tag{display:inline-block;background:var(--red);color:#fff;font-size:8px;font-weight:800;padding:1px 6px;border-radius:8px;margin-left:4px;white-space:nowrap;letter-spacing:.2px}
 .pay-opts{display:flex;flex-direction:column;gap:6px}
 .pay-opt{display:flex;align-items:flex-start;gap:9px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;transition:all .18s;user-select:none}
 .pay-opt input{display:none}
@@ -744,6 +747,34 @@ var openPopupCode=null;
 var cameraStream=null,scanInterval=null;
 var shipBillTargetCode=''; // ★ ລະຫັດອໍເດີ້ທີ່ກຳລັງຈະອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໃສ່
 var noImg="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%23d1d5db' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
+
+// ★ ຂົນສົ່ງທີ່ "ຢຸດຝາກຊົ່ວຄາວ" — ເພີ່ມ/ລຶບຊື່ຂົນສົ່ງ (ຄ່າຕ້ອງກົງກັບ value ໃນ <input name="ship">) ໄດ້ທີ່ນີ້ໂດຍກົງ
+// ເມື່ອຂົນສົ່ງເປີດຮັບຝາກຄືນ — ລຶບແຖວນັ້ນອອກ ຫຼື ປ່ຽນ comment ໄດ້ເລີຍ ບໍ່ຕ້ອງແກ້ HTML
+var SUSPENDED_SHIPPING={
+  'ຮຸ່ງອາລຸນ': 'ຢຸດຝາກ ຮຸ່ງອາລຸນ ຊົ່ວຄາວ — ກະລຸນາເລືອກຂົນສົ່ງອື່ນ'
+};
+
+// ★ ໝາຍແດງ + ປິດການເລືອກ ສຳລັບຂົນສົ່ງທີ່ຢູ່ໃນ SUSPENDED_SHIPPING
+function applyShipSuspension(){
+  document.querySelectorAll('.ship-opt').forEach(function(label){
+    var inp=label.querySelector('input[type="radio"]');
+    if(!inp)return;
+    var reason=SUSPENDED_SHIPPING[inp.value];
+    if(!reason){label.classList.remove('suspended');return;}
+    label.classList.add('suspended');
+    if(!label.querySelector('.ship-suspended-tag')){
+      var tag=document.createElement('span');
+      tag.className='ship-suspended-tag';
+      tag.textContent='ຢຸດຝາກຊົ່ວຄາວ';
+      label.appendChild(tag);
+    }
+    label.onclick=function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      alert('🚫 '+reason);
+    };
+  });
+}
 
 // ─────────────────────────────────────────
 //  DATETIME
@@ -1709,7 +1740,10 @@ function closeSlipModal(){
 // ─────────────────────────────────────────
 //  INIT
 // ─────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',loadProducts);
+document.addEventListener('DOMContentLoaded',function(){
+  loadProducts();
+  applyShipSuspension();
+});
 </script>
 </body>
 </html>
