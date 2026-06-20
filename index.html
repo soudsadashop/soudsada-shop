@@ -202,6 +202,13 @@ input,select,textarea{font-family:inherit}
 .field-row .field{flex:1;min-width:0}
 .field-error{font-size:10px;color:var(--red);margin-top:3px;display:none}
 .field-error.show{display:block}
+.field-hint{font-size:9.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.phone-input-wrap{display:flex;align-items:stretch;border:1.5px solid var(--border);border-radius:7px;overflow:hidden;background:var(--surface);transition:border-color .2s}
+.phone-input-wrap.invalid{border-color:var(--red)}
+.phone-input-wrap:focus-within{border-color:var(--green)}
+.phone-prefix{display:flex;align-items:center;padding:0 8px;background:var(--bg);color:var(--muted);font-size:11px;font-weight:800;border-right:1.5px solid var(--border);white-space:nowrap}
+.phone-input-wrap input{border:none!important;border-radius:0!important}
+.phone-input-wrap input:focus{border:none!important}
 .ship-opts{display:flex;flex-wrap:wrap;gap:5px}
 .ship-opt{display:flex;align-items:center;gap:4px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;user-select:none}
 .ship-opt input{display:none}
@@ -341,18 +348,29 @@ input,select,textarea{font-family:inherit}
 .admin-tab.active{background:var(--surface);color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .admin-tab .tab-count{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:#fff;border-radius:10px;min-width:18px;height:18px;font-size:9px;font-weight:800;padding:0 5px;margin-left:4px;transition:background .2s}
 .admin-tab:not(.active) .tab-count{background:var(--muted)}
-.admin-filter{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.admin-filter{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .admin-filter-inp{flex:1;min-width:160px;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;outline:none}
 .admin-filter-inp:focus{border-color:var(--green)}
 .admin-refresh-btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
 .admin-refresh-btn:hover{background:var(--green-dk)}
+
+/* ★ Date filter bar */
+.admin-date-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;background:var(--green-lt);border:1.5px solid #A8D5BC;border-radius:10px;padding:8px 10px}
+.admin-date-lbl{font-size:11px;font-weight:800;color:var(--green);display:flex;align-items:center;gap:5px;white-space:nowrap}
+.admin-date-inp{padding:7px 10px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-weight:700;outline:none;background:#fff}
+.admin-date-inp:focus{border-color:var(--green)}
+.admin-date-quickbtn{background:#fff;border:1.5px solid var(--border);border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--muted)}
+.admin-date-quickbtn.active{background:var(--green);border-color:var(--green);color:#fff}
+.admin-date-quickbtn:hover{border-color:var(--green)}
+.admin-date-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--green);white-space:nowrap}
+
 .orders-table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .orders-table{width:100%;border-collapse:collapse;font-size:11px}
 .orders-table th{background:var(--green-dk);color:#fff;padding:10px;text-align:left;white-space:nowrap;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
 .orders-table td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
 .orders-table tr:last-child td{border-bottom:none}
 .orders-table tr:hover td{background:#F0FFF8}
-.order-code{font-weight:800;color:var(--green);font-size:11px;font-family:monospace}
+.order-code{font-weight:800;color:var(--green);font-size:11px;font-family:monospace;cursor:pointer;text-decoration:underline;text-decoration-style:dotted}
 .status-btn-wrap{position:relative;display:inline-block}
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:800;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
 .status-pill:hover{filter:brightness(.92);transform:scale(1.03)}
@@ -389,6 +407,45 @@ input,select,textarea{font-family:inherit}
 .shipbill-upload-btn:disabled{opacity:.6;cursor:not-allowed}
 .shipbill-upload-btn.urgent{background:#FFFBEB;border-color:#F59E0B;color:#92400E;animation:shipbill-pulse 1.6s infinite}
 @keyframes shipbill-pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.35)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
+
+/* ★ Delete order button */
+.order-delete-btn{background:#FEF2F2;border:1.5px solid #FCA5A5;color:var(--red);border-radius:7px;padding:5px 9px;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.order-delete-btn:hover{background:#FEE2E2}
+
+/* ★ WhatsApp contact link in admin table */
+.cust-wa-link{display:inline-flex;align-items:center;gap:4px;background:#E7F9EF;border:1px solid #25D366;color:#0E8A3E;border-radius:6px;padding:3px 7px;font-size:9px;font-weight:800;text-decoration:none;margin-top:3px}
+.cust-wa-link:hover{background:#D1F4DF}
+
+/* ★ Order Detail Modal */
+.order-detail-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99998;align-items:center;justify-content:center;padding:14px}
+.order-detail-modal.show{display:flex}
+.order-detail-box{background:var(--surface);border-radius:16px;max-width:460px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:popIn .25s ease}
+.od-header{background:linear-gradient(135deg,#1B5E3A,#2D7A55);padding:16px 18px;display:flex;justify-content:space-between;align-items:center}
+.od-header h3{color:#fff;font-size:15px;font-weight:800;font-family:monospace}
+.od-close{background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700}
+.od-body{padding:16px 18px}
+.od-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--border);font-size:12px;gap:10px}
+.od-row:last-child{border-bottom:none}
+.od-label{color:var(--muted);flex-shrink:0;font-weight:700}
+.od-val{font-weight:700;text-align:right;color:var(--ink)}
+.od-wa-big{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:800;text-decoration:none;margin-top:14px;width:100%}
+.od-wa-big:hover{background:#1FAF5A}
+.od-section-title{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:14px 0 6px}
+.od-items-box{background:var(--bg);border-radius:8px;border:1px solid var(--border);padding:8px 10px;font-size:11px;white-space:pre-line;line-height:1.7}
+.od-delete-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:2px solid var(--red);color:var(--red);border-radius:10px;padding:11px;font-size:12px;font-weight:800;width:100%;margin-top:10px}
+.od-delete-btn:hover{background:#FEF2F2}
+
+/* ★ Delete confirm popup */
+.confirm-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999999;align-items:center;justify-content:center;padding:16px}
+.confirm-modal.show{display:flex}
+.confirm-box{background:#fff;border-radius:14px;max-width:340px;width:100%;padding:22px;text-align:center;animation:popIn .2s ease}
+.confirm-icon{font-size:36px;margin-bottom:10px}
+.confirm-title{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.confirm-msg{font-size:12px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.confirm-actions{display:flex;gap:8px}
+.confirm-cancel{flex:1;background:var(--bg);color:var(--ink);border:1.5px solid var(--border);border-radius:9px;padding:11px;font-size:12px;font-weight:700}
+.confirm-delete{flex:1;background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px;font-size:12px;font-weight:700}
+.confirm-delete:hover{background:#B91C1C}
 </style>
 </head>
 <body>
@@ -456,7 +513,7 @@ input,select,textarea{font-family:inherit}
     <!-- Pane 2: Phone -->
     <div class="track-pane" id="tp-phone">
       <div class="track-row">
-        <input class="track-inp" id="inp-phone" type="tel" placeholder="ໃສ່ເບີໂທ ເຊັ່ນ 02099999999" onkeydown="if(event.key==='Enter')trackByPhone()">
+        <input class="track-inp" id="inp-phone" type="tel" placeholder="ໃສ່ເບີໂທ 8 ໂຕ ເຊັ່ນ 99999999" maxlength="8" oninput="this.value=this.value.replace(/\D/g,'').slice(0,8)" onkeydown="if(event.key==='Enter')trackByPhone()">
         <button class="track-btn" onclick="trackByPhone()">🔍 ກວດສອບ</button>
       </div>
     </div>
@@ -541,7 +598,15 @@ input,select,textarea{font-family:inherit}
           <div class="form-section-title">👤 ຂໍ້ມູນຜູ້ສັ່ງ</div>
           <div class="field-row">
             <div class="field"><label>ຊື່ລູກຄ້າ <span class="req">*</span></label><input type="text" id="c-name" placeholder="ໃສ່ຊື່"><div class="field-error" id="err-name">ກະລຸນາໃສ່ຊື່</div></div>
-            <div class="field"><label>ເບີໂທ <span class="req">*</span></label><input type="tel" id="c-phone" placeholder="020xxxxxxxx"><div class="field-error" id="err-phone">ກະລຸນາໃສ່ເບີ</div></div>
+            <div class="field">
+              <label>ເບີໂທ (8 ໂຕ) <span class="req">*</span></label>
+              <div class="phone-input-wrap" id="phone-wrap">
+                <span class="phone-prefix">🇱🇦 +856</span>
+                <input type="tel" id="c-phone" placeholder="99999999" maxlength="8" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'').slice(0,8)">
+              </div>
+              <div class="field-hint">ໃສ່ພຽງ 8 ໂຕເລກ ບໍ່ຕ້ອງໃສ່ 020 ນຳໜ້າ (ລະບົບຈະຕື່ມລະຫັດປະເທດໃຫ້ອັດຕະໂນມັດ)</div>
+              <div class="field-error" id="err-phone">ກະລຸນາໃສ່ເບີໂທ 8 ໂຕ ໃຫ້ຄົບ</div>
+            </div>
           </div>
         </div>
         <div class="form-section">
@@ -693,17 +758,53 @@ input,select,textarea{font-family:inherit}
           <button class="admin-tab" onclick="adminTab('packing',this)">📦 ກຽມສົ່ງ<span class="tab-count" id="tc-packing">0</span></button>
           <button class="admin-tab" onclick="adminTab('shipped',this)">🎉 ສົ່ງແລ້ວ<span class="tab-count" id="tc-shipped">0</span></button>
         </div>
+
+        <!-- ★ Date filter bar — today by default, or pick a past date, or "all dates" -->
+        <div class="admin-date-bar">
+          <span class="admin-date-lbl">📅 ວັນທີ:</span>
+          <button class="admin-date-quickbtn active" id="dq-today" onclick="adminSetDateMode('today')">ມື້ນີ້</button>
+          <button class="admin-date-quickbtn" id="dq-all" onclick="adminSetDateMode('all')">ທຸກວັນ</button>
+          <input class="admin-date-inp" type="date" id="admin-date-pick" onchange="adminSetDateMode('pick')">
+          <span class="admin-date-count" id="admin-date-count"></span>
+        </div>
+
         <div class="admin-filter">
           <input class="admin-filter-inp" id="admin-search" type="text" placeholder="🔍 ຄົ້ນຫາ ຊື່ / ເລກບິນ / ເບີ..." oninput="adminRenderOrders()">
           <button class="admin-refresh-btn" onclick="adminLoadOrders()">🔄 ໂຫຼດໃໝ່</button>
         </div>
         <div class="orders-table-wrap">
           <table class="orders-table">
-            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ບິນຂົນສົ່ງ</th><th>ສະຖານະ</th></tr></thead>
-            <tbody id="orders-tbody"><tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
+            <thead><tr><th>ລະຫັດ / ວັນທີ</th><th>ລູກຄ້າ</th><th>ສິນຄ້າ</th><th>ລວມ</th><th>ຂົນສົ່ງ</th><th>ຊຳລະ</th><th>ສະລິບ</th><th>ບິນຂົນສົ່ງ</th><th>ສະຖານະ</th><th>ຈັດການ</th></tr></thead>
+            <tbody id="orders-tbody"><tr><td colspan="10" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr></tbody>
           </table>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ★ Order Detail Modal (click order code) -->
+<div class="order-detail-modal" id="order-detail-modal" onclick="if(event.target===this)closeOrderDetail()">
+  <div class="order-detail-box">
+    <div class="od-header">
+      <h3 id="od-code">—</h3>
+      <button class="od-close" onclick="closeOrderDetail()">✕ ປິດ</button>
+    </div>
+    <div class="od-body" id="od-body">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ★ Delete confirm modal -->
+<div class="confirm-modal" id="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <div class="confirm-title">ລົບອໍເດີ້ນີ້?</div>
+    <div class="confirm-msg">ລະຫັດ <strong id="confirm-code">—</strong><br>ການລົບນີ້ບໍ່ສາມາດກູ້ຄືນໄດ້ — ຂໍ້ມູນອໍເດີ້ຈະຖືກລົບອອກຖາວອນ</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeConfirmModal()">ຍົກເລີກ</button>
+      <button class="confirm-delete" onclick="confirmDeleteOrder()">🗑️ ລົບເລີຍ</button>
     </div>
   </div>
 </div>
@@ -729,6 +830,7 @@ input,select,textarea{font-family:inherit}
 var SCRIPT_URL    = 'https://script.google.com/macros/s/AKfycbwYP0bCa0PubM1Taf5btkBPD7lgo0MpQnWzntWGc4KP9HZrlWBvIWM0j2EhAat9707Gvg/exec';
 var ADMIN_PASSWORD = 'soudsada2025';
 var QR_IMG_URL    = 'https://drive.google.com/uc?export=view&id=1uQMuG17oqaPiPDePA95-FngrMPJxA-JQ';
+var WA_COUNTRY_PREFIX = '85620'; // ★ ລະຫັດປະເທດລາວ + 20 ຕື່ມໜ້າເບີ 8 ໂຕ ເພື່ອສ້າງລິງ WhatsApp ທີ່ໃຊ້ໄດ້ຈິງ
 
 // ★ STATUS — ໃຊ້ໂຄ້ດເລກ (0-3) ສົ່ງໃຫ້ backend ເພື່ອບໍ່ໃຫ້ມີບັນຫາ encoding ຂອງຕົວອັກສອນລາວຜ່ານ URL
 // 0=ລໍຖ້າຮັບຍອດ, 1=ແມ່ຄ້າຮັບຍອດແລ້ວ, 2=ກຳລັງກຽມການຈັດສົ່ງ, 3=ຈັດສົ່ງສຳເລັດ
@@ -751,6 +853,9 @@ var lastOrderData={};
 var openPopupCode=null;
 var cameraStream=null,scanInterval=null;
 var shipBillTargetCode=''; // ★ ລະຫັດອໍເດີ້ທີ່ກຳລັງຈະອັບໂຫຼດ "ບິນຂົນສົ່ງ" ໃສ່
+var adminDateMode='today';      // 'today' | 'all' | 'pick'
+var adminPickedDate='';         // yyyy-MM-dd when mode==='pick'
+var deleteTargetCode='';        // ★ ລະຫັດອໍເດີ້ທີ່ກຳລັງຈະຖືກລົບ (ລໍຖ້າຢືນຢັນ)
 var noImg="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%23d1d5db' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
 
 // ★ ຂົນສົ່ງທີ່ "ຢຸດຝາກຊົ່ວຄາວ" — ເພີ່ມ/ລຶບຊື່ຂົນສົ່ງ (ຄ່າຕ້ອງກົງກັບ value ໃນ <input name="ship">) ໄດ້ທີ່ນີ້ໂດຍກົງ
@@ -1027,6 +1132,22 @@ function driveThumb(url,size){
   return'https://drive.google.com/thumbnail?id='+id+'&sz=w'+(size||400);
 }
 
+// ★ ສ້າງເບີໂທແບບສາກົນ ສຳລັບລິງ WhatsApp ຈາກເບີ 8 ໂຕ (ຫຼື ເບີຮູບແບບເກົ່າທີ່ມີ 020 ນຳໜ້າ)
+// ຕົວຢ່າງ: 55360660 → 8562055360660
+function toWaPhone(rawPhone){
+  var digits=String(rawPhone||'').replace(/\D/g,'');
+  if(!digits)return'';
+  // ຖ້າມີ "856" ນຳໜ້າຢູ່ແລ້ວ ໃຫ້ໃຊ້ຄືເກົ່າ
+  if(digits.indexOf('856')===0)return digits;
+  // ຖ້າເປັນຮູບແບບເກົ່າ 020XXXXXXXX (10-11 ໂຕ ຂຶ້ນຕົ້ນ 0) → ຕັດ 0 ນຳໜ້າ ເອົາ 8 ໂຕທ້າຍ
+  if(digits.length>8){digits=digits.slice(-8);}
+  return WA_COUNTRY_PREFIX+digits;
+}
+function waLink(rawPhone){
+  var p=toWaPhone(rawPhone);
+  return p?('https://wa.me/'+p):'';
+}
+
 function renderProds(prods){
   var grid=document.getElementById('prod-grid');
   document.getElementById('prod-count-lbl').textContent=prods.length?prods.length+' ລາຍການ':'';
@@ -1119,7 +1240,7 @@ function scrollToCart(){document.getElementById('right-panel').scrollIntoView({b
 var DISTRICTS_BY_PROVINCE={
   'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
   'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊະນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
-  'ບໍລິຄຳໄຊ':['ປາກກະດິງ','ທ່າພະບາດ','ປາກຊັນ','ບໍລິຄັນ','ໄຊຈຳພອນ','ຄຳເກີດ','ເວียงທອງ'],
+  'ບໍລິຄຳໄຊ':['ປາກກະດິງ','ທ່າພະບາດ','ປາກຊັນ','ບໍລິຄັນ','ໄຊຈຳພອນ','ຄຳເກີດ','ເວியงທອງ'],
   'ຄຳມ່ວນ':['ທ່າແຂກ','ມະຫາໄຊ','ໜອງບົກ','ຫິນບູນ','ຍົມມະລາດ','ບົວລະພາ','ນາກາຍ','ເຊບັ້ງໄຟ','ໄຊບົວທອງ','ຄູນຄຳ'],
   'ສະຫວັນນະເຂດ':['ໄກສອນ ພົມວິຫານ','ອຸທຸມພອນ','ອາດສະພັງທອງ','ພິນ','ເຊໂປນ','ນອງ','ທ່າປາງທອງ','ສອງຄອນ','ຈຳພອນ','ຊານຸບູລີ','ໄຊບູລີ','ວິລະບູລີ','ອາດສະພອນ','ໄຊພູທອງ','ພະລານໄຊ'],
   'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕະໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
@@ -1244,7 +1365,11 @@ function validate(){
   var ok=true;
   if(!cart.length){alert('⚠️ ກະລຸນາເລືອກສິນຄ້າ ແລະ ກົດຢືນຢັນກ່ອນ!');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
   var name=document.getElementById('c-name').value.trim();showErr('err-name',!name);markField('c-name',!name);if(!name)ok=false;
-  var phone=document.getElementById('c-phone').value.trim();showErr('err-phone',!phone);markField('c-phone',!phone);if(!phone)ok=false;
+  var phone=document.getElementById('c-phone').value.trim();
+  var phoneOk=/^\d{8}$/.test(phone);
+  showErr('err-phone',!phoneOk);
+  var pw=document.getElementById('phone-wrap');if(pw)pw.classList.toggle('invalid',!phoneOk);
+  if(!phoneOk)ok=false;
   var prov=document.getElementById('c-province').value;showErr('err-province',!prov);markField('c-province',!prov);if(!prov)ok=false;
   var dist=document.getElementById('c-district').value;showErr('err-district',!dist);markField('c-district',!dist);if(!dist)ok=false;
   showErr('err-ship',!selectedShip);if(!selectedShip)ok=false;
@@ -1252,7 +1377,7 @@ function validate(){
   if(selectedPay==='ເກັບປາຍທາງ COD'&&selectedShip!=='ອານຸສິດ'){alert('⚠️ COD ໃຊ້ໄດ້ສະເພາະ ຂົນສົ່ງ ອານຸສິດ!');ok=false;}
   var slipReq=selectedPay==='ເກັບປາຍທາງ COD'||selectedPay==='ໂອນຈ່າຍ'||selectedPay==='ມັດຈຳບັດເຕີມເງິນ';
   if(slipReq&&!slipBase64){showErr('err-slip',true);ok=false;}else showErr('err-slip',false);
-  if(!ok){var fe=document.querySelector('.invalid,.field-error.show');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});}
+  if(!ok){var fe=document.querySelector('.invalid,.field-error.show,.phone-input-wrap.invalid');if(fe)fe.scrollIntoView({behavior:'smooth',block:'center'});}
   return ok;
 }
 
@@ -1272,7 +1397,7 @@ function generateOrderCode(phone){
 function submitOrder(){
   if(!validate())return;
   var name=document.getElementById('c-name').value.trim();
-  var phone=document.getElementById('c-phone').value.trim();
+  var phone=document.getElementById('c-phone').value.trim(); // ★ 8 digits, no 020 prefix
   var prov=document.getElementById('c-province').value;
   var dist=document.getElementById('c-district').value;
   var branch=document.getElementById('c-branch').value.trim();
@@ -1345,7 +1470,7 @@ function showSuccess(orderData,nowDate){
 
   var infoHtml=[
     ['👤 ຊື່',orderData.customerName],
-    ['📱 ເບີໂທ',orderData.customerPhone],
+    ['📱 ເບີໂທ','020 '+orderData.customerPhone],
     ['📍 ທີ່ຢູ່',orderData.customerAddr],
     ['🚚 ຂົນສົ່ງ',orderData.shipping],
     ['💳 ຊຳລະ',orderData.payment],
@@ -1494,7 +1619,7 @@ function downloadReceipt(){
   ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-10,y+20);y+=44;
 
   ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  [['👤 ຊື່',d.customerName+' | '+d.customerPhone],
+  [['👤 ຊື່',d.customerName+' | 020 '+d.customerPhone],
    ['📍 ທີ່ຢູ່',d.customerAddr],
    ['🚚 ຂົນສົ່ງ',d.shipping],
    ['💳 ຊຳລະ',d.payment],
@@ -1570,12 +1695,36 @@ function adminTab(tab,el){
   document.querySelectorAll('.admin-tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');adminRenderOrders();
 }
+
+// ★ ວັນທີໃນເຂດເວລາລາວ ແບບ yyyy-MM-dd (ໃຊ້ປຽບທຽບກັບ dateIso ຈາກ backend)
+function todayIsoVientiane(){
+  var now=new Date();
+  var parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Vientiane',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
+  var y='',m='',d='';
+  parts.forEach(function(p){if(p.type==='year')y=p.value;if(p.type==='month')m=p.value;if(p.type==='day')d=p.value;});
+  return y+'-'+m+'-'+d;
+}
+
+// ★ ສະຫຼັບໂໝດການກອງວັນທີ: ມື້ນີ້ / ທຸກວັນ / ເລືອກວັນທີ
+function adminSetDateMode(mode){
+  adminDateMode=mode;
+  document.getElementById('dq-today').classList.toggle('active',mode==='today');
+  document.getElementById('dq-all').classList.toggle('active',mode==='all');
+  if(mode==='pick'){
+    adminPickedDate=document.getElementById('admin-date-pick').value;
+    if(!adminPickedDate){adminDateMode='all';document.getElementById('dq-all').classList.add('active');}
+  }else if(mode==='today'){
+    document.getElementById('admin-date-pick').value='';
+  }
+  adminRenderOrders();
+}
+
 function adminLoadOrders(){
-  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr>';
+  document.getElementById('orders-tbody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--muted)">⏳ ກຳລັງໂຫຼດ...</td></tr>';
   fetch(SCRIPT_URL+'?action=getAllOrders')
     .then(function(r){return r.json();})
     .then(function(d){adminOrders=Array.isArray(d)?d:[];adminRenderOrders();adminRenderStats();updateTabCounts();})
-    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--red)">❌ ໂຫຼດບໍ່ໄດ້</td></tr>';});
+    .catch(function(){document.getElementById('orders-tbody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--red)">❌ ໂຫຼດບໍ່ໄດ້</td></tr>';});
 }
 function updateTabCounts(){
   var all=adminOrders.length;
@@ -1629,12 +1778,25 @@ function applyStatus(code,statusCode){
   closeAllPopups();
   updateOrderStatusAdmin(code,statusCode);
 }
-document.addEventListener('click',function(e){if(!e.target.closest('.status-btn-wrap'))closeAllPopups();});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.status-btn-wrap'))closeAllPopups();
+});
+
+// ★ ກັ່ນຕອງອໍເດີ້ຕາມວັນທີ ກ່ອນ render — ໃຊ້ dateIso ຈາກ backend (yyyy-MM-dd ໃນເຂດເວລາລາວ)
+function ordersFilteredByDate(list){
+  if(adminDateMode==='all')return list;
+  var target=adminDateMode==='today'?todayIsoVientiane():adminPickedDate;
+  if(!target)return list;
+  return list.filter(function(o){return o.dateIso===target;});
+}
 
 function adminRenderOrders(){
   var q=(document.getElementById('admin-search')||{}).value||'';
   q=q.toLowerCase().trim();
-  var filtered=adminOrders.filter(function(o){
+
+  var dateFiltered=ordersFilteredByDate(adminOrders);
+
+  var filtered=dateFiltered.filter(function(o){
     if(adminTabFilter==='waiting')  return o.orderStatus===STATUS_LIST[0].key;
     if(adminTabFilter==='accepted') return o.orderStatus===STATUS_LIST[1].key;
     if(adminTabFilter==='packing')  return o.orderStatus===STATUS_LIST[2].key;
@@ -1644,8 +1806,16 @@ function adminRenderOrders(){
     if(!q)return true;
     return (o.code||'').toLowerCase().includes(q)||(o.customerName||'').toLowerCase().includes(q)||(o.customerPhone||'').includes(q);
   });
+
+  // ★ ສະແດງຈຳນວນອໍເດີ້ທີ່ກອງດ້ວຍວັນທີ
+  var dcEl=document.getElementById('admin-date-count');
+  if(dcEl){
+    var lbl=adminDateMode==='today'?'ມື້ນີ້':(adminDateMode==='all'?'ທຸກວັນ':(adminPickedDate||''));
+    dcEl.textContent=lbl+': '+dateFiltered.length+' ອໍເດີ້';
+  }
+
   if(!filtered.length){
-    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພົບລາຍການ</td></tr>';
+    document.getElementById('orders-tbody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:24px;color:var(--muted)">📭 ບໍ່ພົບລາຍການ'+(adminDateMode!=='all'?' ໃນວັນທີນີ້':'')+'</td></tr>';
     return;
   }
   var html='';
@@ -1678,9 +1848,15 @@ function adminRenderOrders(){
       +'<button class="status-pill '+cfg.cls+'" onclick="toggleStatusPopup(\''+escHtml(o.code)+'\',\''+escHtml(o.orderStatus)+'\',this)">'+cfg.icon+' '+escHtml(o.orderStatus)+' ▾</button>'
       +'<div class="status-popup" data-code="'+escHtml(o.code)+'"></div>'
       +'</div>';
+
+    var waUrl=waLink(o.customerPhone);
+    var custWaHtml=waUrl?('<a class="cust-wa-link" href="'+waUrl+'" target="_blank" onclick="event.stopPropagation()">💬 WhatsApp</a>'):'';
+
+    var deleteHtml='<button class="order-delete-btn" onclick="openConfirmModal(\''+escHtml(o.code)+'\')">🗑️ ລົບ</button>';
+
     html+='<tr>'
-      +'<td><span class="order-code">'+escHtml(o.code)+'</span><div style="font-size:9px;color:var(--muted);margin-top:2px">'+escHtml(o.submittedAt||'')+'</div></td>'
-      +'<td><div style="font-weight:700;font-size:11px">'+escHtml(o.customerName)+'</div><div style="font-size:10px;color:var(--muted)">'+escHtml(o.customerPhone)+'</div><div style="font-size:9px;color:var(--muted)">'+escHtml(o.customerAddr)+'</div></td>'
+      +'<td><span class="order-code" onclick="openOrderDetail(\''+escHtml(o.code)+'\')">'+escHtml(o.code)+'</span><div style="font-size:9px;color:var(--muted);margin-top:2px">'+escHtml(o.submittedAt||'')+'</div></td>'
+      +'<td><div style="font-weight:700;font-size:11px">'+escHtml(o.customerName)+'</div><div style="font-size:10px;color:var(--muted)">020 '+escHtml(o.customerPhone)+'</div><div style="font-size:9px;color:var(--muted)">'+escHtml(o.customerAddr)+'</div>'+custWaHtml+'</td>'
       +'<td style="font-size:10px;max-width:130px">'+escHtml(o.itemsSummary).replace(/\n/g,'<br>')+'</td>'
       +'<td style="font-weight:800;color:var(--green);font-size:11px;white-space:nowrap">'+fN(o.totalAmount)+' ₭</td>'
       +'<td style="font-size:10px">'+escHtml(o.shipping)+'</td>'
@@ -1688,6 +1864,7 @@ function adminRenderOrders(){
       +'<td>'+slipHtml+'</td>'
       +'<td>'+shipBillHtml+'</td>'
       +'<td>'+statusHtml+'</td>'
+      +'<td>'+deleteHtml+'</td>'
       +'</tr>';
   });
   document.getElementById('orders-tbody').innerHTML=html;
@@ -1714,6 +1891,86 @@ function updateOrderStatusAdmin(code,statusCode){
         },50);
       }else{alert('❌ '+(res&&res.message?res.message:'ອັບເດດບໍ່ສຳເລັດ'));}
     }).catch(function(){alert('❌ ເຊື່ອມຕໍ່ບໍ່ໄດ້');});
+}
+
+// ─────────────────────────────────────────
+//  ★ ORDER DETAIL MODAL — click order code to view full info + WhatsApp button
+// ─────────────────────────────────────────
+function openOrderDetail(code){
+  var o=adminOrders.find(function(x){return x.code===code;});
+  if(!o)return;
+  document.getElementById('od-code').textContent='📦 '+o.code;
+
+  var waUrl=waLink(o.customerPhone);
+  var cfg=statusCfgByKey(o.orderStatus);
+
+  var rows=[
+    ['👤 ຊື່ລູກຄ້າ',o.customerName],
+    ['📱 ເບີໂທ','020 '+o.customerPhone],
+    ['📍 ທີ່ຢູ່',o.customerAddr],
+    ['🚚 ຂົນສົ່ງ',o.shipping],
+    ['💳 ການຊຳລະ',o.payment],
+    ['💰 ລວມທັງໝົດ',fN(o.totalAmount)+' ₭'],
+    ['📅 ວັນທີສັ່ງ',o.submittedAt],
+    ['🔖 ສະຖານະ',cfg.icon+' '+o.orderStatus]
+  ].filter(function(r){return r[1];}).map(function(r){
+    return '<div class="od-row"><span class="od-label">'+r[0]+'</span><span class="od-val">'+escHtml(String(r[1]))+'</span></div>';
+  }).join('');
+
+  var html=rows;
+  html+='<div class="od-section-title">🛍️ ລາຍການສິນຄ້າ</div>';
+  html+='<div class="od-items-box">'+escHtml(o.itemsSummary||'-')+'</div>';
+  if(o.note){
+    html+='<div class="od-section-title">📝 ໝາຍເຫດ</div>';
+    html+='<div class="od-items-box">'+escHtml(o.note)+'</div>';
+  }
+
+  if(waUrl){
+    html+='<a class="od-wa-big" href="'+waUrl+'" target="_blank">'
+      +'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'
+      +'ທັກ WhatsApp ຫາລູກຄ້າ</a>';
+  }
+
+  html+='<button class="od-delete-btn" onclick="closeOrderDetail();openConfirmModal(\''+escHtml(o.code)+'\')">🗑️ ລົບອໍເດີ້ນີ້</button>';
+
+  document.getElementById('od-body').innerHTML=html;
+  document.getElementById('order-detail-modal').classList.add('show');
+}
+function closeOrderDetail(){document.getElementById('order-detail-modal').classList.remove('show');}
+
+// ─────────────────────────────────────────
+//  ★ DELETE ORDER — confirm modal then call backend
+// ─────────────────────────────────────────
+function openConfirmModal(code){
+  deleteTargetCode=code;
+  document.getElementById('confirm-code').textContent=code;
+  document.getElementById('confirm-modal').classList.add('show');
+}
+function closeConfirmModal(){
+  deleteTargetCode='';
+  document.getElementById('confirm-modal').classList.remove('show');
+}
+function confirmDeleteOrder(){
+  var code=deleteTargetCode;
+  if(!code)return;
+  var btn=document.querySelector('.confirm-delete');
+  if(btn){btn.disabled=true;btn.textContent='⏳ ກຳລັງລົບ...';}
+  fetch(SCRIPT_URL+'?action=deleteOrder&code='+encodeURIComponent(code),{method:'GET'})
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(btn){btn.disabled=false;btn.textContent='🗑️ ລົບເລີຍ';}
+      closeConfirmModal();
+      if(res&&res.status==='ok'){
+        adminOrders=adminOrders.filter(function(o){return o.code!==code;});
+        adminRenderOrders();adminRenderStats();updateTabCounts();
+      }else{
+        alert('❌ '+(res&&res.message?res.message:'ລົບບໍ່ສຳເລັດ'));
+      }
+    })
+    .catch(function(){
+      if(btn){btn.disabled=false;btn.textContent='🗑️ ລົບເລີຍ';}
+      alert('❌ ເຊື່ອມຕໍ່ບໍ່ໄດ້ ລົບບໍ່ສຳເລັດ');
+    });
 }
 
 // ─────────────────────────────────────────
@@ -1795,6 +2052,8 @@ function closeSlipModal(){
 document.addEventListener('DOMContentLoaded',function(){
   loadProducts();
   applyShipSuspension();
+  // ★ ຕັ້ງຄ່າເລີ່ມຕົ້ນຂອງ admin date filter ໃຫ້ກົງກັບ "ມື້ນີ້"
+  adminDateMode='today';
 });
 </script>
 </body>
