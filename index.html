@@ -2,8 +2,29 @@
 <html lang="lo">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>SOUDSADA SHOP – ສັ່ງຊື້ສິນຄ້າ</title>
+
+<!-- PWA Manifest — controls the icon/name shown when "Added to Home Screen" -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#2D7A55" />
+
+<!-- Favicon / Home Screen icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Soudsada" />
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Open Graph / Link Preview -->
+<meta property="og:title" content="SOUDSADA SHOP – ສັ່ງຊື້ສິນຄ້າ" />
+<meta property="og:description" content="ຮ້ານຂາຍສິນຄ້າຄວາມງາມ Soudsada Shop · ສັ່ງຊື້ອອນລາຍ ຝາກສົ່ງທົ່ວລາວ" />
+<meta property="og:image" content="icons/icon-512.png" />
+<meta property="og:type" content="website" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
@@ -14,13 +35,15 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Segoe UI','Noto Sans Lao',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;min-height:100vh}
+body{font-family:'Segoe UI','Noto Sans Lao',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;min-height:100vh;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);
+  -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none;}
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit;transition:all .15s}
 input,select,textarea{font-family:inherit}
 
 /* ── HEADER ── */
-.site-header{background:linear-gradient(135deg,#1B5E3A 0%,#2D7A55 55%,#4CAF7D 100%);padding:0 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:300;box-shadow:0 2px 20px rgba(0,0,0,.3);flex-direction:column}
+.site-header{background:linear-gradient(135deg,#1B5E3A 0%,#2D7A55 55%,#4CAF7D 100%);padding:0 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:300;box-shadow:0 2px 20px rgba(0,0,0,.3);flex-direction:column;padding-top:env(safe-area-inset-top)}
 .header-top{display:flex;align-items:center;gap:10px;width:100%;padding:10px 0}
 .header-logo{width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.85);object-fit:cover;flex-shrink:0}
 .header-info h1{font-size:16px;font-weight:800;color:#fff;line-height:1.2}
@@ -242,7 +265,7 @@ input,select,textarea{font-family:inherit}
 .file-remove{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;display:flex;align-items:center;justify-content:center}
 
 /* ── SUBMIT BAR ── */
-.submit-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);padding:10px 14px;box-shadow:0 -2px 16px rgba(0,0,0,.1);z-index:200}
+.submit-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);padding:10px 14px;box-shadow:0 -2px 16px rgba(0,0,0,.1);z-index:200;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .submit-btn{width:100%;max-width:1200px;margin:0 auto;display:block;background:linear-gradient(135deg,#2D7A55,#1B5E3A);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:800;letter-spacing:.3px;box-shadow:0 4px 18px rgba(45,122,85,.35)}
 .submit-btn:hover{opacity:.93}
 .submit-btn:active{transform:scale(.99)}
