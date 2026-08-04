@@ -158,9 +158,12 @@ input,select,textarea{font-family:inherit}
 .prod-card:active{transform:scale(.97)}
 .prod-card.in-cart{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,122,85,.15);background:var(--green-lt)}
 .prod-card.out{opacity:.45;cursor:not-allowed}
-.prod-thumb-wrap{width:100%;aspect-ratio:1/1;background:#F3F4F6;overflow:hidden}
+.prod-thumb-wrap{width:100%;aspect-ratio:1/1;background:#F3F4F6;overflow:hidden;position:relative}
 .prod-thumb{width:100%;height:100%;object-fit:cover;transition:transform .3s}
 .prod-card:hover .prod-thumb{transform:scale(1.06)}
+.prod-zoom-btn{position:absolute;bottom:5px;right:5px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.5);border:1.5px solid rgba(255,255,255,.8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;z-index:3;backdrop-filter:blur(2px);transition:background .15s,transform .15s}
+.prod-zoom-btn:hover{background:rgba(0,0,0,.7);transform:scale(1.08)}
+.prod-zoom-btn:active{transform:scale(.92)}
 .prod-info{padding:7px 8px 8px}
 .prod-name{font-size:11px;font-weight:700;line-height:1.3;color:var(--ink);margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:28px}
 .prod-price{font-size:12px;font-weight:800;color:var(--green)}
@@ -168,10 +171,23 @@ input,select,textarea{font-family:inherit}
 .badge-ok{background:#DCF5E8;color:#1A6B3C}
 .badge-low{background:#FEF3C7;color:#92400E}
 .badge-out{background:#FEE2E2;color:#991B1B}
-.cart-qty-badge{position:absolute;top:5px;right:5px;background:var(--green);border-radius:50%;color:#fff;font-size:10px;font-weight:900;width:20px;height:20px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.cart-qty-badge{position:absolute;top:5px;right:5px;background:var(--green);border-radius:50%;color:#fff;font-size:10px;font-weight:900;width:20px;height:20px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:3}
 .prod-card.in-cart .cart-qty-badge{display:flex}
 .empty-state{text-align:center;padding:28px 14px;color:var(--muted);font-size:12px;grid-column:1/-1}
 .empty-state .eicon{font-size:32px;margin-bottom:8px}
+
+/* ★ Product image lightbox — big, clear view before adding to cart */
+.img-view-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;align-items:center;justify-content:center;padding:16px;flex-direction:column;gap:12px}
+.img-view-modal.show{display:flex}
+.img-view-modal img{max-width:92vw;max-height:70vh;object-fit:contain;border-radius:10px;background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.img-view-loading{color:#fff;font-size:12px}
+.img-view-name{color:#fff;font-size:14px;font-weight:800;text-align:center;max-width:92vw}
+.img-view-price{color:var(--gold);font-size:15px;font-weight:900}
+.img-view-actions{display:flex;gap:10px;width:100%;max-width:340px}
+.img-view-close{position:absolute;top:16px;right:16px;background:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:18px;font-weight:900;cursor:pointer}
+.img-view-select-btn{flex:1;background:var(--green);color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:800}
+.img-view-select-btn:hover{background:var(--green-dk)}
+.img-view-close-btn{flex:1;background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.4);border-radius:10px;padding:12px;font-size:13px;font-weight:700}
 
 /* ── QTY PANEL ── */
 .qty-panel{display:none;background:var(--surface);border:2px solid var(--green);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;margin-bottom:12px;animation:fadeUp .2s ease}
@@ -699,6 +715,19 @@ input,select,textarea{font-family:inherit}
 <div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ຢືນຢັນການສັ່ງຊື້</button></div>
 <div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div></div>
 
+<!-- ★ PRODUCT IMAGE LIGHTBOX (view large image before ordering) -->
+<div class="img-view-modal" id="img-view-modal" onclick="if(event.target===this)closeImgView()">
+  <button class="img-view-close" onclick="closeImgView()">✕</button>
+  <div class="img-view-loading" id="img-view-loading" style="display:none">⏳ ກຳລັງໂຫຼດຮູບ...</div>
+  <img id="img-view-el" src="" alt="" onclick="event.stopPropagation()">
+  <div class="img-view-name" id="img-view-name"></div>
+  <div class="img-view-price" id="img-view-price"></div>
+  <div class="img-view-actions">
+    <button class="img-view-close-btn" onclick="closeImgView()">ປິດ</button>
+    <button class="img-view-select-btn" id="img-view-select-btn" onclick="selectFromImgView()">🛒 ເລືອກສິນຄ້ານີ້</button>
+  </div>
+</div>
+
 <!-- ★ SUCCESS RECEIPT MODAL -->
 <div class="modal-overlay" id="success-modal">
   <div class="modal-box" id="receipt-box">
@@ -887,6 +916,7 @@ var shipBillTargetCode=''; // ★ ລະຫັດອໍເດີ້ທີ່ກ�
 var adminDateMode='today';      // 'today' | 'all' | 'pick'
 var adminPickedDate='';         // yyyy-MM-dd when mode==='pick'
 var deleteTargetCode='';        // ★ ລະຫັດອໍເດີ້ທີ່ກຳລັງຈະຖືກລົບ (ລໍຖ້າຢືນຢັນ)
+var imgViewProdName='';         // ★ product name currently shown in the image lightbox
 var noImg="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Crect width='80' height='80' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' fill='%23d1d5db' font-size='28'%3E📦%3C/text%3E%3C/svg%3E";
 
 // ★ ຂົນສົ່ງທີ່ "ຢຸດຝາກຊົ່ວຄາວ" — ເພີ່ມ/ລຶບຊື່ຂົນສົ່ງ (ຄ່າຕ້ອງກົງກັບ value ໃນ <input name="ship">) ໄດ້ທີ່ນີ້ໂດຍກົງ
@@ -1193,11 +1223,66 @@ function renderProds(prods){
     var inC=!!ci,cQ=ci?ci.qty:0;
     html+='<div class="prod-card'+(qty<=0?' out':'')+(inC?' in-cart':'')+'" onclick="'+(qty<=0?'':'selectProd(\''+sn+'\')')+'">'
       +'<div class="cart-qty-badge">'+cQ+'</div>'
-      +'<div class="prod-thumb-wrap"><img class="prod-thumb" src="'+(img||noImg)+'" alt="'+escHtml(name)+'" loading="lazy" onerror="this.src=\''+noImg+'\'"></div>'
+      +'<div class="prod-thumb-wrap"><img class="prod-thumb" src="'+(img||noImg)+'" alt="'+escHtml(name)+'" loading="lazy" onerror="this.src=\''+noImg+'\'">'
+      +'<button class="prod-zoom-btn" title="ເບິ່ງຮູບໃຫຍ່" onclick="event.stopPropagation();openImgView(\''+sn+'\')">🔍</button></div>'
       +'<div class="prod-info"><div class="prod-name">'+escHtml(name)+'</div><div class="prod-price">'+fN(price)+' ₭</div>'
       +'<span class="prod-stock-badge '+bc+'">'+bt+'</span></div></div>';
   });
   grid.innerHTML=html;
+}
+
+// ─────────────────────────────────────────
+//  ★ PRODUCT IMAGE LIGHTBOX — big/clear view before selecting
+// ─────────────────────────────────────────
+function openImgView(name){
+  var prod=allProds.find(function(r){return r[0]===name;});
+  if(!prod)return;
+  imgViewProdName=name;
+  var qty=Number(prod[3])||0;
+  var rawImg=prod[4]||'';
+  // ★ ໃຊ້ຂະໜາດໃຫຍ່ (w1600) ເພື່ອໃຫ້ຮູບຄົມຊັດທີ່ສຸດເທົ່າທີ່ Drive ຈະໃຫ້ໄດ້
+  var bigImg=rawImg?driveThumb(rawImg,1600):noImg;
+
+  var imgEl=document.getElementById('img-view-el');
+  var loadingEl=document.getElementById('img-view-loading');
+  imgEl.style.display='none';
+  loadingEl.style.display='block';
+  imgEl.onload=function(){loadingEl.style.display='none';imgEl.style.display='block';};
+  imgEl.onerror=function(){
+    // ★ fallback ຫາຂະໜາດນ້ອຍກວ່າ ຖ້າ Drive ບໍ່ຍອມສະແດງຂະໜາດໃຫຍ່
+    if(imgEl.src!==convertGD(rawImg)&&rawImg){imgEl.src=convertGD(rawImg)||noImg;}
+    else{imgEl.src=noImg;loadingEl.style.display='none';imgEl.style.display='block';}
+  };
+  imgEl.src=bigImg;
+  imgEl.alt=name;
+
+  document.getElementById('img-view-name').textContent=name;
+  document.getElementById('img-view-price').textContent=fN(Number(prod[2])||0)+' ₭';
+  var selBtn=document.getElementById('img-view-select-btn');
+  if(qty<=0){
+    selBtn.textContent='🚨 ສິນຄ້ານີ້ໝົດ';
+    selBtn.disabled=true;
+    selBtn.style.opacity='.5';
+    selBtn.style.cursor='not-allowed';
+  }else{
+    selBtn.textContent='🛒 ເລືອກສິນຄ້ານີ້';
+    selBtn.disabled=false;
+    selBtn.style.opacity='';
+    selBtn.style.cursor='';
+  }
+  document.getElementById('img-view-modal').classList.add('show');
+}
+function closeImgView(){
+  document.getElementById('img-view-modal').classList.remove('show');
+  var imgEl=document.getElementById('img-view-el');
+  imgEl.onload=null;imgEl.onerror=null;imgEl.src='';
+  imgViewProdName='';
+}
+function selectFromImgView(){
+  if(!imgViewProdName)return;
+  var name=imgViewProdName;
+  closeImgView();
+  selectProd(name);
 }
 
 // ─────────────────────────────────────────
