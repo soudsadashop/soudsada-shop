@@ -498,6 +498,30 @@ input,select,textarea{font-family:inherit}
 .confirm-cancel{flex:1;background:var(--bg);color:var(--ink);border:1.5px solid var(--border);border-radius:9px;padding:11px;font-size:12px;font-weight:700}
 .confirm-delete{flex:1;background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px;font-size:12px;font-weight:700}
 .confirm-delete:hover{background:#B91C1C}
+
+/* ★ NEW — Pretty notification popup (replaces plain browser alert()) */
+.notify-modal{display:none;position:fixed;inset:0;background:rgba(20,30,25,.55);backdrop-filter:blur(1px);z-index:1000000;align-items:center;justify-content:center;padding:18px}
+.notify-modal.show{display:flex}
+.notify-box{background:#fff;border-radius:18px;max-width:340px;width:100%;overflow:hidden;animation:notifyPop .28s cubic-bezier(.22,1,.36,1);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+@keyframes notifyPop{from{opacity:0;transform:scale(.82) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.notify-top{height:6px;width:100%}
+.notify-top.info{background:linear-gradient(90deg,var(--green),var(--green-md))}
+.notify-top.success{background:linear-gradient(90deg,var(--green),var(--green-md))}
+.notify-top.warn{background:linear-gradient(90deg,#F59E0B,#FBBF24)}
+.notify-top.error{background:linear-gradient(90deg,var(--red),#F87171)}
+.notify-body{padding:22px 22px 20px;text-align:center}
+.notify-icon{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.notify-icon.info{background:var(--green-lt);color:var(--green)}
+.notify-icon.success{background:var(--green-lt);color:var(--green)}
+.notify-icon.warn{background:#FFFBEB;color:#B45309}
+.notify-icon.error{background:#FEF2F2;color:var(--red)}
+.notify-msg{font-size:13px;color:var(--ink);line-height:1.7;white-space:pre-line;font-weight:600}
+.notify-ok-btn{margin-top:18px;width:100%;background:var(--green);color:#fff;border:none;border-radius:10px;padding:12px;font-size:13px;font-weight:800;letter-spacing:.2px;box-shadow:0 4px 14px rgba(45,122,85,.3)}
+.notify-ok-btn:hover{background:var(--green-dk)}
+.notify-ok-btn.error{background:var(--red);box-shadow:0 4px 14px rgba(220,38,38,.3)}
+.notify-ok-btn.error:hover{background:#B91C1C}
+.notify-ok-btn.warn{background:#D97706;box-shadow:0 4px 14px rgba(217,119,6,.3)}
+.notify-ok-btn.warn:hover{background:#B45309}
 </style>
 </head>
 <body>
@@ -870,6 +894,18 @@ input,select,textarea{font-family:inherit}
   </div>
 </div>
 
+<!-- ★ NEW — Pretty notification popup (replaces browser alert()) -->
+<div class="notify-modal" id="notify-modal" onclick="if(event.target===this)closeNotify()">
+  <div class="notify-box">
+    <div class="notify-top info" id="notify-top"></div>
+    <div class="notify-body">
+      <div class="notify-icon info" id="notify-icon">ℹ️</div>
+      <div class="notify-msg" id="notify-msg"></div>
+      <button class="notify-ok-btn" id="notify-ok-btn" onclick="closeNotify()">ຮັບຊາບແລ້ວ</button>
+    </div>
+  </div>
+</div>
+
 <!-- Slip / Shipping-bill fullscreen viewer (shared) -->
 <div class="slip-modal" id="slip-modal" onclick="if(event.target===this)closeSlipModal()">
   <button class="slip-modal-close" onclick="closeSlipModal()">✕</button>
@@ -903,6 +939,25 @@ var STATUS_LIST=[
 ];
 function statusIndexByKey(key){var i=STATUS_LIST.findIndex(function(s){return s.key===key;});return i<0?0:i;}
 function statusCfgByKey(key){return STATUS_LIST[statusIndexByKey(key)];}
+
+// ─────────────────────────────────────────
+//  ★ NEW — PRETTY NOTIFICATION POPUP (replaces browser alert())
+// ─────────────────────────────────────────
+var NOTIFY_ICONS={info:'ℹ️',success:'✅',warn:'⚠️',error:'❌'};
+var NOTIFY_BTN_TEXT={info:'ຮັບຊາບແລ້ວ',success:'ຮັບຊາບແລ້ວ',warn:'ເຂົ້າໃຈແລ້ວ',error:'ຮັບຊາບແລ້ວ'};
+function notify(msg,type){
+  type=(type&&NOTIFY_ICONS[type])?type:'info';
+  document.getElementById('notify-top').className='notify-top '+type;
+  var iconEl=document.getElementById('notify-icon');
+  iconEl.className='notify-icon '+type;
+  iconEl.textContent=NOTIFY_ICONS[type];
+  document.getElementById('notify-msg').textContent=msg;
+  var okBtn=document.getElementById('notify-ok-btn');
+  okBtn.className='notify-ok-btn '+(type==='error'?'error':type==='warn'?'warn':'');
+  okBtn.textContent=NOTIFY_BTN_TEXT[type];
+  document.getElementById('notify-modal').classList.add('show');
+}
+function closeNotify(){document.getElementById('notify-modal').classList.remove('show');}
 
 // ─────────────────────────────────────────
 //  STATE
@@ -943,7 +998,7 @@ function applyShipSuspension(){
     label.onclick=function(e){
       e.preventDefault();
       e.stopPropagation();
-      alert('🚫 '+reason);
+      notify(reason,'warn');
     };
   });
 }
@@ -975,7 +1030,7 @@ function switchTrackTab(tab,el){
 // ─────────────────────────────────────────
 function trackByOrder(){
   var code=document.getElementById('inp-order').value.trim().toUpperCase();
-  if(!code){alert('ກະລຸນາໃສ່ເລກບິນ');return;}
+  if(!code){notify('ກະລຸນາໃສ່ເລກບິນ','warn');return;}
   doTrack('code',code);
 }
 
@@ -984,7 +1039,7 @@ function trackByOrder(){
 // ─────────────────────────────────────────
 function trackByPhone(){
   var phone=document.getElementById('inp-phone').value.trim();
-  if(!phone){alert('ກະລຸນາໃສ່ເບີໂທ');return;}
+  if(!phone){notify('ກະລຸນາໃສ່ເບີໂທ','warn');return;}
   doTrack('phone',phone);
 }
 
@@ -1058,7 +1113,7 @@ function setCamMsg(msg){
 
 function startCamera(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    alert('ບຣາວເຊີນີ້ບໍ່ຮອງຮັບກ້ອງ');
+    notify('ບຣາວເຊີນີ້ບໍ່ຮອງຮັບກ້ອງ','error');
     return;
   }
   setCamMsg('⏳ ກຳລັງເປີດກ້ອງ...');
@@ -1077,7 +1132,7 @@ function startCamera(){
     })
     .catch(function(err){
       setCamMsg('');
-      alert('ບໍ່ສາມາດເປີດກ້ອງໄດ້: '+err.message+'\\nກະລຸນາອະນຸຍາດການໃຊ້ກ້ອງ ແລະ ໃຊ້ໂດເມນ https');
+      notify('ບໍ່ສາມາດເປີດກ້ອງໄດ້: '+err.message+'\nກະລຸນາອະນຸຍາດການໃຊ້ກ້ອງ ແລະ ໃຊ້ໂດເມນ https','error');
     });
 }
 
@@ -1426,7 +1481,7 @@ function downloadQR(){
 function triggerUpload(){document.getElementById('slip-file').click();}
 function previewSlip(input){
   var file=input.files[0];if(!file)return;
-  if(file.size>5*1024*1024){alert('ຮູບໃຫຍ່ເກີນໄປ (≤ 5MB)');return;}
+  if(file.size>5*1024*1024){notify('ຮູບໃຫຍ່ເກີນໄປ (≤ 5MB)','warn');return;}
   var reader=new FileReader();
   reader.onload=function(e){
     var img=new Image();
@@ -1462,7 +1517,7 @@ function showErr(id,show){var el=document.getElementById(id);if(el)show?el.class
 function markField(id,inv){var el=document.getElementById(id);if(el)inv?el.classList.add('invalid'):el.classList.remove('invalid');}
 function validate(){
   var ok=true;
-  if(!cart.length){alert('⚠️ ກະລຸນາເລືອກສິນຄ້າ ແລະ ກົດຢືນຢັນກ່ອນ!');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
+  if(!cart.length){notify('ກະລຸນາເລືອກສິນຄ້າ ແລະ ກົດຢືນຢັນກ່ອນ!','warn');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
   var name=document.getElementById('c-name').value.trim();showErr('err-name',!name);markField('c-name',!name);if(!name)ok=false;
   var phone=document.getElementById('c-phone').value.trim();
   var phoneOk=/^\d{8}$/.test(phone);
@@ -1523,7 +1578,7 @@ function submitViaGet(orderData,now){
   var params=new URLSearchParams({action:'submitCustomerOrder',code:orderData.code,customerName:orderData.customerName,customerPhone:orderData.customerPhone,customerAddr:orderData.customerAddr,shipping:orderData.shipping,payment:orderData.payment,note:orderData.note||'',totalAmount:orderData.totalAmount,items:JSON.stringify(orderData.cart),submittedAt:orderData.submittedAt});
   fetch(SCRIPT_URL+'?'+params.toString(),{method:'GET',mode:'no-cors'})
     .then(function(){loadEl.classList.remove('show');showSuccess(orderData,now);})
-    .catch(function(){loadEl.classList.remove('show');alert('❌ ສົ່ງບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່');});
+    .catch(function(){loadEl.classList.remove('show');notify('ສົ່ງບໍ່ສຳເລັດ ກະລຸນາລອງໃໝ່','error');});
 }
 
 // ─────────────────────────────────────────
@@ -1635,7 +1690,7 @@ function fallbackCopy(text,cb){
 // ─────────────────────────────────────────
 function downloadReceipt(){
   var d=lastOrderData;
-  if(!d||!d.code){alert('ບໍ່ມີຂໍ້ມູນໃບບິນ');return;}
+  if(!d||!d.code){notify('ບໍ່ມີຂໍ້ມູນໃບບິນ','warn');return;}
 
   var qrEl=document.getElementById('receipt-qr-code');
   var qrImg=qrEl.querySelector('img')||qrEl.querySelector('canvas');
@@ -1981,8 +2036,8 @@ function updateOrderStatusAdmin(code,statusCode){
             }
           });
         },50);
-      }else{alert('❌ '+(res&&res.message?res.message:'ອັບເດດບໍ່ສຳເລັດ'));}
-    }).catch(function(){alert('❌ ເຊື່ອມຕໍ່ບໍ່ໄດ້');});
+      }else{notify(res&&res.message?res.message:'ອັບເດດບໍ່ສຳເລັດ','error');}
+    }).catch(function(){notify('ເຊື່ອມຕໍ່ບໍ່ໄດ້','error');});
 }
 
 // ─────────────────────────────────────────
@@ -2086,12 +2141,12 @@ function confirmDeleteOrder(){
         adminOrders=adminOrders.filter(function(o){return o.code!==code;});
         adminRenderOrders();adminRenderStats();updateTabCounts();
       }else{
-        alert('❌ '+(res&&res.message?res.message:'ລົບບໍ່ສຳເລັດ'));
+        notify(res&&res.message?res.message:'ລົບບໍ່ສຳເລັດ','error');
       }
     })
     .catch(function(){
       if(btn){btn.disabled=false;btn.textContent='🗑️ ລົບເລີຍ';}
-      alert('❌ ເຊື່ອມຕໍ່ບໍ່ໄດ້ ລົບບໍ່ສຳເລັດ');
+      notify('ເຊື່ອມຕໍ່ບໍ່ໄດ້ ລົບບໍ່ສຳເລັດ','error');
     });
 }
 
@@ -2109,7 +2164,7 @@ function triggerShipBillUpload(code){
 function handleShipBillFileChange(input){
   var file=input.files[0];
   if(!file||!shipBillTargetCode)return;
-  if(file.size>6*1024*1024){alert('ຮູບໃຫຍ່ເກີນໄປ (≤ 6MB)');return;}
+  if(file.size>6*1024*1024){notify('ຮູບໃຫຍ່ເກີນໄປ (≤ 6MB)','warn');return;}
   var reader=new FileReader();
   reader.onload=function(e){
     var img=new Image();
@@ -2148,7 +2203,7 @@ function uploadShippingBillAdmin(code,base64){
       },1300);
     })
     .catch(function(){
-      alert('❌ ອັບໂຫຼດບິນຂົນສົ່ງບໍ່ໄດ້ ກະລຸນາລອງໃໝ່');
+      notify('ອັບໂຫຼດບິນຂົນສົ່ງບໍ່ໄດ້ ກະລຸນາລອງໃໝ່','error');
       if(btn){btn.disabled=false;btn.textContent='📤 ອັບໂຫຼດບິນຂົນສົ່ງ';}
     });
 }
