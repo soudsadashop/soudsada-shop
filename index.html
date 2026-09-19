@@ -288,6 +288,15 @@ input,select,textarea{font-family:inherit}
 .file-preview img{width:100%;max-height:160px;object-fit:contain;border-radius:7px;border:1.5px solid var(--border)}
 .file-remove{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;display:flex;align-items:center;justify-content:center}
 
+/* ── ★ FLOATING CART (ເດັ້ງຂຶ້ນດ້ານຂ້າງ ເມື່ອມີສິນຄ້າໃນກະຕ່າ / ຫາຍໄປເມື່ອກະຕ່າວ່າງ) ── */
+.float-cart{display:none;position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#2D7A55,#1B5E3A);border:3px solid #fff;color:#fff;font-size:24px;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(27,94,58,.45);z-index:250;cursor:pointer}
+.float-cart.show{display:flex;animation:floatCartIn .35s cubic-bezier(.22,1,.36,1)}
+.float-cart:active{transform:scale(.93)}
+.float-cart .cart-count{position:absolute;top:-8px;right:-8px;width:auto;min-width:24px;height:24px;padding:0 6px;border-radius:12px;border:2px solid #fff;font-size:12px;font-weight:900;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.float-cart.bump{animation:floatCartBump .3s ease}
+@keyframes floatCartIn{from{opacity:0;transform:translateX(70px) scale(.6)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes floatCartBump{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+
 /* ── SUBMIT BAR ── */
 .submit-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);padding:10px 14px;box-shadow:0 -2px 16px rgba(0,0,0,.1);z-index:200;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
 .submit-btn{width:100%;max-width:1200px;margin:0 auto;display:block;background:linear-gradient(135deg,#2D7A55,#1B5E3A);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:800;letter-spacing:.3px;box-shadow:0 4px 18px rgba(45,122,85,.35)}
@@ -555,7 +564,6 @@ input,select,textarea{font-family:inherit}
         ຕິດຕໍ່
       </a>
       <button class="header-btn admin-btn" onclick="openAdmin()">🔐 Admin</button>
-      <button class="header-btn" onclick="scrollToCart()">🛒 <span class="cart-count" id="cart-count">0</span></button>
     </div>
   </div>
   <div class="datetime-bar">
@@ -749,6 +757,9 @@ input,select,textarea{font-family:inherit}
     </div>
   </div>
 </main>
+
+<!-- ★ ກະຕ່າສິນຄ້າແບບລອຍ — ເດັ້ງຂຶ້ນມາດ້ານຂ້າງພ້ອມໂຕເລກຈຳນວນ ເມື່ອລູກຄ້າເລືອກສິນຄ້າ, ຫາຍໄປເມື່ອບໍ່ມີສິນຄ້າ -->
+<button class="float-cart" id="float-cart" onclick="scrollToCart()" aria-label="ກະຕ່າສິນຄ້າ" title="ເບິ່ງກະຕ່າສິນຄ້າ">🛒<span class="cart-count" id="cart-count">0</span></button>
 
 <div class="submit-bar"><button class="submit-btn" id="submit-btn" onclick="submitOrder()">✅ ຢືນຢັນການສັ່ງຊື້</button></div>
 <div class="loading-overlay" id="loading"><div class="spinner"></div><div class="loading-text" id="loading-text">ກຳລັງສົ່ງຄຳສັ່ງ...</div></div>
@@ -1417,7 +1428,21 @@ function confirmQty(){
 // ─────────────────────────────────────────
 function renderCart(){
   var total=cart.reduce(function(s,c){return s+c.price*c.qty;},0);
-  document.getElementById('cart-count').textContent=cart.reduce(function(s,c){return s+c.qty;},0);
+  // ★ ອັບເດດໂຕເລກ + ໂຊ/ເຊື່ອງ ກະຕ່າລອຍ (ມີສິນຄ້າ = ເດັ້ງຂຶ້ນ, ວ່າງ = ຫາຍໄປ)
+  var totalQty=cart.reduce(function(s,c){return s+c.qty;},0);
+  var cc=document.getElementById('cart-count');
+  var fc=document.getElementById('float-cart');
+  var prevQty=Number(cc.textContent)||0;
+  cc.textContent=totalQty;
+  if(fc){
+    if(totalQty>0){
+      var wasHidden=!fc.classList.contains('show');
+      fc.classList.add('show');
+      if(!wasHidden&&totalQty!==prevQty){fc.classList.remove('bump');void fc.offsetWidth;fc.classList.add('bump');}
+    }else{
+      fc.classList.remove('show','bump');
+    }
+  }
   document.getElementById('cart-total').textContent=fN(total)+' ₭';
   var el=document.getElementById('cart-items');
   if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div>';return;}
