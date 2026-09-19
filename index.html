@@ -249,12 +249,16 @@ input,select,textarea{font-family:inherit}
 .phone-input-wrap input{border:none!important;border-radius:0!important}
 .phone-input-wrap input:focus{border:none!important}
 .ship-opts{display:flex;flex-wrap:wrap;gap:5px}
-.ship-opt{display:flex;align-items:center;gap:4px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;user-select:none}
+.ship-opt{display:flex;align-items:center;gap:6px;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .18s;user-select:none}
 .ship-opt input{display:none}
 .ship-opt.active{background:var(--green-lt);border-color:var(--green);color:var(--green)}
 .ship-opt.suspended{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B;cursor:not-allowed;opacity:.85}
 .ship-opt.suspended:hover{background:#FEF2F2}
 .ship-suspended-tag{display:inline-block;background:var(--red);color:#fff;font-size:8px;font-weight:800;padding:1px 6px;border-radius:8px;margin-left:4px;white-space:nowrap;letter-spacing:.2px}
+/* ★ ໂລໂກ້ຂົນສົ່ງ — ຮູບແທນ emoji */
+.ship-logo{width:26px;height:26px;object-fit:contain;border-radius:6px;background:#fff;flex-shrink:0;display:block}
+.ship-ico{font-size:16px;line-height:1}
+.ship-opt.suspended .ship-logo{filter:grayscale(1);opacity:.65}
 .pay-opts{display:flex;flex-direction:column;gap:6px}
 .pay-opt{display:flex;align-items:flex-start;gap:9px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 11px;cursor:pointer;transition:all .18s;user-select:none}
 .pay-opt input{display:none}
@@ -474,7 +478,7 @@ input,select,textarea{font-family:inherit}
 .od-delete-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:2px solid var(--red);color:var(--red);border-radius:10px;padding:11px;font-size:12px;font-weight:800;width:100%;margin-top:10px}
 .od-delete-btn:hover{background:#FEF2F2}
 
-/* ★ NEW — Order Detail proof-image blocks (ສະລິບ / ບິນຂົນສົ່ງ) */
+/* ★ Order Detail proof-image blocks (ສະລິບ / ບິນຂົນສົ່ງ) */
 .od-proof-grid{display:grid;grid-template-columns:1fr;gap:10px}
 @media(min-width:380px){.od-proof-grid{grid-template-columns:1fr 1fr}}
 .od-proof-box{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:8px;text-align:center}
@@ -499,7 +503,7 @@ input,select,textarea{font-family:inherit}
 .confirm-delete{flex:1;background:var(--red);color:#fff;border:none;border-radius:9px;padding:11px;font-size:12px;font-weight:700}
 .confirm-delete:hover{background:#B91C1C}
 
-/* ★ NEW — Pretty notification popup (replaces plain browser alert()) */
+/* ★ Pretty notification popup (replaces plain browser alert()) */
 .notify-modal{display:none;position:fixed;inset:0;background:rgba(20,30,25,.55);backdrop-filter:blur(1px);z-index:1000000;align-items:center;justify-content:center;padding:18px}
 .notify-modal.show{display:flex}
 .notify-box{background:#fff;border-radius:18px;max-width:340px;width:100%;overflow:hidden;animation:notifyPop .28s cubic-bezier(.22,1,.36,1);box-shadow:0 20px 50px rgba(0,0,0,.35)}
@@ -698,11 +702,12 @@ input,select,textarea{font-family:inherit}
         </div>
         <div class="form-section">
           <div class="form-section-title">🚚 ຂົນສົ່ງ <span class="req">*</span></div>
+          <!-- ★ ແຕ່ລະຂົນສົ່ງມີ <span class="ship-ico"> (emoji ສຳຮອງ) — ສະຄຣິບ applyShipLogos() ຈະປ່ຽນເປັນຮູບໂລໂກ້ເມື່ອໂຫຼດສຳເລັດ -->
           <div class="ship-opts">
-            <label class="ship-opt" onclick="selectShip(this,'ອານຸສິດ')"><input type="radio" name="ship" value="ອານຸສິດ"> 🏍 ອານຸສິດ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ຮຸ່ງອາລຸນ')"><input type="radio" name="ship" value="ຮຸ່ງອາລຸນ"> 🚌 ຮຸ່ງອາລຸນ</label>
-            <label class="ship-opt" onclick="selectShip(this,'ມີໄຊ')"><input type="radio" name="ship" value="ມີໄຊ"> 🚚 ມີໄຊ</label>
-            <label class="ship-opt" onclick="selectShip(this,'J&T')"><input type="radio" name="ship" value="J&T"> 🚛 J&T</label>
+            <label class="ship-opt" onclick="selectShip(this,'ອານຸສິດ')"><input type="radio" name="ship" value="ອານຸສິດ"><span class="ship-ico">🏍</span> ອານຸສິດ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ຮຸ່ງອາລຸນ')"><input type="radio" name="ship" value="ຮຸ່ງອາລຸນ"><span class="ship-ico">🚌</span> ຮຸ່ງອາລຸນ</label>
+            <label class="ship-opt" onclick="selectShip(this,'ມີໄຊ')"><input type="radio" name="ship" value="ມີໄຊ"><span class="ship-ico">🚚</span> ມີໄຊ</label>
+            <label class="ship-opt" onclick="selectShip(this,'J&T')"><input type="radio" name="ship" value="J&T"><span class="ship-ico">🚛</span> J&T</label>
           </div>
           <div class="field-error" id="err-ship" style="margin-top:5px">ກະລຸນາເລືອກຂົນສົ່ງ</div>
           <div class="field" style="margin-top:8px"><label>ສາຂາ / ຈຸດຮັບ</label><input type="text" id="c-branch" placeholder="ລະບຸສາຂາ"></div>
@@ -894,7 +899,7 @@ input,select,textarea{font-family:inherit}
   </div>
 </div>
 
-<!-- ★ NEW — Pretty notification popup (replaces browser alert()) -->
+<!-- ★ Pretty notification popup (replaces browser alert()) -->
 <div class="notify-modal" id="notify-modal" onclick="if(event.target===this)closeNotify()">
   <div class="notify-box">
     <div class="notify-top info" id="notify-top"></div>
@@ -941,7 +946,7 @@ function statusIndexByKey(key){var i=STATUS_LIST.findIndex(function(s){return s.
 function statusCfgByKey(key){return STATUS_LIST[statusIndexByKey(key)];}
 
 // ─────────────────────────────────────────
-//  ★ NEW — PRETTY NOTIFICATION POPUP (replaces browser alert())
+//  ★ PRETTY NOTIFICATION POPUP (replaces browser alert())
 // ─────────────────────────────────────────
 var NOTIFY_ICONS={info:'ℹ️',success:'✅',warn:'⚠️',error:'❌'};
 var NOTIFY_BTN_TEXT={info:'ຮັບຊາບແລ້ວ',success:'ຮັບຊາບແລ້ວ',warn:'ເຂົ້າໃຈແລ້ວ',error:'ຮັບຊາບແລ້ວ'};
@@ -1000,6 +1005,31 @@ function applyShipSuspension(){
       e.stopPropagation();
       notify(reason,'warn');
     };
+  });
+}
+
+// ★ ໂລໂກ້ຂອງແຕ່ລະຂົນສົ່ງ — ຮູບຈາກ Google Drive (ຕ້ອງຕັ້ງການແບ່ງປັນເປັນ "Anyone with the link")
+// ຖ້າຮູບໂຫຼດບໍ່ຂຶ້ນ ຫຼື ລິງວ່າງ ລະບົບຈະໃຊ້ emoji ເດີມແທນ (ປຸ່ມບໍ່ພັງ)
+var SHIP_LOGOS={
+  'ອານຸສິດ':  'https://drive.google.com/file/d/16CDSIz65rT_LnT6_6jxS2aJ66PbM4bnM/view?usp=sharing',
+  'ຮຸ່ງອາລຸນ': 'https://drive.google.com/file/d/1A-zoLK6FSKegn63LZetDWKeGPz2ouX6P/view?usp=sharing',
+  'ມີໄຊ':     'https://drive.google.com/file/d/1Pn6pW-XmRflueq1uTPrmPPQDGD1835li/view?usp=sharing',
+  'J&T':      'https://drive.google.com/file/d/1-rNqUelgGOYMcfYtGRaG6N-dc852JjID/view?usp=sharing'
+};
+
+// ★ ປ່ຽນ emoji ເປັນຮູບໂລໂກ້ — ໂຫຼດຮູບສຳເລັດແລ້ວຄ່ອຍປ່ຽນ ຖ້າໂຫຼດບໍ່ໄດ້ emoji ຍັງຢູ່ຄືເກົ່າ
+function applyShipLogos(){
+  document.querySelectorAll('.ship-opt').forEach(function(label){
+    var inp=label.querySelector('input[type="radio"]');
+    var ico=label.querySelector('.ship-ico');
+    if(!inp||!ico)return;
+    var url=SHIP_LOGOS[inp.value];
+    if(!url)return;
+    var img=new Image();
+    img.className='ship-logo';
+    img.alt=inp.value;
+    img.onload=function(){ if(ico.parentNode)ico.replaceWith(img); };
+    img.src=driveThumb(url,200);
   });
 }
 
@@ -1412,7 +1442,7 @@ function scrollToCart(){document.getElementById('right-panel').scrollIntoView({b
 var DISTRICTS_BY_PROVINCE={
   'ວຽງຈັນ (ນະຄອນຫຼວງ)':['ຈັນທະບູລີ','ໄຊເສດຖາ','ສີໂຄດຕະບອງ','ສີສັດຕະນາກ','ຫາດຊາຍຟອງ','ນາຊາຍທອງ','ໄຊທານີ','ສັງທອງ','ປາກງື່ມ'],
   'ວຽງຈັນ (ແຂວງ)':['ໂພນໂຮງ','ທຸລະຄົມ','ກາສີ','ວັງວຽງ','ແມດ','ຫີນເຫີບ','ແກ້ວອຸດົມ','ເຟືອງ','ຊະນະຄາມ','ວຽງຄຳ','ໝື່ນ'],
-  'ບໍລິຄຳໄຊ':['ປາກກະດິງ','ທ່າພະບາດ','ປາກຊັນ','ບໍລິຄັນ','ໄຊຈຳພອນ','ຄຳເກີດ','ເວियงທອງ'],
+  'ບໍລິຄຳໄຊ':['ປາກກະດິງ','ທ່າພະບາດ','ປາກຊັນ','ບໍລິຄັນ','ໄຊຈຳພອນ','ຄຳເກີດ','ວຽງທອງ'],
   'ຄຳມ່ວນ':['ທ່າແຂກ','ມະຫາໄຊ','ໜອງບົກ','ຫິນບູນ','ຍົມມະລາດ','ບົວລະພາ','ນາກາຍ','ເຊບັ້ງໄຟ','ໄຊບົວທອງ','ຄູນຄຳ'],
   'ສະຫວັນນະເຂດ':['ໄກສອນ ພົມວິຫານ','ອຸທຸມພອນ','ອາດສະພັງທອງ','ພິນ','ເຊໂປນ','ນອງ','ທ່າປາງທອງ','ສອງຄອນ','ຈຳພອນ','ຊານຸບູລີ','ໄຊບູລີ','ວິລະບູລີ','ອາດສະພອນ','ໄຊພູທອງ','ພະລານໄຊ'],
   'ສາລະວັນ':['ສາລະວັນ','ລະຄອນເພັງ','ວາປີ','ເລົ່າງາມ','ຕຸ້ມລານ','ຕະໂອ້ຍ','ຄົງເຊໂດນ','ສະມ້ວຍ'],
@@ -1975,7 +2005,7 @@ function adminRenderOrders(){
       slipHtml='<img class="slip-thumb" src="'+escHtml(thumb)+'" onerror="this.style.display=\'none\'" onclick="viewSlip(\''+slipUrlEsc+'\')" alt="slip"><button class="slip-view-btn" onclick="viewSlip(\''+slipUrlEsc+'\')">ເບິ່ງ</button>';
     }else if(o.slipStatus){slipHtml='<span style="color:var(--green);font-size:10px">'+escHtml(o.slipStatus)+'</span>';}
 
-    // ★ "ບິນຂົນສົ່ง" column — thumbnail+ view/replace if uploaded, otherwise an upload button
+    // ★ "ບິນຂົນສົ່ງ" column — thumbnail+ view/replace if uploaded, otherwise an upload button
     // (highlighted/pulsing when status is "ກຳລັງກຽມການຈັດສົ່ງ" and not yet uploaded)
     var shipBillHtml;
     if(o.shippingBillUrl){
@@ -2072,7 +2102,7 @@ function openOrderDetail(code){
     html+='<div class="od-items-box">'+escHtml(o.note)+'</div>';
   }
 
-  // ★ ໃໝ່: ສະລິບໂອນ + ບິນຂົນສົ່ງ — ໂຊຮູບໃຫ້ເຫັນທັງສອງຢ່າງໃນກ່ອງດຽວກັນ
+  // ★ ສະລິບໂອນ + ບິນຂົນສົ່ງ — ໂຊຮູບໃຫ້ເຫັນທັງສອງຢ່າງໃນກ່ອງດຽວກັນ
   html+='<div class="od-section-title">📸 ຫຼັກຖານ ສະລິບ / ບິນຂົນສົ່ງ</div>';
   html+='<div class="od-proof-grid">';
 
@@ -2151,7 +2181,7 @@ function confirmDeleteOrder(){
 }
 
 // ─────────────────────────────────────────
-//  ★ "ບິນຂົນສົ່ง" UPLOAD — Admin chooses an image, it's resized,
+//  ★ "ບິນຂົນສົ່ງ" UPLOAD — Admin chooses an image, it's resized,
 //  then sent to the backend and attached to the matching order
 // ─────────────────────────────────────────
 function triggerShipBillUpload(code){
@@ -2234,6 +2264,7 @@ function closeSlipModal(){
 // ─────────────────────────────────────────
 document.addEventListener('DOMContentLoaded',function(){
   loadProducts();
+  applyShipLogos();       // ★ ປ່ຽນ emoji ເປັນໂລໂກ້ຂົນສົ່ງ
   applyShipSuspension();
   // ★ ຕັ້ງຄ່າເລີ່ມຕົ້ນຂອງ admin date filter ໃຫ້ກົງກັບ "ມື້ນີ້"
   adminDateMode='today';
