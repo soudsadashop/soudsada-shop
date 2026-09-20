@@ -1754,110 +1754,277 @@ function fallbackCopy(text,cb){
 // ─────────────────────────────────────────
 //  DOWNLOAD RECEIPT (Canvas-based)
 // ─────────────────────────────────────────
+// ★ ຄວາມລະອຽດຂອງຮູບໃບບິນ: 3 = ຮູບກວ້າງ ~1560px (ຄົມຊັດ ຊູມໄດ້) — ຢາກຊັດກວ່ານີ້ປ່ຽນເປັນ 4
+var RECEIPT_SCALE=3;
+// ★ ໂລໂກ້ສຳລັບລາຍນ້ຳ — ລອງໂຫຼດຕາມລຳດັບ ອັນທຳອິດທີ່ໂຫຼດໄດ້ຈະຖືກໃຊ້
+// (ຖ້າໂຫຼດບໍ່ໄດ້ທັງໝົດ ລະບົບຈະໃຊ້ຕົວໜັງສື SOUDSADA SHOP ເປັນລາຍນ້ຳແທນ ໃບບິນບໍ່ພັງ)
+var RECEIPT_LOGO_URLS=['https://i.postimg.cc/d322Q33X/LOGO.jpg','icons/icon-512.png'];
+var RECEIPT_FONT="'Noto Sans Lao','Segoe UI','Leelawadee UI','Lao UI','Phetsarath OT',sans-serif";
+var receiptLogoImg=null,receiptLogoState='idle',receiptLogoWaiters=[]; // idle | loading | ok | fail
+var LAO_LEAD_VOWELS='ເແໂໄໃ';
+
+// ★ ໂຫຼດໂລໂກ້ລ່ວງໜ້າ (crossOrigin ເພື່ອບໍ່ໃຫ້ canvas ຖືກ "taint" ແລ້ວບັນທຶກຮູບບໍ່ໄດ້)
+function loadReceiptLogo(cb){
+  if(receiptLogoState==='ok'){if(cb)cb(receiptLogoImg);return;}
+  if(cb)receiptLogoWaiters.push(cb);
+  if(receiptLogoState==='loading')return;
+  receiptLogoState='loading';
+  var i=0;
+  function flush(){var w=receiptLogoWaiters.slice();receiptLogoWaiters=[];w.forEach(function(f){f(receiptLogoImg);});}
+  function tryNext(){
+    if(i>=RECEIPT_LOGO_URLS.length){receiptLogoState='fail';receiptLogoImg=null;flush();return;}
+    var img=new Image();
+    img.crossOrigin='anonymous';
+    img.onload=function(){receiptLogoImg=img;receiptLogoState='ok';flush();};
+    img.onerror=function(){i++;tryNext();};
+    img.src=RECEIPT_LOGO_URLS[i];
+  }
+  tryNext();
+}
+
+// ★ ສ້າງ QR ເປັນ canvas ໂດຍກົງ (ບໍ່ຂຶ້ນກັບ <img> ທີ່ qrcodejs ສ້າງຊ້າ — ນັ້ນຄືສາເຫດທີ່ QR ໃນໃບບິນເກົ່າວ່າງເປົ່າ)
+function makeQrCanvas(text,size){
+  var tmp=document.createElement('div');
+  tmp.style.cssText='position:fixed;left:-9999px;top:0;';
+  document.body.appendChild(tmp);
+  var out=null;
+  try{
+    new QRCode(tmp,{text:text,width:size,height:size,colorDark:'#1B5E3A',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    var src=tmp.querySelector('canvas');
+    if(src&&src.width){
+      out=document.createElement('canvas');
+      out.width=src.width;out.height=src.height;
+      out.getContext('2d').drawImage(src,0,0);
+    }
+  }catch(e){out=null;}
+  document.body.removeChild(tmp);
+  return out;
+}
+
+// ★ ແຍກຂໍ້ຄວາມເປັນຕົວອັກສອນ (ຮວມສະຫຼະ/ວັນນະຍຸດ ລາວໃຫ້ຢູ່ນຳກັນ)
+function splitGraphemes(s){
+  s=String(s||'');
+  try{
+    if(window.Intl&&Intl.Segmenter){
+      return Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(s),function(x){return x.segment;});
+    }
+  }catch(e){}
+  return s.match(/[\s\S][\u0EB1\u0EB4-\u0EB9\u0EBB\u0EBC\u0EC8-\u0ECD\u200D\uFE0F]*/gu)||[];
+}
+
+// ★ ຕັດແຖວຂໍ້ຄວາມຍາວ — ພາສາລາວບໍ່ມີຍະຫວ່າງລະຫວ່າງຄຳ ຈຶ່ງຕັດຕາມຕົວອັກສອນຖ້າຄຳຍາວເກີນແຖວ
+function wrapText(ctx,text,maxW){
+  var lines=[];
+  String(text==null?'':text).split('\n').forEach(function(par){
+    var line='';
+    function pushLine(){lines.push(line.replace(/\s+$/,''));line='';}
+    par.split(/(\s+)/).forEach(function(w){
+      if(!w)return;
+      if(ctx.measureText(line+w).width<=maxW){line+=w;return;}
+      if(line.trim())pushLine();
+      if(/^\s+$/.test(w)){line='';return;}
+      if(ctx.measureText(w).width<=maxW){line=w;return;}
+      splitGraphemes(w).forEach(function(g){
+        if(line&&ctx.measureText(line+g).width>maxW){
+          var last=line.slice(-1);
+          if(LAO_LEAD_VOWELS.indexOf(last)>=0){ // ຢ່າປ່ອຍສະຫຼະນຳໜ້າ (ເ ແ ໂ ໄ ໃ) ຄ້າງທ້າຍແຖວ
+            line=line.slice(0,-1);pushLine();line=last+g;
+          }else{pushLine();line=g;}
+        }else{line+=g;}
+      });
+    });
+    if(line)pushLine();else if(!par)lines.push('');
+  });
+  return lines.length?lines:[''];
+}
+
+function dashLine(ctx,x1,x2,y,color){
+  ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y);ctx.stroke();ctx.restore();
+}
+
+// ★ ລາຍນ້ຳໂລໂກ້ຮ້ານ (ຮູບກົມ ຈາງໆ) — ຖ້າບໍ່ມີໂລໂກ້ຈະໃຊ້ຕົວໜັງສືແທນ
+function drawReceiptWatermark(ctx,cx,cy,size){
+  ctx.save();
+  if(receiptLogoImg){
+    var iw=receiptLogoImg.naturalWidth||receiptLogoImg.width;
+    var ih=receiptLogoImg.naturalHeight||receiptLogoImg.height;
+    var side=Math.min(iw,ih);
+    ctx.globalAlpha=0.09;
+    ctx.beginPath();ctx.arc(cx,cy,size/2,0,Math.PI*2);ctx.closePath();ctx.clip();
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    ctx.drawImage(receiptLogoImg,(iw-side)/2,(ih-side)/2,side,side,cx-size/2,cy-size/2,size,size);
+  }else{
+    ctx.globalAlpha=0.07;
+    ctx.translate(cx,cy);ctx.rotate(-Math.PI/6);
+    ctx.fillStyle='#1B5E3A';ctx.font='bold 46px '+RECEIPT_FONT;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('SOUDSADA SHOP',0,0);
+  }
+  ctx.restore();
+}
+
+// ★ ວາດໃບບິນທັງໝົດ (ຫົວໜ່ວຍ = 520px ຕາມເດີມ, ຄູນ scale ຕອນສ້າງ canvas)
+// dry=true → ໃຊ້ວັດຄວາມສູງເທົ່ານັ້ນ · return ຄ່າ y ສຸດທ້າຍ
+function paintReceipt(ctx,H,d,qrCanvas,dry){
+  var W=520,pad=30,lineH=20,F=RECEIPT_FONT;
+  var headerH=108,innerW=W-pad*2;
+  var y;
+
+  ctx.save();
+  ctx.textBaseline='alphabetic';
+  ctx.fillStyle='#F0F4F8';ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#ffffff';roundRect(ctx,12,12,W-24,H-24,16);ctx.fill();
+
+  // ── ລາຍນ້ຳ: ວາດກ່ອນເນື້ອຫາ ຢູ່ດ້ານຫຼັງພື້ນສີຂາວ ──
+  if(!dry){
+    var areaTop=12+headerH,areaBottom=H-12;
+    drawReceiptWatermark(ctx,W/2,(areaTop+areaBottom)/2,Math.min(340,(areaBottom-areaTop)*0.85));
+  }
+
+  // ── ຫົວໃບບິນ ──
+  var grad=ctx.createLinearGradient(0,12,0,12+headerH);
+  grad.addColorStop(0,'#1B5E3A');grad.addColorStop(1,'#2D7A55');
+  ctx.fillStyle=grad;roundRectTop(ctx,12,12,W-24,headerH,16);ctx.fill();
+  var when=d._date?new Date(d._date):new Date();
+  ctx.textAlign='center';
+  ctx.fillStyle='#ffffff';ctx.font='bold 22px '+F;ctx.fillText('SOUDSADA SHOP',W/2,54);
+  ctx.font='13px '+F;ctx.fillText('ໃບບິນສັ່ງຊື້ / Order Receipt',W/2,78);
+  ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font='11px '+F;
+  ctx.fillText(when.toLocaleString('lo-LA',{timeZone:'Asia/Vientiane'}),W/2,98);
+  y=12+headerH+24;
+
+  // ── ລະຫັດອໍເດີ້ ──
+  ctx.fillStyle='rgba(232,245,238,0.93)';roundRect(ctx,pad,y,innerW,42,10);ctx.fill();
+  ctx.strokeStyle='#A8D5BC';ctx.lineWidth=1;roundRect(ctx,pad,y,innerW,42,10);ctx.stroke();
+  ctx.fillStyle='#2D7A55';ctx.font='bold 12px '+F;ctx.textAlign='left';
+  ctx.fillText('ລະຫັດອໍເດີ້',pad+14,y+26);
+  ctx.font='bold 18px monospace';ctx.textAlign='right';
+  ctx.fillText(d.code,W-pad-14,y+27);
+  y+=42+18;
+
+  // ── QR Code (ແຕ້ມ 1:1 ກັບພິກເຊວຈິງ ໃຫ້ຄົມຊັດ ສະແກນງ່າຍ) ──
+  var qs=qrCanvas?Math.min(qrCanvas.width/RECEIPT_SCALE,150):126;
+  var boxW=qs+28,boxH=qs+46,bx=(W-boxW)/2;
+  ctx.fillStyle='#ffffff';roundRect(ctx,bx,y,boxW,boxH,12);ctx.fill();
+  ctx.strokeStyle='#E2E8F0';roundRect(ctx,bx,y,boxW,boxH,12);ctx.stroke();
+  if(qrCanvas){
+    ctx.imageSmoothingEnabled=false;
+    try{ctx.drawImage(qrCanvas,bx+14,y+14,qs,qs);}catch(e){}
+    ctx.imageSmoothingEnabled=true;
+  }
+  ctx.fillStyle='#2D7A55';ctx.font='bold 12px monospace';ctx.textAlign='center';
+  ctx.fillText(d.code,W/2,y+qs+34);
+  y+=boxH+20;
+
+  dashLine(ctx,pad,W-pad,y,'#CBD5E1');
+  y+=24;
+
+  // ── ລາຍການສິນຄ້າ ──
+  ctx.fillStyle='#6B7280';ctx.font='bold 11px '+F;ctx.textAlign='left';
+  ctx.fillText('ລາຍການສິນຄ້າ',pad,y);y+=lineH+2;
+  d.cart.forEach(function(item){
+    ctx.font='13px '+F;
+    var lines=wrapText(ctx,item.name+' ×'+item.qty,innerW-100);
+    ctx.fillStyle='#1A1A2E';ctx.textAlign='left';
+    lines.forEach(function(ln,i){ctx.fillText(ln,pad,y+i*lineH);});
+    ctx.font='bold 13px '+F;ctx.fillStyle='#2D7A55';ctx.textAlign='right';
+    ctx.fillText(fN(item.price*item.qty)+' ₭',W-pad,y);
+    y+=lines.length*lineH+4;
+  });
+
+  // ── ລວມທັງໝົດ ──
+  y+=6;
+  ctx.fillStyle='rgba(232,245,238,0.93)';roundRect(ctx,pad,y,innerW,40,10);ctx.fill();
+  ctx.strokeStyle='#A8D5BC';roundRect(ctx,pad,y,innerW,40,10);ctx.stroke();
+  ctx.fillStyle='#2D7A55';ctx.font='bold 15px '+F;ctx.textAlign='left';
+  ctx.fillText('ລວມທັງໝົດ',pad+14,y+26);
+  ctx.font='bold 19px '+F;ctx.textAlign='right';
+  ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-14,y+27);
+  y+=40+26;
+
+  // ── ຂໍ້ມູນລູກຄ້າ (ຕັດແຖວອັດຕະໂນມັດ ຖ້າຂໍ້ຄວາມຍາວ) ──
+  var rows=[
+    ['👤 ຊື່',d.customerName+' | 020 '+d.customerPhone],
+    ['📍 ທີ່ຢູ່',d.customerAddr],
+    ['🚚 ຂົນສົ່ງ',d.shipping],
+    ['💳 ຊຳລະ',d.payment]
+  ];
+  if(d.note)rows.push(['📝 ໝາຍເຫດ',d.note]);
+  var labelW=84;
+  rows.forEach(function(r){
+    ctx.font='bold 12px '+F;
+    var lines=wrapText(ctx,r[1],innerW-labelW-8);
+    ctx.font='12px '+F;ctx.fillStyle='#6B7280';ctx.textAlign='left';
+    ctx.fillText(r[0],pad,y);
+    ctx.font='bold 12px '+F;ctx.fillStyle='#1A1A2E';ctx.textAlign='right';
+    lines.forEach(function(ln,i){ctx.fillText(ln,W-pad,y+i*lineH);});
+    var bottom=y+(lines.length-1)*lineH+7;
+    dashLine(ctx,pad,W-pad,bottom,'#E2E8F0');
+    y=bottom+15;
+  });
+
+  // ── ຂໍ້ຄວາມແຈ້ງເຕືອນ ──
+  y+=8;
+  ctx.font='bold 11px '+F;
+  var msg=wrapText(ctx,'📸 ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້ · ຫາກ 1-2 ມື້ ບໍ່ໄດ້ຮັບ ຕິດຕໍ່ 020 92833416',innerW-28);
+  var nbH=msg.length*16+34;
+  ctx.fillStyle='rgba(255,251,235,0.96)';roundRect(ctx,pad,y,innerW,nbH,10);ctx.fill();
+  ctx.strokeStyle='#FCD34D';roundRect(ctx,pad,y,innerW,nbH,10);ctx.stroke();
+  ctx.fillStyle='#92400E';ctx.textAlign='center';
+  msg.forEach(function(ln,i){ctx.fillText(ln,W/2,y+20+i*16);});
+  ctx.font='11px '+F;
+  ctx.fillText('SOUDSADA SHOP · soudsada2025@gmail.com',W/2,y+22+msg.length*16);
+  y+=nbH;
+
+  ctx.restore();
+  return y;
+}
+
+function buildAndSaveReceipt(d){
+  var S=RECEIPT_SCALE,W=520;
+  var qr=makeQrCanvas(d.code,132*S);
+
+  // ຮອບທີ 1: ວັດຄວາມສູງຈິງຂອງໃບບິນ (ຂຶ້ນກັບຈຳນວນສິນຄ້າ/ຄວາມຍາວຂໍ້ຄວາມ)
+  var meas=document.createElement('canvas').getContext('2d');
+  var endY=paintReceipt(meas,5000,d,qr,true);
+  var H=Math.ceil(endY+32);
+
+  // ຮອບທີ 2: ວາດຈິງດ້ວຍຄວາມລະອຽດສູງ
+  var canvas=document.createElement('canvas');
+  canvas.width=W*S;canvas.height=H*S;
+  var ctx=canvas.getContext('2d');
+  ctx.scale(S,S);
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  paintReceipt(ctx,H,d,qr,false);
+
+  var fname='SOUDSADA_Receipt_'+d.code+'.png';
+  function saveHref(href,revoke){
+    var a=document.createElement('a');
+    a.href=href;a.download=fname;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    if(revoke)setTimeout(function(){URL.revokeObjectURL(href);},4000);
+  }
+  if(canvas.toBlob){
+    canvas.toBlob(function(blob){
+      if(blob){saveHref(URL.createObjectURL(blob),true);}
+      else{saveHref(canvas.toDataURL('image/png'),false);}
+    },'image/png');
+  }else{
+    saveHref(canvas.toDataURL('image/png'),false);
+  }
+}
+
 function downloadReceipt(){
   var d=lastOrderData;
   if(!d||!d.code){notify('ບໍ່ມີຂໍ້ມູນໃບບິນ','warn');return;}
-
-  var qrEl=document.getElementById('receipt-qr-code');
-  var qrImg=qrEl.querySelector('img')||qrEl.querySelector('canvas');
-
-  var W=520;
-  var lineH=20;
-  var pad=24;
-  var headerH=100;
-  var qrSize=120;
-  var rows=d.cart.length+6+(d.note?1:0);
-  var H=pad*2+headerH+qrSize+40+rows*lineH+160;
-
-  var canvas=document.createElement('canvas');
-  canvas.width=W;canvas.height=H;
-  var ctx=canvas.getContext('2d');
-
-  ctx.fillStyle='#F0F4F8';ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#ffffff';
-  roundRect(ctx,12,12,W-24,H-24,14);ctx.fill();
-
-  var grad=ctx.createLinearGradient(0,12,0,headerH+12);
-  grad.addColorStop(0,'#1B5E3A');grad.addColorStop(1,'#2D7A55');
-  ctx.fillStyle=grad;
-  roundRectTop(ctx,12,12,W-24,headerH,14);ctx.fill();
-
-  ctx.fillStyle='#ffffff';
-  ctx.font='bold 20px sans-serif';ctx.textAlign='center';
-  ctx.fillText('SOUDSADA SHOP',W/2,50);
-  ctx.font='12px sans-serif';ctx.fillText('ໃບບິນສັ່ງຊື້ / Order Receipt',W/2,72);
-  ctx.font='10px sans-serif';ctx.fillStyle='rgba(255,255,255,0.75)';
-  var now=lastOrderData._date?new Date(lastOrderData._date):new Date();
-  ctx.fillText(now.toLocaleString('lo-LA',{timeZone:'Asia/Vientiane'}),W/2,92);
-
-  var y=headerH+24;
-
-  ctx.fillStyle='#E8F5EE';
-  roundRect(ctx,pad,y,W-pad*2,36,8);ctx.fill();
-  ctx.fillStyle='#2D7A55';ctx.font='bold 11px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລະຫັດອໍເດີ້:',pad+10,y+14);
-  ctx.font='bold 16px monospace';ctx.textAlign='right';
-  ctx.fillText(d.code,W-pad-10,y+22);
-  y+=50;
-
-  ctx.fillStyle='#ffffff';
-  roundRect(ctx,(W-qrSize-20)/2,y,qrSize+20,qrSize+30,10);ctx.fill();
-  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;
-  roundRect(ctx,(W-qrSize-20)/2,y,qrSize+20,qrSize+30,10);ctx.stroke();
-
-  if(qrImg){
-    try{ctx.drawImage(qrImg,(W-qrSize)/2,y+10,qrSize,qrSize);}catch(e){}
-  }
-  ctx.fillStyle='#2D7A55';ctx.font='bold 11px monospace';ctx.textAlign='center';
-  ctx.fillText(d.code,W/2,y+qrSize+24);
-  y+=qrSize+44;
-
-  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([4,3]);
-  ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();
-  ctx.setLineDash([]);y+=lineH;
-
-  ctx.fillStyle='#6B7280';ctx.font='bold 10px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລາຍການສິນຄ້າ',pad,y);y+=lineH;
-
-  d.cart.forEach(function(item){
-    ctx.font='12px sans-serif';ctx.fillStyle='#1A1A2E';ctx.textAlign='left';
-    ctx.fillText(item.name+' ×'+item.qty,pad,y);
-    ctx.textAlign='right';ctx.fillStyle='#2D7A55';ctx.font='bold 12px sans-serif';
-    ctx.fillText(fN(item.price*item.qty)+' ₭',W-pad,y);
-    ctx.textAlign='left';y+=lineH;
+  var btn=document.querySelector('.receipt-dl-btn');
+  if(btn){btn.disabled=true;btn.textContent='⏳ ກຳລັງສ້າງໃບບິນ...';}
+  loadReceiptLogo(function(){
+    try{buildAndSaveReceipt(d);}
+    catch(e){notify('ສ້າງຮູບໃບບິນບໍ່ສຳເລັດ ກະລຸນາແຄບຈໍໜ້ານີ້ໄວ້ແທນ','error');}
+    if(btn){btn.disabled=false;btn.textContent='⬇️ ດາວໂຫຼດໃບບິນ';}
   });
-
-  ctx.fillStyle='#E8F5EE';roundRect(ctx,pad,y,W-pad*2,30,6);ctx.fill();
-  ctx.fillStyle='#2D7A55';ctx.font='bold 14px sans-serif';ctx.textAlign='left';
-  ctx.fillText('ລວມທັງໝົດ',pad+10,y+20);
-  ctx.textAlign='right';ctx.font='bold 16px sans-serif';
-  ctx.fillText(fN(d.totalAmount)+' ₭',W-pad-10,y+20);y+=44;
-
-  ctx.strokeStyle='#E2E8F0';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  [['👤 ຊື່',d.customerName+' | 020 '+d.customerPhone],
-   ['📍 ທີ່ຢູ່',d.customerAddr],
-   ['🚚 ຂົນສົ່ງ',d.shipping],
-   ['💳 ຊຳລະ',d.payment],
-   d.note?['📝 ໝາຍເຫດ',d.note]:null
-  ].filter(Boolean).forEach(function(r){
-    ctx.font='10px sans-serif';ctx.fillStyle='#6B7280';ctx.textAlign='left';ctx.fillText(r[0],pad,y);
-    ctx.fillStyle='#1A1A2E';ctx.font='bold 10px sans-serif';ctx.textAlign='right';ctx.fillText(r[1],W-pad,y);
-    ctx.textAlign='left';ctx.beginPath();ctx.moveTo(pad,y+4);ctx.lineTo(W-pad,y+4);ctx.stroke();
-    y+=lineH;
-  });
-  ctx.setLineDash([]);y+=8;
-
-  ctx.fillStyle='#FFFBEB';roundRect(ctx,pad,y,W-pad*2,38,6);ctx.fill();
-  ctx.strokeStyle='#FCD34D';ctx.lineWidth=1;roundRect(ctx,pad,y,W-pad*2,38,6);ctx.stroke();
-  ctx.fillStyle='#92400E';ctx.font='bold 10px sans-serif';ctx.textAlign='center';
-  ctx.fillText('📸 ກະລຸນາບັນທຶກໃບບິນນີ້ໄວ້ · ຫາກ 1-2 ມື້ ບໍ່ໄດ້ຮັບ ຕິດຕໍ່ 020 92833416',W/2,y+16);
-  ctx.font='10px sans-serif';
-  ctx.fillText('SOUDSADA SHOP · soudsada2025@gmail.com',W/2,y+30);y+=50;
-
-  var link=document.createElement('a');
-  link.href=canvas.toDataURL('image/png');
-  link.download='SOUDSADA_Receipt_'+d.code+'.png';
-  link.click();
 }
 
 function roundRect(ctx,x,y,w,h,r){
@@ -2301,6 +2468,7 @@ function closeSlipModal(){
 document.addEventListener('DOMContentLoaded',function(){
   loadProducts();
   applyShipLogos();       // ★ ປ່ຽນ emoji ເປັນໂລໂກ້ຂົນສົ່ງ
+  loadReceiptLogo();      // ★ ໂຫຼດໂລໂກ້ລ່ວງໜ້າ ສຳລັບລາຍນ້ຳໃນໃບບິນ
   applyShipSuspension();
   // ★ ຕັ້ງຄ່າເລີ່ມຕົ້ນຂອງ admin date filter ໃຫ້ກົງກັບ "ມື້ນີ້"
   adminDateMode='today';
