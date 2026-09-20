@@ -1202,14 +1202,16 @@ function stopCamera(keepBadge){
 //   ຕົວອ່ານ (ໃຊ້ຫຼາຍຕົວພ້ອມກັນ ເພື່ອໃຫ້ອ່ານໄດ້ແນ່ນອນທີ່ສຸດ):
 //     1) BarcodeDetector ຂອງເບຣາວເຊີ (Chrome/Android — ບໍ່ຕ້ອງໂຫຼດຫຍັງຈາກອິນເຕີເນັດ)
 //     2) ZXing → ອ່ານບາໂຄດແທ່ງ      3) jsQR → ອ່ານ QR Code
-//   ໂມດູນ ZXing/jsQR: ລອງໂຫຼດຈາກໂຟນເດີ libs/ ຂອງເວັບໄຊກ່ອນ ແລ້ວຄ່ອຍໄປ CDN ຫຼາຍແຫຼ່ງ (ແຕ່ລະແຫຼ່ງລໍຖ້າສູງສຸດ 7 ວິນາທີ)
+//   ໂມດູນ ZXing/jsQR: ລອງໂຫຼດຈາກໄຟລ໌ໃນເວັບໄຊຂອງເຈົ້າກ່ອນ (ຢູ່ຂ້າງ index.html ຫຼື ໃນໂຟນເດີ libs/) ແລ້ວຄ່ອຍໄປ CDN ຫຼາຍແຫຼ່ງ (ແຕ່ລະແຫຼ່ງລໍຖ້າສູງສຸດ 7 ວິນາທີ)
 var ZXING_URLS=[
-  'libs/zxing.min.js',
+  'zxing.min.js',        // ໄຟລ໌ຢູ່ຂ້າງ index.html (ໂຟນເດີດຽວກັນ)
+  'libs/zxing.min.js',   // ຫຼື ຢູ່ໃນໂຟນເດີ libs
   'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
   'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js'
 ];
 var JSQR_URLS=[
-  'libs/jsQR.min.js',
+  'jsQR.min.js',         // ໄຟລ໌ຢູ່ຂ້າງ index.html (ໂຟນເດີດຽວກັນ)
+  'libs/jsQR.min.js',    // ຫຼື ຢູ່ໃນໂຟນເດີ libs
   'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js',
   'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js'
