@@ -1168,7 +1168,7 @@ function startCamera(){
     return;
   }
   setCamMsg('⏳ ກຳລັງເປີດກ້ອງ...');
-  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false})
+  navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false})
     .then(function(stream){
       cameraStream=stream;
       var video=document.getElementById('qr-video');
@@ -1199,37 +1199,74 @@ function stopCamera(keepBadge){
 }
 
 // ★ ສະແກນໄດ້ທັງ "ບາໂຄດແທ່ງ" (Code 128 — ໃບບິນໃໝ່) ແລະ "QR Code" (ໃບບິນເກົ່າ)
-//   ບາໂຄດ → ZXing   ·   QR → jsQR
+//   ຕົວອ່ານ (ໃຊ້ຫຼາຍຕົວພ້ອມກັນ ເພື່ອໃຫ້ອ່ານໄດ້ແນ່ນອນທີ່ສຸດ):
+//     1) BarcodeDetector ຂອງເບຣາວເຊີ (Chrome/Android — ບໍ່ຕ້ອງໂຫຼດຫຍັງຈາກອິນເຕີເນັດ)
+//     2) ZXing → ອ່ານບາໂຄດແທ່ງ      3) jsQR → ອ່ານ QR Code
+//   ໂມດູນ ZXing/jsQR: ລອງໂຫຼດຈາກໂຟນເດີ libs/ ຂອງເວັບໄຊກ່ອນ ແລ້ວຄ່ອຍໄປ CDN ຫຼາຍແຫຼ່ງ (ແຕ່ລະແຫຼ່ງລໍຖ້າສູງສຸດ 7 ວິນາທີ)
 var ZXING_URLS=[
+  'libs/zxing.min.js',
   'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
   'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js'
 ];
-var JSQR_URLS=['https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js'];
-var zxReader=null;
+var JSQR_URLS=[
+  'libs/jsQR.min.js',
+  'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js',
+  'https://unpkg.com/jsqr@1.4.0/dist/jsQR.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js'
+];
+var zxReader=null,nativeDetector=null,nativeBusy=false,nativeFails=0;
 
-// ໂຫຼດສະຄຣິບຈາກລາຍການ URL — ອັນທຳອິດທີ່ໃຊ້ໄດ້ຈະຖືກເລືອກ
+// ໂຫຼດສະຄຣິບຈາກລາຍການ URL — ອັນທຳອິດທີ່ໃຊ້ໄດ້ຈະຖືກເລືອກ (ຖ້າຊ້າ/ໂຫຼດບໍ່ໄດ້ ຂ້າມໄປອັນຕໍ່ໄປ)
 function loadScript(urls,isReady,cb){
   if(isReady()){cb(true);return;}
   var i=0;
   function next(){
     if(i>=urls.length){cb(false);return;}
-    var s=document.createElement('script');
+    var s=document.createElement('script'),fin=false,t;
+    function step(ok){
+      if(fin)return;
+      fin=true;clearTimeout(t);
+      if(ok&&isReady())cb(true);else next();
+    }
+    t=setTimeout(function(){step(false);},7000);
+    s.onload=function(){step(true);};
+    s.onerror=function(){step(false);};
     s.src=urls[i++];
-    s.onload=function(){if(isReady())cb(true);else next();};
-    s.onerror=next;
     document.head.appendChild(s);
   }
   next();
 }
 
+// ເປີດໃຊ້ BarcodeDetector ຂອງເບຣາວເຊີ (ຖ້າມີ)
+function initNativeDetector(cb){
+  nativeDetector=null;nativeFails=0;
+  if(!('BarcodeDetector' in window)){cb(false);return;}
+  var want=['code_128','qr_code'];
+  function make(formats){
+    try{nativeDetector=new BarcodeDetector({formats:formats});cb(true);}
+    catch(e){nativeDetector=null;cb(false);}
+  }
+  if(typeof BarcodeDetector.getSupportedFormats==='function'){
+    BarcodeDetector.getSupportedFormats().then(function(sup){
+      var f=want.filter(function(x){return sup.indexOf(x)>=0;});
+      if(f.length)make(f);else cb(false);
+    }).catch(function(){cb(false);});
+  }else{make(want);}
+}
+
 function loadScanLibs(cb){
-  var pending=2,zxOk=false;
+  var pending=3,natOk=false,jsOk=false,zxOk=false;
   function done(){
     if(--pending>0)return;
-    if(!zxOk)setCamMsg('⚠️ ໂຫຼດໂມດູນສະແກນບາໂຄດບໍ່ໄດ້ (ຍັງສະແກນ QR ໄດ້) ກວດສອບອິນເຕີເນັດ');
+    var msg='';
+    if(!natOk&&!jsOk&&!zxOk)msg='⚠️ ໂຫຼດໂມດູນສະແກນບໍ່ໄດ້ (ອິນເຕີເນັດອາດຊ້າ/ຖືກບລັອກ) — ກະລຸນາໃຊ້ແຖບ "ເລກບິນ" ແທນ ຫຼື ລອງໃໝ່';
+    else if(!natOk&&!zxOk)msg='⚠️ ໂຫຼດໂມດູນອ່ານບາໂຄດແທ່ງບໍ່ໄດ້ (ຍັງສະແກນ QR ໄດ້) — ຖ້າສະແກນບໍ່ໄດ້ ໃຫ້ໃຊ້ແຖບ "ເລກບິນ"';
+    else if(!natOk&&!jsOk)msg='⚠️ ໂຫຼດໂມດູນອ່ານ QR ບໍ່ໄດ້ (ຍັງສະແກນບາໂຄດແທ່ງໄດ້)';
+    if(msg)setCamMsg(msg);
     cb();
   }
-  loadScript(JSQR_URLS,function(){return !!window.jsQR;},function(){done();});
+  initNativeDetector(function(ok){natOk=ok;done();});
+  loadScript(JSQR_URLS,function(){return !!window.jsQR;},function(ok){jsOk=ok;done();});
   loadScript(ZXING_URLS,function(){return !!window.ZXing;},function(ok){zxOk=ok;done();});
 }
 
@@ -1269,11 +1306,22 @@ function decodeScanFrame(img){
 
 function startQRScan(){
   if(!cameraStream)return; // ຜູ້ໃຊ້ປິດກ້ອງໄປແລ້ວ ຕອນລໍຖ້າໂຫຼດໂມດູນ
+  if(!nativeDetector&&!window.jsQR&&!window.ZXing)return; // ບໍ່ມີຕົວອ່ານເລີຍ (ມີຂໍ້ຄວາມແຈ້ງແລ້ວ)
   var video=document.getElementById('qr-video');
   var canvas=document.createElement('canvas');
   var ctx=canvas.getContext('2d',{willReadFrequently:true});
   var lastResult='';
   var lastResultTime=0;
+
+  function report(text){
+    text=String(text||'').trim();
+    if(!text||!cameraStream)return;
+    var now=Date.now();
+    if(text!==lastResult||(now-lastResultTime)>4000){
+      lastResult=text;lastResultTime=now;
+      handleScanResult(text);
+    }
+  }
 
   clearInterval(scanInterval);
   scanInterval=setInterval(function(){
@@ -1284,16 +1332,25 @@ function startQRScan(){
     var w=Math.round(vw*k),h=Math.round(vh*k);
     canvas.width=w;canvas.height=h;
     ctx.drawImage(video,0,0,w,h);
-    var imageData;
-    try{ imageData=ctx.getImageData(0,0,w,h); }
-    catch(e){ return; }
-    var text=decodeScanFrame(imageData);
-    if(text){
-      var now=Date.now();
-      if(text!==lastResult||(now-lastResultTime)>4000){
-        lastResult=text;lastResultTime=now;
-        handleScanResult(text);
-      }
+
+    // (1) ຕົວອ່ານຂອງເບຣາວເຊີ (ເຮັດວຽກແບບ async)
+    if(nativeDetector&&!nativeBusy){
+      nativeBusy=true;
+      nativeDetector.detect(canvas).then(function(codes){
+        nativeFails=0;
+        if(codes&&codes.length&&codes[0].rawValue)report(codes[0].rawValue);
+      }).catch(function(){
+        if(++nativeFails>=5)nativeDetector=null; // ໃຊ້ບໍ່ໄດ້ຈິງ → ປິດ ແລ້ວໃຊ້ຕົວອ່ານອື່ນແທນ
+      }).then(function(){nativeBusy=false;});
+    }
+
+    // (2)+(3) ZXing (ບາໂຄດ) ແລະ jsQR (QR)
+    if(window.ZXing||window.jsQR){
+      var imageData;
+      try{ imageData=ctx.getImageData(0,0,w,h); }
+      catch(e){ return; }
+      var text=decodeScanFrame(imageData);
+      if(text)report(text);
     }
   },250);
 }
