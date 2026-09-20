@@ -25,7 +25,6 @@
 <meta property="og:image" content="icons/icon-512.png" />
 <meta property="og:type" content="website" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --green:#2D7A55;--green-dk:#1B5E3A;--green-lt:#E8F5EE;--green-md:#4CAF7D;
@@ -90,7 +89,7 @@ input,select,textarea{font-family:inherit}
 .camera-video-wrap{position:relative;background:#000;border-radius:10px;overflow:hidden;max-width:320px;margin:0 auto}
 #qr-video{width:100%;display:block;max-height:220px;object-fit:cover}
 .camera-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.camera-frame{width:160px;height:160px;border:3px solid var(--green);border-radius:12px;box-shadow:0 0 0 2000px rgba(0,0,0,.35)}
+.camera-frame{width:240px;height:120px;border:3px solid var(--green);border-radius:12px;box-shadow:0 0 0 2000px rgba(0,0,0,.35)}
 .camera-corner{position:absolute;width:20px;height:20px;border-color:var(--gold);border-style:solid;border-width:0}
 .camera-corner.tl{top:0;left:0;border-top-width:3px;border-left-width:3px;border-radius:4px 0 0 0}
 .camera-corner.tr{top:0;right:0;border-top-width:3px;border-right-width:3px;border-radius:0 4px 0 0}
@@ -338,8 +337,8 @@ input,select,textarea{font-family:inherit}
 /* QR code in receipt */
 .receipt-qr-section{text-align:center;margin-bottom:14px;padding:12px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
 .receipt-qr-label{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
-#receipt-qr-code{display:inline-block;background:#fff;padding:8px;border-radius:8px;border:1.5px solid var(--border)}
-#receipt-qr-code canvas,#receipt-qr-code img{display:block}
+#receipt-qr-code{display:block;width:100%;max-width:346px;margin:0 auto;background:#fff;padding:8px;border-radius:8px;border:1.5px solid var(--border)}
+#receipt-qr-code canvas,#receipt-qr-code img{display:block;width:100%;height:auto}
 .receipt-qr-code-text{font-size:11px;font-weight:800;color:var(--green);margin-top:6px;font-family:monospace;letter-spacing:1px}
 
 /* Receipt items */
@@ -596,7 +595,7 @@ input,select,textarea{font-family:inherit}
   <div class="track-tab-header">
     <button class="track-tab-btn active" onclick="switchTrackTab('order',this)" id="ttb-order">📦 ເລກບິນ</button>
     <button class="track-tab-btn" onclick="switchTrackTab('phone',this)" id="ttb-phone">📱 ເບີໂທ</button>
-    <button class="track-tab-btn" onclick="switchTrackTab('scan',this)" id="ttb-scan">📷 ສະແກນ QR</button>
+    <button class="track-tab-btn" onclick="switchTrackTab('scan',this)" id="ttb-scan">📷 ສະແກນບາໂຄດ</button>
   </div>
   <div class="track-tab-body">
     <!-- Pane 1: OrderID -->
@@ -634,7 +633,7 @@ input,select,textarea{font-family:inherit}
         </div>
         <div class="scan-result-badge" id="scan-result-badge"></div>
         <div class="cam-status-msg" id="cam-status-msg"></div>
-        <div class="cam-hint">ວາງ QR Code ຢູ່ໃນກ່ອງ · ລະບົບຈະສະແກນອັດຕະໂນມັດ<br>ຮັບຮອງ QR ຈາກໃບບິນ SOUDSADA SHOP</div>
+        <div class="cam-hint">ວາງບາໂຄດ (ເສັ້ນຂີດ) ຢູ່ໃນກອບ · ລະບົບຈະສະແກນອັດຕະໂນມັດ<br>ຮອງຮັບບາໂຄດ ແລະ QR ຈາກໃບບິນ SOUDSADA SHOP</div>
       </div>
     </div>
     <!-- Result -->
@@ -803,7 +802,7 @@ input,select,textarea{font-family:inherit}
 
       <!-- QR code of OrderID -->
       <div class="receipt-qr-section">
-        <div class="receipt-qr-label">📲 QR Code ສຳລັບກວດສອບອໍເດີ້</div>
+        <div class="receipt-qr-label">📊 ບາໂຄດສຳລັບກວດສອບອໍເດີ້</div>
         <div id="receipt-qr-code"></div>
         <div class="receipt-qr-code-text" id="receipt-qr-code-text"></div>
       </div>
@@ -1180,7 +1179,7 @@ function startCamera(){
       document.getElementById('btn-cam-stop').style.display='';
       document.getElementById('scan-result-badge').classList.remove('show');
       setCamMsg('🔎 ກຳລັງສະແກນ...');
-      loadJsQR(function(){ startQRScan(); });
+      loadScanLibs(function(){ startQRScan(); });
     })
     .catch(function(err){
       setCamMsg('');
@@ -1199,7 +1198,77 @@ function stopCamera(keepBadge){
   if(!keepBadge)document.getElementById('scan-result-badge').classList.remove('show');
 }
 
+// ★ ສະແກນໄດ້ທັງ "ບາໂຄດແທ່ງ" (Code 128 — ໃບບິນໃໝ່) ແລະ "QR Code" (ໃບບິນເກົ່າ)
+//   ບາໂຄດ → ZXing   ·   QR → jsQR
+var ZXING_URLS=[
+  'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
+  'https://unpkg.com/@zxing/library@0.21.3/umd/index.min.js'
+];
+var JSQR_URLS=['https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js'];
+var zxReader=null;
+
+// ໂຫຼດສະຄຣິບຈາກລາຍການ URL — ອັນທຳອິດທີ່ໃຊ້ໄດ້ຈະຖືກເລືອກ
+function loadScript(urls,isReady,cb){
+  if(isReady()){cb(true);return;}
+  var i=0;
+  function next(){
+    if(i>=urls.length){cb(false);return;}
+    var s=document.createElement('script');
+    s.src=urls[i++];
+    s.onload=function(){if(isReady())cb(true);else next();};
+    s.onerror=next;
+    document.head.appendChild(s);
+  }
+  next();
+}
+
+function loadScanLibs(cb){
+  var pending=2,zxOk=false;
+  function done(){
+    if(--pending>0)return;
+    if(!zxOk)setCamMsg('⚠️ ໂຫຼດໂມດູນສະແກນບາໂຄດບໍ່ໄດ້ (ຍັງສະແກນ QR ໄດ້) ກວດສອບອິນເຕີເນັດ');
+    cb();
+  }
+  loadScript(JSQR_URLS,function(){return !!window.jsQR;},function(){done();});
+  loadScript(ZXING_URLS,function(){return !!window.ZXing;},function(ok){zxOk=ok;done();});
+}
+
+function getZxReader(){
+  if(zxReader)return zxReader;
+  if(!window.ZXing)return null;
+  var hints=new Map();
+  hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.CODE_128]);
+  hints.set(ZXing.DecodeHintType.TRY_HARDER,true);
+  zxReader=new ZXing.MultiFormatReader();
+  zxReader.setHints(hints);
+  return zxReader;
+}
+
+// ອ່ານບາໂຄດ Code 128 ຈາກ ImageData ຂອງເຟຣມກ້ອງ
+function zxingDecode(img){
+  var reader=getZxReader();
+  if(!reader)return '';
+  var w=img.width,h=img.height,d=img.data,lum=new Uint8ClampedArray(w*h);
+  for(var i=0,j=0;i<d.length;i+=4,j++){lum[j]=(d[i]*306+d[i+1]*601+d[i+2]*117)>>10;}
+  try{
+    var bmp=new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(new ZXing.RGBLuminanceSource(lum,w,h)));
+    var res=reader.decode(bmp);
+    return res?String(res.getText()||''):'';
+  }catch(e){return '';}
+}
+
+// ລອງອ່ານບາໂຄດກ່ອນ ຖ້າບໍ່ໄດ້ຄ່ອຍລອງ QR
+function decodeScanFrame(img){
+  var txt=zxingDecode(img);
+  if(!txt&&window.jsQR){
+    var q=window.jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+    if(q&&q.data)txt=q.data;
+  }
+  return txt;
+}
+
 function startQRScan(){
+  if(!cameraStream)return; // ຜູ້ໃຊ້ປິດກ້ອງໄປແລ້ວ ຕອນລໍຖ້າໂຫຼດໂມດູນ
   var video=document.getElementById('qr-video');
   var canvas=document.createElement('canvas');
   var ctx=canvas.getContext('2d',{willReadFrequently:true});
@@ -1208,31 +1277,25 @@ function startQRScan(){
 
   clearInterval(scanInterval);
   scanInterval=setInterval(function(){
-    if(!window.jsQR||!video||!video.videoWidth)return;
-    canvas.width=video.videoWidth;
-    canvas.height=video.videoHeight;
-    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    if(!video||!video.videoWidth)return;
+    // ຫຍໍ້ເຟຣມໃຫ້ກວ້າງບໍ່ເກີນ 900px ເພື່ອໃຫ້ອ່ານໄວ ແລະ ບໍ່ໜັກເຄື່ອງ
+    var vw=video.videoWidth,vh=video.videoHeight;
+    var k=Math.min(1,900/vw);
+    var w=Math.round(vw*k),h=Math.round(vh*k);
+    canvas.width=w;canvas.height=h;
+    ctx.drawImage(video,0,0,w,h);
     var imageData;
-    try{ imageData=ctx.getImageData(0,0,canvas.width,canvas.height); }
+    try{ imageData=ctx.getImageData(0,0,w,h); }
     catch(e){ return; }
-    var code=window.jsQR(imageData.data,imageData.width,imageData.height,{inversionAttempts:'attemptBoth'});
-    if(code&&code.data){
+    var text=decodeScanFrame(imageData);
+    if(text){
       var now=Date.now();
-      if(code.data!==lastResult||(now-lastResultTime)>4000){
-        lastResult=code.data;lastResultTime=now;
-        handleScanResult(code.data);
+      if(text!==lastResult||(now-lastResultTime)>4000){
+        lastResult=text;lastResultTime=now;
+        handleScanResult(text);
       }
     }
-  },300);
-}
-
-function loadJsQR(cb){
-  if(window.jsQR){cb();return;}
-  var s=document.createElement('script');
-  s.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
-  s.onload=cb;
-  s.onerror=function(){setCamMsg('⚠️ ໂຫຼດໂມດູນສະແກນບໍ່ໄດ້ ກວດສອບອິນເຕີເນັດ');};
-  document.head.appendChild(s);
+  },250);
 }
 
 function handleScanResult(val){
@@ -1247,7 +1310,7 @@ function handleScanResult(val){
     .then(function(r){return r.json();})
     .then(function(d){
       if(!d||d.status==='not_found'){
-        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບ QR Code ນີ້ ຫຼື ບໍ່ແມ່ນໃບບິນ SOUDSADA SHOP</div></div>';
+        res.innerHTML='<div class="status-box"><div class="status-not-found">❌ ບໍ່ພົບບາໂຄດ/QR ນີ້ ຫຼື ບໍ່ແມ່ນໃບບິນ SOUDSADA SHOP</div></div>';
         return;
       }
       res.innerHTML=buildStatusHtml(d);
@@ -1661,18 +1724,12 @@ function showSuccess(orderData,nowDate){
   document.getElementById('receipt-code-val').textContent=orderData.code;
   document.getElementById('receipt-qr-code-text').textContent=orderData.code;
 
+  // ★ ບາໂຄດແທ່ງ Code 128 ຂອງລະຫັດອໍເດີ້ (ແທນ QR)
   var qrEl=document.getElementById('receipt-qr-code');
   qrEl.innerHTML='';
-  try{
-    new QRCode(qrEl,{
-      text:orderData.code,
-      width:128,height:128,
-      colorDark:'#1B5E3A',colorLight:'#ffffff',
-      correctLevel:QRCode.CorrectLevel.M
-    });
-  }catch(e){
-    qrEl.innerHTML='<div style="width:128px;height:128px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:10px;color:#6B7280;border-radius:6px">QR: '+escHtml(orderData.code)+'</div>';
-  }
+  var bc=makeBarcodeCanvas(orderData.code,1000,180);
+  if(bc){qrEl.appendChild(bc);}
+  else{qrEl.innerHTML='<div style="padding:18px;text-align:center;font-family:monospace;font-weight:800;color:#1B5E3A">'+escHtml(orderData.code)+'</div>';}
 
   var itemsHtml='';
   orderData.cart.forEach(function(item){
@@ -1782,23 +1839,42 @@ function loadReceiptLogo(cb){
   tryNext();
 }
 
-// ★ ສ້າງ QR ເປັນ canvas ໂດຍກົງ (ບໍ່ຂຶ້ນກັບ <img> ທີ່ qrcodejs ສ້າງຊ້າ — ນັ້ນຄືສາເຫດທີ່ QR ໃນໃບບິນເກົ່າວ່າງເປົ່າ)
-function makeQrCanvas(text,size){
-  var tmp=document.createElement('div');
-  tmp.style.cssText='position:fixed;left:-9999px;top:0;';
-  document.body.appendChild(tmp);
-  var out=null;
-  try{
-    new QRCode(tmp,{text:text,width:size,height:size,colorDark:'#1B5E3A',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-    var src=tmp.querySelector('canvas');
-    if(src&&src.width){
-      out=document.createElement('canvas');
-      out.width=src.width;out.height=src.height;
-      out.getContext('2d').drawImage(src,0,0);
-    }
-  }catch(e){out=null;}
-  document.body.removeChild(tmp);
-  return out;
+// ★ Code 128 (Subset B) — ຕົວເຂົ້າລະຫັດບາໂຄດແທ່ງ ຂຽນເອງ ບໍ່ຕ້ອງໃຊ້ຫ້ອງສະໝຸດ
+//   ຮອງຮັບຕົວອັກສອນ ASCII 32-126 (A-Z, 0-9, ຂີດ -) ເຊິ່ງລະຫັດອໍເດີ້ເຊັ່ນ P0660-3147 ໃຊ້ໄດ້ທັງໝົດ
+var CODE128_PATTERNS=['212222','222122','222221','121223','121322','131222','122213','122312','132212','221213','221312','231212','112232','122132','122231','113222','123122','123221','223211','221132','221231','213212','223112','312131','311222','321122','321221','312212','322112','322211','212123','212321','232121','111323','131123','131321','112313','132113','132311','211313','231113','231311','112133','112331','132131','113123','113321','133121','313121','211331','231131','213113','213311','213131','311123','311321','331121','312113','312311','332111','314111','221411','431111','111224','111422','121124','121421','141122','141221','112214','112412','122114','122411','142112','142211','241211','221114','413111','241112','134111','111242','121142','121241','114212','124112','124211','411212','421112','421211','212141','214121','412121','111143','111341','131141','114113','114311','411113','411311','113141','114131','311141','411131','211412','211214','211232','2331112'];
+
+function code128Encode(text){
+  var vals=[104],sum=104; // 104 = Start B
+  for(var i=0;i<text.length;i++){
+    var c=text.charCodeAt(i);
+    if(c<32||c>126)return null;
+    var v=c-32;vals.push(v);sum+=v*(i+1);
+  }
+  vals.push(sum%103);  // ຕົວກວດສອບ (checksum)
+  vals.push(106);      // Stop
+  return vals.map(function(v){return CODE128_PATTERNS[v];}).join('');
+}
+
+// ສ້າງບາໂຄດເປັນ canvas — ຄວາມກວ້າງຂອງເສັ້ນເປັນຈຳນວນເຕັມພິກເຊວ ຈຶ່ງຄົມຊັດ ສະແກນງ່າຍ
+// maxWPhys = ຄວາມກວ້າງສູງສຸດ (ພິກເຊວຈິງ), hPhys = ຄວາມສູງ (ພິກເຊວຈິງ)
+function makeBarcodeCanvas(text,maxWPhys,hPhys){
+  var pat=code128Encode(String(text||''));
+  if(!pat)return null;
+  var quiet=10,total=0,i;
+  for(i=0;i<pat.length;i++)total+=+pat.charAt(i);
+  var mp=Math.max(2,Math.floor(maxWPhys/(total+quiet*2)));
+  var c=document.createElement('canvas');
+  c.width=(total+quiet*2)*mp;c.height=hPhys;
+  var x=c.getContext('2d');
+  x.fillStyle='#ffffff';x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#0F172A';
+  var pos=quiet*mp;
+  for(i=0;i<pat.length;i++){
+    var w=(+pat.charAt(i))*mp;
+    if(i%2===0)x.fillRect(pos,0,w,hPhys);
+    pos+=w;
+  }
+  return c;
 }
 
 // ★ ແຍກຂໍ້ຄວາມເປັນຕົວອັກສອນ (ຮວມສະຫຼະ/ວັນນະຍຸດ ລາວໃຫ້ຢູ່ນຳກັນ)
@@ -1866,7 +1942,7 @@ function drawReceiptWatermark(ctx,cx,cy,size){
 
 // ★ ວາດໃບບິນທັງໝົດ (ຫົວໜ່ວຍ = 520px ຕາມເດີມ, ຄູນ scale ຕອນສ້າງ canvas)
 // dry=true → ໃຊ້ວັດຄວາມສູງເທົ່ານັ້ນ · return ຄ່າ y ສຸດທ້າຍ
-function paintReceipt(ctx,H,d,qrCanvas,dry){
+function paintReceipt(ctx,H,d,barCanvas,dry){
   var W=520,pad=30,lineH=20,F=RECEIPT_FONT;
   var headerH=108,innerW=W-pad*2;
   var y;
@@ -1903,18 +1979,22 @@ function paintReceipt(ctx,H,d,qrCanvas,dry){
   ctx.fillText(d.code,W-pad-14,y+27);
   y+=42+18;
 
-  // ── QR Code (ແຕ້ມ 1:1 ກັບພິກເຊວຈິງ ໃຫ້ຄົມຊັດ ສະແກນງ່າຍ) ──
-  var qs=qrCanvas?Math.min(qrCanvas.width/RECEIPT_SCALE,150):126;
-  var boxW=qs+28,boxH=qs+46,bx=(W-boxW)/2;
-  ctx.fillStyle='#ffffff';roundRect(ctx,bx,y,boxW,boxH,12);ctx.fill();
-  ctx.strokeStyle='#E2E8F0';roundRect(ctx,bx,y,boxW,boxH,12);ctx.stroke();
-  if(qrCanvas){
+  // ── ບາໂຄດແທ່ງ Code 128 + ເລກລະຫັດ (ແຕ້ມ 1:1 ກັບພິກເຊວຈິງ ໃຫ້ຄົມຊັດ ສະແກນງ່າຍ) ──
+  var bw=barCanvas?barCanvas.width/RECEIPT_SCALE:0;
+  var bh=barCanvas?barCanvas.height/RECEIPT_SCALE:0;
+  var boxH=bh+68;
+  ctx.fillStyle='#ffffff';roundRect(ctx,pad,y,innerW,boxH,12);ctx.fill();
+  ctx.strokeStyle='#E2E8F0';roundRect(ctx,pad,y,innerW,boxH,12);ctx.stroke();
+  ctx.fillStyle='#6B7280';ctx.font='11px '+F;ctx.textAlign='center';
+  ctx.fillText('ບາໂຄດສຳລັບກວດສອບອໍເດີ້',W/2,y+22);
+  if(barCanvas){
+    var bx=Math.round((W*RECEIPT_SCALE-barCanvas.width)/2)/RECEIPT_SCALE; // ຈັດໃຫ້ຕົງພິກເຊວພໍດີ
     ctx.imageSmoothingEnabled=false;
-    try{ctx.drawImage(qrCanvas,bx+14,y+14,qs,qs);}catch(e){}
+    try{ctx.drawImage(barCanvas,bx,y+30,bw,bh);}catch(e){}
     ctx.imageSmoothingEnabled=true;
   }
-  ctx.fillStyle='#2D7A55';ctx.font='bold 12px monospace';ctx.textAlign='center';
-  ctx.fillText(d.code,W/2,y+qs+34);
+  ctx.fillStyle='#1B5E3A';ctx.font='bold 17px monospace';ctx.textAlign='center';
+  ctx.fillText(d.code,W/2,y+30+bh+26);
   y+=boxH+20;
 
   dashLine(ctx,pad,W-pad,y,'#CBD5E1');
@@ -1983,11 +2063,11 @@ function paintReceipt(ctx,H,d,qrCanvas,dry){
 
 function buildAndSaveReceipt(d){
   var S=RECEIPT_SCALE,W=520;
-  var qr=makeQrCanvas(d.code,132*S);
+  var bar=makeBarcodeCanvas(d.code,(460-24)*S,70*S); // ບາໂຄດ Code 128
 
   // ຮອບທີ 1: ວັດຄວາມສູງຈິງຂອງໃບບິນ (ຂຶ້ນກັບຈຳນວນສິນຄ້າ/ຄວາມຍາວຂໍ້ຄວາມ)
   var meas=document.createElement('canvas').getContext('2d');
-  var endY=paintReceipt(meas,5000,d,qr,true);
+  var endY=paintReceipt(meas,5000,d,bar,true);
   var H=Math.ceil(endY+32);
 
   // ຮອບທີ 2: ວາດຈິງດ້ວຍຄວາມລະອຽດສູງ
@@ -1996,7 +2076,7 @@ function buildAndSaveReceipt(d){
   var ctx=canvas.getContext('2d');
   ctx.scale(S,S);
   ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-  paintReceipt(ctx,H,d,qr,false);
+  paintReceipt(ctx,H,d,bar,false);
 
   var fname='SOUDSADA_Receipt_'+d.code+'.png';
   function saveHref(href,revoke){
