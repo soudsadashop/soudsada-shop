@@ -174,6 +174,9 @@ input,select,textarea{font-family:inherit}
 .badge-ok{background:#DCF5E8;color:#1A6B3C}
 .badge-low{background:#FEF3C7;color:#92400E}
 .badge-out{background:#FEE2E2;color:#991B1B}
+.prod-check{position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.92);border:2px solid #9CA3AF;color:transparent;font-size:15px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.25);transition:all .15s;pointer-events:none}
+.prod-card.in-cart .prod-check{background:var(--green);border-color:#fff;color:#fff;transform:scale(1.08)}
+.prod-card.out .prod-check{display:none}
 .cart-qty-badge{position:absolute;top:5px;right:5px;background:var(--green);border-radius:50%;color:#fff;font-size:10px;font-weight:900;width:20px;height:20px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:3}
 .prod-card.in-cart .cart-qty-badge{display:flex}
 .empty-state{text-align:center;padding:28px 14px;color:var(--muted);font-size:12px;grid-column:1/-1}
@@ -608,7 +611,7 @@ input,select,textarea{font-family:inherit}
     <!-- Pane 2: Phone -->
     <div class="track-pane" id="tp-phone">
       <div class="track-row">
-        <input class="track-inp" id="inp-phone" type="tel" placeholder="ໃສ່ເບີໂທ 8 ໂຕ ເຊັ່ນ 99999999" maxlength="8" oninput="this.value=this.value.replace(/\D/g,'').slice(0,8)" onkeydown="if(event.key==='Enter')trackByPhone()">
+        <input class="track-inp" id="inp-phone" type="tel" placeholder="ໃສ່ເບີໂທ 8 ໂຕ ເຊັ່ນ 99999999" oninput="onPhoneInput(this)" onkeydown="if(event.key==='Enter')trackByPhone()">
         <button class="track-btn" onclick="trackByPhone()">🔍 ກວດສອບ</button>
       </div>
     </div>
@@ -663,28 +666,12 @@ input,select,textarea{font-family:inherit}
 
     <!-- RIGHT: QTY + CART + FORM -->
     <div class="right-panel" id="right-panel">
-      <div class="qty-panel" id="qty-panel">
-        <div class="qty-panel-top">
-          <div class="qty-prod-name" id="qty-name"></div>
-          <div class="qty-stock-info" id="qty-stock"></div>
-        </div>
-        <div class="qty-row">
-          <div class="qty-ctrl">
-            <button class="qty-btn" onclick="changeQty(-1)">−</button>
-            <input class="qty-num" id="qty-num" type="number" value="1" min="1" max="99">
-            <button class="qty-btn" onclick="changeQty(1)">+</button>
-          </div>
-          <button class="qty-cancel-btn" onclick="closeQtyPanel()">ປິດ</button>
-          <button class="qty-confirm-btn" onclick="confirmQty()">✓ ຢືນຢັນ</button>
-        </div>
-      </div>
-
       <div class="panel-card" id="cart-panel">
         <div class="cart-header">
-          <h3>🛒 ລາຍການສິນຄ້າ</h3>
+          <h3>🛒 ລາຍການສິນຄ້າ <span id="cart-lines" style="font-size:11px;color:var(--muted);font-weight:700"></span></h3>
           <button class="cart-clear-btn" onclick="clearCart()">ລ້າງທັງໝົດ</button>
         </div>
-        <div class="cart-items-wrap"><div class="cart-items" id="cart-items"><div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div></div></div>
+        <div class="cart-items-wrap"><div class="cart-items" id="cart-items"><div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ຕິກເລືອກສິນຄ້າໄດ້ຫຼາຍລາຍການ</small></div></div></div>
         <div class="cart-total-row"><span>ລວມທັງໝົດ</span><strong id="cart-total">0 ₭</strong></div>
       </div>
 
@@ -697,10 +684,10 @@ input,select,textarea{font-family:inherit}
               <label>ເບີໂທ (8 ໂຕ) <span class="req">*</span></label>
               <div class="phone-input-wrap" id="phone-wrap">
                 <span class="phone-prefix">🇱🇦 +856</span>
-                <input type="tel" id="c-phone" placeholder="99999999" maxlength="8" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'').slice(0,8)">
+                <input type="tel" id="c-phone" placeholder="99999999" inputmode="numeric" oninput="onPhoneInput(this)">
               </div>
               <div class="field-hint">ໃສ່ພຽງ 8 ໂຕເລກ ບໍ່ຕ້ອງໃສ່ 020 ນຳໜ້າ (ລະບົບຈະຕື່ມລະຫັດປະເທດໃຫ້ອັດຕະໂນມັດ)</div>
-              <div class="field-error" id="err-phone">ກະລຸນາໃສ່ເບີໂທ 8 ໂຕ ໃຫ້ຄົບ</div>
+              <div class="field-error" id="err-phone">ກະລຸນາໃສ່ເບີໂທ 8 ໂຕ ໃຫ້ຄົບ (ຫ້າມໃສ່ 020 ຫຼື 20 ຂຶ້ນຕົ້ນ)</div>
             </div>
           </div>
         </div>
@@ -1451,7 +1438,8 @@ function renderProds(prods){
     var sn=name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     var ci=cart.find(function(c){return c.name===name;});
     var inC=!!ci,cQ=ci?ci.qty:0;
-    html+='<div class="prod-card'+(qty<=0?' out':'')+(inC?' in-cart':'')+'" onclick="'+(qty<=0?'':'selectProd(\''+sn+'\')')+'">'
+    html+='<div class="prod-card'+(qty<=0?' out':'')+(inC?' in-cart':'')+'" data-name="'+escHtml(name)+'" onclick="'+(qty<=0?'':'toggleProd(\''+sn+'\')')+'">'
+      +'<span class="prod-check" aria-hidden="true">✓</span>'
       +'<div class="cart-qty-badge">'+cQ+'</div>'
       +'<div class="prod-thumb-wrap"><img class="prod-thumb" src="'+(img||noImg)+'" alt="'+escHtml(name)+'" loading="lazy" onerror="this.src=\''+noImg+'\'">'
       +'<button class="prod-zoom-btn" title="ເບິ່ງຮູບໃຫຍ່" onclick="event.stopPropagation();openImgView(\''+sn+'\')">🔍</button></div>'
@@ -1495,7 +1483,8 @@ function openImgView(name){
     selBtn.style.opacity='.5';
     selBtn.style.cursor='not-allowed';
   }else{
-    selBtn.textContent='🛒 ເລືອກສິນຄ້ານີ້';
+    var already=cart.some(function(c){return c.name===name;});
+    selBtn.textContent=already?'✓ ເລືອກແລ້ວ · ກົດເພື່ອເອົາອອກ':'🛒 ເລືອກສິນຄ້ານີ້';
     selBtn.disabled=false;
     selBtn.style.opacity='';
     selBtn.style.cursor='';
@@ -1512,40 +1501,42 @@ function selectFromImgView(){
   if(!imgViewProdName)return;
   var name=imgViewProdName;
   closeImgView();
-  selectProd(name);
+  toggleProd(name);
 }
 
 // ─────────────────────────────────────────
-//  QTY PANEL
+//  ★ TICK SELECT — ຕິກເລືອກສິນຄ້າໄດ້ຫຼາຍລາຍການ (ກົດຄັ້ງທີ 1 = ເລືອກ ໃສ່ກະຕ່າ 1 ຊິ້ນ, ກົດອີກຄັ້ງ = ເອົາອອກ)
+//  ປັບຈຳນວນ / ລຶບ ໄດ້ໃນກ່ອງ "ລາຍການສິນຄ້າ" ແລ້ວຄ່ອຍກົດ "ຢືນຢັນການສັ່ງຊື້" ຄັ້ງດຽວ
 // ─────────────────────────────────────────
-function selectProd(name){
+function toggleProd(name){
   var prod=allProds.find(function(r){return r[0]===name;});
-  if(!prod||Number(prod[3])<=0)return;
-  if(selectedProd&&selectedProd[0]===name){closeQtyPanel();return;}
-  selectedProd=prod;
-  var ex=cart.find(function(c){return c.name===name;});
-  document.getElementById('qty-name').textContent='🛍️ '+name;
-  document.getElementById('qty-stock').textContent='ຄົງເຫຼືອ: '+prod[3]+' ຊິ້ນ';
-  document.getElementById('qty-num').value=ex?ex.qty:1;
-  document.getElementById('qty-num').max=prod[3];
-  document.getElementById('qty-panel').classList.add('open');
-  setTimeout(function(){document.getElementById('qty-panel').scrollIntoView({behavior:'smooth',block:'nearest'});},50);
+  if(!prod)return;
+  var stock=Number(prod[3])||0;
+  var idx=cart.findIndex(function(c){return c.name===name;});
+  if(idx>=0){
+    cart.splice(idx,1);
+  }else{
+    if(stock<=0)return;
+    cart.push({name:name,price:Number(prod[2])||0,qty:1,max:stock});
+    flashCartPanel();
+  }
+  renderCart();refreshCardStates();
 }
-function closeQtyPanel(){selectedProd=null;document.getElementById('qty-panel').classList.remove('open');}
-function changeQty(d){
-  var inp=document.getElementById('qty-num');
-  var max=selectedProd?Number(selectedProd[3]):99;
-  inp.value=Math.max(1,Math.min(max,(parseInt(inp.value)||1)+d));
+// ອັບເດດສະຖານະ ✓ ແລະ ຈຳນວນ ຢູ່ບັດສິນຄ້າ ໂດຍບໍ່ຕ້ອງວາດລາຍການໃໝ່ທັງໝົດ
+function refreshCardStates(){
+  document.querySelectorAll('#prod-grid .prod-card[data-name]').forEach(function(card){
+    var nm=card.getAttribute('data-name');
+    var ci=cart.find(function(c){return c.name===nm;});
+    card.classList.toggle('in-cart',!!ci);
+    var b=card.querySelector('.cart-qty-badge');
+    if(b)b.textContent=ci?ci.qty:0;
+  });
 }
-function confirmQty(){
-  if(!selectedProd)return;
-  var qty=Math.max(1,Math.min(Number(selectedProd[3]),parseInt(document.getElementById('qty-num').value)||1));
-  var ex=cart.find(function(c){return c.name===selectedProd[0];});
-  if(ex){ex.qty=qty;}else{cart.push({name:selectedProd[0],price:Number(selectedProd[2]),qty:qty,max:Number(selectedProd[3])});}
-  closeQtyPanel();filterProds();renderCart();
+function flashCartPanel(){
   var ce=document.getElementById('cart-panel');
+  if(!ce)return;
   ce.style.transition='box-shadow .2s';ce.style.boxShadow='0 0 0 3px rgba(45,122,85,.5)';
-  setTimeout(function(){ce.style.boxShadow='';},700);
+  setTimeout(function(){ce.style.boxShadow='';},600);
 }
 
 // ─────────────────────────────────────────
@@ -1569,8 +1560,10 @@ function renderCart(){
     }
   }
   document.getElementById('cart-total').textContent=fN(total)+' ₭';
+  var cl=document.getElementById('cart-lines');
+  if(cl)cl.textContent=cart.length?'(ເລືອກ '+cart.length+' ລາຍການ)':'';
   var el=document.getElementById('cart-items');
-  if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ກົດທີ່ສິນຄ້າເພື່ອເພີ່ມ</small></div>';return;}
+  if(!cart.length){el.innerHTML='<div class="cart-empty">📦 ຍັງບໍ່ທັນເລືອກສິນຄ້າ<br><small>ຕິກເລືອກສິນຄ້າໄດ້ຫຼາຍລາຍການ</small></div>';return;}
   var html='';
   cart.forEach(function(item,i){
     var sub=item.price*item.qty;
@@ -1587,11 +1580,13 @@ function renderCart(){
 function cartChangeQty(i,d){
   var item=cart[i];if(!item)return;
   var prod=allProds.find(function(r){return r[0]===item.name;});
-  item.qty=Math.max(1,Math.min(prod?Number(prod[3]):99,item.qty+d));
-  renderCart();filterProds();
+  var maxQ=prod?Number(prod[3]):99;
+  if(d>0&&item.qty>=maxQ){notify('ສິນຄ້ານີ້ເຫຼືອພຽງ '+maxQ+' ຊິ້ນ','warn');return;}
+  item.qty=Math.max(1,Math.min(maxQ,item.qty+d));
+  renderCart();refreshCardStates();
 }
-function removeFromCart(i){cart.splice(i,1);renderCart();filterProds();}
-function clearCart(){cart=[];renderCart();filterProds();}
+function removeFromCart(i){cart.splice(i,1);renderCart();refreshCardStates();}
+function clearCart(){cart=[];renderCart();refreshCardStates();}
 function scrollToCart(){document.getElementById('right-panel').scrollIntoView({behavior:'smooth'});}
 
 // ─────────────────────────────────────────
@@ -1703,12 +1698,24 @@ function removeSlip(){slipBase64='';document.getElementById('slip-file').value='
 // ─────────────────────────────────────────
 function showErr(id,show){var el=document.getElementById(id);if(el)show?el.classList.add('show'):el.classList.remove('show');}
 function markField(id,inv){var el=document.getElementById(id);if(el)inv?el.classList.add('invalid'):el.classList.remove('invalid');}
+// ★ ກົດລະບຽບເບີໂທ: ສະເພາະ 8 ໂຕເລກ — ຫ້າມຂຶ້ນຕົ້ນດ້ວຍ 0 / 020 / 20 (ລະບົບຕື່ມ 020 ໃຫ້ເອງ)
+//   ຖ້າພິມ/ວາງມາຜິດ ຈະແຈ້ງເຕືອນ ແລະ ຕັດ 0 / 020 / 20 (ແລະ +856) ນຳໜ້າອອກໃຫ້ (ວາງ 02055360660 → 55360660)
+var PHONE_RULE_MSG='ພິມສະເພາະເບີ 8 ໂຕເລກ\nຫ້າມໃສ່ 020 ຫຼື 20 ຂຶ້ນຕົ້ນ\n(ຕົວຢ່າງ: 99999999)';
+function onPhoneInput(el){
+  var v=String(el.value||'').replace(/\D/g,'');
+  var bad=false;
+  if(v.indexOf('856')===0){bad=true;v=v.slice(3);}   // ວາງ +856 ... ມາ → ຕັດລະຫັດປະເທດອອກ
+  if(v.charAt(0)==='0'){bad=true;v=v.replace(/^0+/,'');}
+  if(v.indexOf('20')===0){bad=true;v=v.slice(2);}
+  el.value=v.slice(0,8);
+  if(bad)notify(PHONE_RULE_MSG,'warn');
+}
 function validate(){
   var ok=true;
-  if(!cart.length){notify('ກະລຸນາເລືອກສິນຄ້າ ແລະ ກົດຢືນຢັນກ່ອນ!','warn');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
+  if(!cart.length){notify('ກະລຸນາຕິກເລືອກສິນຄ້າ ຢ່າງໜ້ອຍ 1 ລາຍການກ່ອນ','warn');document.getElementById('prod-grid').scrollIntoView({behavior:'smooth'});return false;}
   var name=document.getElementById('c-name').value.trim();showErr('err-name',!name);markField('c-name',!name);if(!name)ok=false;
   var phone=document.getElementById('c-phone').value.trim();
-  var phoneOk=/^\d{8}$/.test(phone);
+  var phoneOk=/^[1-9]\d{7}$/.test(phone)&&phone.indexOf('20')!==0;
   showErr('err-phone',!phoneOk);
   var pw=document.getElementById('phone-wrap');if(pw)pw.classList.toggle('invalid',!phoneOk);
   if(!phoneOk)ok=false;
@@ -2121,21 +2128,31 @@ function paintReceipt(ctx,H,d,barCanvas,dry){
 }
 
 function buildAndSaveReceipt(d){
-  var S=RECEIPT_SCALE,W=520;
-  var bar=makeBarcodeCanvas(d.code,(460-24)*S,70*S); // ບາໂຄດ Code 128
+  var base=RECEIPT_SCALE,W=520,MAX_PX=14000000; // ຂີດຈຳກັດຂະໜາດ canvas ຂອງມືຖື (iPhone ປະມານ 16.7 ລ້ານພິກເຊວ)
+  var S=base,bar=null,H=0,canvas;
 
   // ຮອບທີ 1: ວັດຄວາມສູງຈິງຂອງໃບບິນ (ຂຶ້ນກັບຈຳນວນສິນຄ້າ/ຄວາມຍາວຂໍ້ຄວາມ)
-  var meas=document.createElement('canvas').getContext('2d');
-  var endY=paintReceipt(meas,5000,d,bar,true);
-  var H=Math.ceil(endY+32);
-
-  // ຮອບທີ 2: ວາດຈິງດ້ວຍຄວາມລະອຽດສູງ
-  var canvas=document.createElement('canvas');
-  canvas.width=W*S;canvas.height=H*S;
-  var ctx=canvas.getContext('2d');
-  ctx.scale(S,S);
-  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
-  paintReceipt(ctx,H,d,bar,false);
+  function measure(){
+    RECEIPT_SCALE=S;
+    bar=makeBarcodeCanvas(d.code,(460-24)*S,Math.round(70*S)); // ບາໂຄດ Code 128
+    var meas=document.createElement('canvas').getContext('2d');
+    H=Math.ceil(paintReceipt(meas,5000,d,bar,true)+32);
+  }
+  try{
+    measure();
+    // ສິນຄ້າຫຼາຍລາຍການຈົນໃບບິນຍາວຫຼາຍ → ລົດຄວາມລະອຽດລົງເລັກນ້ອຍ ເພື່ອບໍ່ໃຫ້ຮູບວ່າງເປົ່າໃນມືຖື (ບໍ່ຈຳກັດຈຳນວນລາຍການ)
+    if(W*S*H*S>MAX_PX){
+      S=Math.max(1,Math.floor(Math.sqrt(MAX_PX/(W*H))*100)/100);
+      measure();
+    }
+    // ຮອບທີ 2: ວາດຈິງດ້ວຍຄວາມລະອຽດສູງ
+    canvas=document.createElement('canvas');
+    canvas.width=Math.round(W*S);canvas.height=Math.round(H*S);
+    var ctx=canvas.getContext('2d');
+    ctx.scale(S,S);
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+    paintReceipt(ctx,H,d,bar,false);
+  }finally{RECEIPT_SCALE=base;}
 
   var fname='SOUDSADA_Receipt_'+d.code+'.png';
   function saveHref(href,revoke){
@@ -2190,7 +2207,6 @@ function resetAll(){
   document.getElementById('slip-section').style.display='none';
   removeSlip();renderCart();filterProds();
   document.getElementById('success-modal').classList.remove('show');
-  document.getElementById('qty-panel').classList.remove('open');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
